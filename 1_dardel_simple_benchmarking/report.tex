@@ -198,10 +198,11 @@ The code for our project can be found at this location: \url{}.
 \tableofcontents
 \newpage
 
-\section{Compiling and Running on Dardel}
-
-
 \todo[inline]{Check headers}
+
+\section{Compiling and Running on Dardel}
+\verb|salloc -t 00:30:00 --nodes 1 --ntasks-per-node 128 --cpus-per-task 1 -A edu25.DD2356 -p shared|
+\verb|srun -n 128 ./mpi_hello_world.out > log_dd2356_e1_i|
 
 % content end
 %###############################################################################
