@@ -74,6 +74,7 @@
 \usepackage{titlesec}
 \usepackage[nocheck]{fancyhdr}
 \usepackage{lastpage}
+\usepackage{csvsimple}
 
 \usepackage{kantlipsum}
 \usepackage[colorinlistoftodos,prependcaption,textsize=tiny]{todonotes}
@@ -244,6 +245,23 @@ The code for our project can be found at this location: \url{https://github.com/
   This especially holds true if the data is within a small multiple of the cache size.
   However, for very large data arrays, it might take multiple fetching cylces until the same data location is referenced again, therefore will decrease the temperal locality.
    
+\section{Sustainability and Supercomputers}
+  Following the assumption of the previous task, that Dardel uses AMD EPYC™ 7742 cpus, we get a Thermal Design Power (TDP) of $ 225 W $ as stated in \url{https://www.topcpu.net/de/cpu/amd-epyc-7742}.
+  Using the \verb|Green algorithm calculator| (\url{https://calculator.green-algorithms.org/}) we can calculate the CO2equivalents of running an algorithm for 12 hours on 10 Dardel computing nodes only utilizing CPU processing power.
+  Each node uses two 64 core processors. The memory differs per node, we assume using the most commonly \verb|NAISS thin node| with $256GB $ of memory per node as stated in \url{https://www.pdc.kth.se/hpc-services/computing-systems/dardel-hpc-system/about-the-dardel-system-1.1053338}.
+  So our algorithm inputs result in the following values:
+  \begin{itemize}
+    \item Runtime: 12hrs,
+    \item Type of cores: CPU,
+    \item Number of cores: 1280 $10 nodes*2 cpus/node*64cores/cpu$, 
+    \item TDP: $225 W$,
+    \item Memory $ 640 GB = 64GB/node * 10 nodes$
+  \end{itemize}
+
+  We retreive the following output:
+  \csvautotabular{\misc\GreenAlgorithms_results.csv}
+  The power consumption equals $5.4 MWh$ and the carbon footprint of the job is 30.59 kg CO2 equivalents,
+  for the HPC located in Sweden, which underlines the need for sustainable usage of HPC ressources.
  % content end
  %###############################################################################
  
