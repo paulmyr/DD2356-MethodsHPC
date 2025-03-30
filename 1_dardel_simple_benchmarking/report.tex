@@ -194,14 +194,42 @@
 %
 
 \section*{Prefix}
-The code for our project can be found at this location: \url{https://github.com/paulmyr/DD2356-MethodsHPC/tree/master/1_dardel_simple_benchmarking/code}.
+The code and other utilities associated with for our assignment can be found at this location: \url{https://github.com/paulmyr/DD2356-MethodsHPC/tree/master/1_dardel_simple_benchmarking}.
 
 % \tableofcontents
 % \newpage
 
 \section{Compiling and Running on Dardel}
-\verb|salloc -t 00:30:00 --nodes 1 --ntasks-per-node 128 --cpus-per-task 1 -A edu25.DD2356 -p shared|
-\verb|srun -n 128 ./mpi_hello_world.out > log_dd2356_e1_i|
+The steps for running the program first required us to login to Dardel and compile the program. Then, we executed different commands based on the requirement to run in interactive or batch mode. 
+
+\subsection{Logging in to Dardel and Compiling}
+Logging in to Dardel can be doen using Kerberos, as described \href{https://support.pdc.kth.se/doc/login/mac_login/}{here} (under the \textit{Own Mac OS X} section). The compilation can be done using the \verb|cc| command. To summarize: 
+\begin{itemize}
+\item Obtain kerberos ticket using: \verb|/usr/bin/kinit username@NADA.KTH.SE|
+\item SSH to Dardel: \verb|ssh -o GSSAPIAuthentication=yes  username@dardel.pdc.kth.se|
+\item Add the required code to a file, for ex: \verb|mpi_hello_world.c| 
+\item Compile the file with the \verb|cc| command: \verb|cc mpi_hello_world.c -o mpi_hello_world.out|
+\end{itemize}
+
+Next steps depend on whether we want the task to be run in interactive mode or batch mode. 
+
+\subsection{Batch Mode}
+\begin{itemize}
+\item Create a job-script: For our program, this is the \verb|run_mpi_hello_world.sh| file in the repository, present \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/1_dardel_simple_benchmarking/code/run_mpi_hello_world.sh}{here}.
+\item Submit the job: This is done using the command \verb|sbatch ./run_mpi_hello_world.sh|
+\item Eventually, the job was executed. We redirected the output to a \verb|log_dd2356_e1| file. The file with the output can be found \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/1_dardel_simple_benchmarking/code/log_dd2356_e1}{here} in the repo.
+\end{itemize}
+
+\subsection{Interactive Mode}
+\begin{itemize}
+\item Request for job allocation using \verb|salloc|. We ran the command with the following arguments: \\ {\small \verb|salloc -t 00:30:00 --nodes 1 --ntasks-per-node 128 --cpus-per-task 1 -A edu25.DD2356 -p shared|}
+\item Launch program using \verb|srun| on the allocated node: \\ \verb|srun -n 128 ./mpi_hello_world.out > log_dd2356_e1_i|. \\ The output produced can be found in the \verb|log_dd2356_e1_i| file \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/1_dardel_simple_benchmarking/code/log_dd2356_e1_i}{here} in the repository. 
+\item Once our execution is done, we can relinquish the allocated node by using \verb|exit|.  
+\end{itemize}
+
+
+% \verb|salloc -t 00:30:00 --nodes 1 --ntasks-per-node 128 --cpus-per-task 1 -A edu25.DD2356 -p shared|
+% \verb|srun -n 128 ./mpi_hello_world.out > log_dd2356_e1_i|
 
 \section{Sustainability and Supercomputers}
   Following the assumption of the previous task, that Dardel uses AMD EPYC™ 7742 cpus, we get a Thermal Design Power (TDP) of $ 225 W $ as stated in \url{https://www.topcpu.net/de/cpu/amd-epyc-7742}.
