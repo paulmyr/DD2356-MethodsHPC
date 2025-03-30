@@ -204,7 +204,27 @@ The code for our project can be found at this location: \url{https://github.com/
 \verb|srun -n 128 ./mpi_hello_world.out > log_dd2356_e1_i|
 
 \section{Sustainability and Supercomputers}
-\todo[inline]{Exercise 2}
+  Following the assumption of the previous task, that Dardel uses AMD EPYC™ 7742 cpus, we get a Thermal Design Power (TDP) of $ 225 W $ as stated in \url{https://www.topcpu.net/de/cpu/amd-epyc-7742}.
+  Using the \verb|Green algorithm calculator| (\url{https://calculator.green-algorithms.org/}) we can calculate the CO2equivalents of running an algorithm for 12 hours on 10 Dardel computing nodes only utilizing CPU processing power.
+  Each node uses two 64 core processors. The memory differs per node, we assume using the most commonly \verb|NAISS thin node| with $256GB $ of memory per node as stated in \url{https://www.pdc.kth.se/hpc-services/computing-systems/dardel-hpc-system/about-the-dardel-system-1.1053338}.
+  So our algorithm inputs result in the following values:
+  \begin{itemize}
+    \item Runtime: 12hrs,
+    \item Type of cores: CPU,
+    \item Number of cores: 1280 $10 nodes*2 cpus/node*64cores/cpu$, 
+    \item TDP: $225 W$,
+    \item Memory $ 640 GB = 64GB/node * 10 nodes$
+  \end{itemize}
+
+  The output retrieved can be seen in a tabular format at \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/1_dardel_simple_benchmarking/misc/GreenAlgorithms_results_tabular.txt}{this} location in the repository.
+  The power consumption equals $5.4 MWh$ and the carbon footprint of the job is 30.59 kg CO2 equivalents,
+  for the HPC located in Sweden, which underlines the need for sustainable usage of HPC ressources.
+
+  Since these results are relatively high, we assume the TDP is given per chip, but used as TDP/core by the algorithm. We adapt our inputs by $225W/64cores = 3.515625 W/core$.
+  
+  With the adapted TDP, we get the output that can be seen in tabular format at \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/1_dardel_simple_benchmarking/misc/GreenAlgorithms_results_TDP_tabular.txt}{this} location in the repository.
+  The power consumption equals now $88.7 kWh$ and the carbon footprint of the job is 502.95 g CO2 equivalents,
+  for the HPC located in Sweden, which is closer to the results shown in the lecture and more reasonable w.r.t. power dimensioning on the Dardel cluster.
 
 \section{The Memory Mountain}
   We ran the script on dardel.
@@ -244,30 +264,6 @@ The code for our project can be found at this location: \url{https://github.com/
   The main reason for this is that most of heavy computations perform operations in loops, and most of the times is performed on the same data (or data stored in the same location).
   This especially holds true if the data is within a small multiple of the cache size.
   However, for very large data arrays, it might take multiple fetching cylces until the same data location is referenced again, therefore will decrease the temperal locality.
-   
-\section{Sustainability and Supercomputers}
-  Following the assumption of the previous task, that Dardel uses AMD EPYC™ 7742 cpus, we get a Thermal Design Power (TDP) of $ 225 W $ as stated in \url{https://www.topcpu.net/de/cpu/amd-epyc-7742}.
-  Using the \verb|Green algorithm calculator| (\url{https://calculator.green-algorithms.org/}) we can calculate the CO2equivalents of running an algorithm for 12 hours on 10 Dardel computing nodes only utilizing CPU processing power.
-  Each node uses two 64 core processors. The memory differs per node, we assume using the most commonly \verb|NAISS thin node| with $256GB $ of memory per node as stated in \url{https://www.pdc.kth.se/hpc-services/computing-systems/dardel-hpc-system/about-the-dardel-system-1.1053338}.
-  So our algorithm inputs result in the following values:
-  \begin{itemize}
-    \item Runtime: 12hrs,
-    \item Type of cores: CPU,
-    \item Number of cores: 1280 $10 nodes*2 cpus/node*64cores/cpu$, 
-    \item TDP: $225 W$,
-    \item Memory $ 640 GB = 64GB/node * 10 nodes$
-  \end{itemize}
-
-  We retreive the following output:
-  \csvautotabular{\misc\GreenAlgorithms_results.csv}
-  The power consumption equals $5.4 MWh$ and the carbon footprint of the job is 30.59 kg CO2 equivalents,
-  for the HPC located in Sweden, which underlines the need for sustainable usage of HPC ressources.
-
-  Since these results are relatively high, we assume the TDP is given per chip, but used as TDP/core by the algorithm. We adapt our inputs by $225W/64cores = 3.515625 W/core$
-  With the adapted TDP we get the following output:
-  \csvautotabular{\misc\GreenAlgorithms_results_TDP.csv}
-  The power consumption equals now $88.7 kWh$ and the carbon footprint of the job is 502.95 g CO2 equivalents,
-  for the HPC located in Sweden, which is closer to the results shown in the lecture and more reasonable w.r.t. power dimensioning on the Dardel cluster.
  % content end
  %###############################################################################
  
