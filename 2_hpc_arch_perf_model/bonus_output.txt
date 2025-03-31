@@ -1,0 +1,11 @@
+Size: 4 Bytes, RTT: 3277.695000 microseconds
+Size: 8 Bytes, RTT: 7.003000 microseconds
+Size: 16 Bytes, RTT: 21.010000 microseconds
+Size: 32 Bytes, RTT: 1.062000 microseconds
+Size: 64 Bytes, RTT: 0.831000 microseconds
+Size: 128 Bytes, RTT: 0.762000 microseconds
+Size: 256 Bytes, RTT: 0.902000 microseconds
+Size: 512 Bytes, RTT: 1.513000 microseconds
+Size: 1024 Bytes, RTT: 0.842000 microseconds
+Size: 2048 Bytes, RTT: 0.852000 microseconds
+Size: 4096 Bytes, RTT: 2.765000 microseconds
