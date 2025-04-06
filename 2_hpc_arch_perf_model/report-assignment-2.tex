@@ -1,0 +1,259 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper,
+            bindingoffset=0.2in,
+            left=1in,
+            right=1in,
+            top=1in,
+            bottom=1in,
+            footskip=.25in]{geometry}
+
+%###############################################################################
+
+%\input{~/layout/global_layout}
+
+
+%###############################################################################
+
+% packages begin
+
+\usepackage[
+  backend=biber,
+  sortcites=true,
+  style=alphabetic,
+  eprint=true,
+  backref=true
+]{biblatex}
+\addbibresource{bibliographie.bib}
+\usepackage[acronym]{glossaries}
+
+\usepackage{euscript}[mathcal]
+% e.g. \mathcal{A} for fancy letters in mathmode
+\usepackage{amsmath,amssymb,amstext,amsthm}
+
+\usepackage{mdframed}
+\newmdtheoremenv[nobreak=true]{problem}{Problem}[subsection]
+\newmdtheoremenv[nobreak=true]{claim}{Claim}[subsection]
+\newtheorem{definition}{Definition}[subsection]
+\newtheorem{lemma}{Lemma}[claim]
+\newtheorem{plemma}{Lemma}[problem]
+
+\usepackage{mathtools}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+\usepackage{enumerate}
+\usepackage[pdftex]{graphicx}
+\usepackage{subcaption}
+% 'draft' für schnelleres rendern mitübergeben -> [pdftex, draft]
+% dadruch wird nicht das bild mitgerendered, sondern nur ein kasten mit bildname -> schont ressourcen
+
+\usepackage{hyperref}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows,automata,matrix,positioning,shapes}
+
+% for adding non-formatted text to include source-code
+\usepackage{listings}
+\lstset{language=Python,basicstyle=\footnotesize}
+% z.B.:
+% \lstinputlisting{source_filename.py}
+% \lstinputlisting[lanugage=Python, firstline=37, lastline=45]{source_filename.py}
+%
+% oder
+%
+% \begin{lstlisting}[frame=single]
+% CODE HERE
+%\end{lstlisting}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+\usepackage{wasysym}
+
+\usepackage{titling}
+\usepackage{titlesec}
+\usepackage[nocheck]{fancyhdr}
+\usepackage{lastpage}
+
+\usepackage{kantlipsum}
+\usepackage[colorinlistoftodos,prependcaption,textsize=tiny]{todonotes}
+
+% packages end
+%###############################################################################
+
+\pretitle{% add some rules
+  \begin{center}
+    \LARGE\bfseries
+} %, make the fonts bigger, make the title (only) bold
+\posttitle{%
+  \end{center}%
+  %\vskip .75em plus .25em minus .25em% increase the vertical spacing a bit, make this particular glue stretchier
+}
+\predate{%
+  \begin{center}
+    \normalsize
+}
+\postdate{%
+  \end{center}%
+}
+
+\titleformat*{\section}{\Large\bfseries}
+\titleformat*{\subsection}{\large\bfseries}
+\titleformat*{\subsubsection}{\normalsize\bfseries}
+
+\titleformat*{\paragraph}{\Large\bfseries}
+\titleformat*{\subparagraph}{\large\bfseries}
+
+%###############################################################################
+
+\pagestyle{fancy}
+\fancyhf{}
+% l=left, c=center, r=right; e=even_pagenumber, o=odd_pagenumber; h=header, f=footer
+% example: [lh] -> left header, [lof,ref] -> fotter left when odd, right when even
+%\fancyhf[lh]{}
+%\fancyhf[ch]{}
+%\fancyhf[rh]{}
+%\fancyhf[lf]{}
+\fancyhf[cf]{\footnotesize Page \thepage\ of \pageref*{LastPage}}
+%\fancyhf[rf]{}
+\renewcommand{\headrule}{} % removes horizontal header line
+
+% Fotter options for first page
+
+\fancypagestyle{firstpagestyle}{
+  \renewcommand{\thedate}{\textmd{}} % removes horizontal header line
+  \fancyhf{}
+  \fancyhf[lh]{\ttfamily M.Sc. Computer Science\\KTH Royal Institute of Technology}
+  \fancyhf[rh]{\ttfamily Period 4\\\today}
+  \fancyfoot[C]{\footnotesize Page \thepage\ of \pageref*{LastPage}}
+  \renewcommand{\headrule}{} % removes horizontal header line
+}
+%###############################################################################
+
+\newcommand\extrafootertext[1]{%
+    \bgroup
+    \renewcommand\thefootnote{\fnsymbol{footnote}}%
+    \renewcommand\thempfootnote{\fnsymbol{mpfootnote}}%
+    \footnotetext[0]{#1}%
+    \egroup
+}
+
+%###############################################################################
+
+\title{
+  \normalsize{DD2356 VT25 Methods in}\\
+  \normalsize{High Performance Computing}\\
+  \large{Assignment 2}
+}
+\author{
+  \small Rishi Vijayvargiya\textsuperscript{\textdagger}\\[-0.75ex]
+%  \footnotesize\texttt{MN: }\\[-1ex]
+  \scriptsize\texttt{rishiv@kth.se}
+  \and
+  \small Paul Mayer\textsuperscript{\textdagger}\\[-0.75ex]
+%  \footnotesize\texttt{MN: }\\[-1ex]
+  \scriptsize\texttt{pmayer@kth.se}
+  \and
+  \small Lennard Herud \textsuperscript{\textdagger}\\[-0.75ex]
+%  \footnotesize\texttt{MN: }\\[-1ex]
+  \scriptsize\texttt{herud@kth.se}
+}
+\date{}
+
+%###############################################################################
+% define Commands
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\I}{\mathbb{I}}
+
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Prob}{\mathbb{P}}
+
+\renewcommand{\epsilon}{\varepsilon}
+
+%###############################################################################
+\makeatletter
+\renewcommand*{\@fnsymbol}[1]{\ensuremath{\ifcase#1\or \dagger\or \ddagger\or
+   \mathsection\or \mathparagraph\or \|\or **\or \dagger\dagger
+   \or \ddagger\ddagger \else\@ctrerr\fi}}
+\makeatother
+%###############################################################################
+
+\begin{document}
+\maketitle
+\extrafootertext{\textsuperscript{\textdagger}Authors made equal contribution to the project}
+\thispagestyle{firstpagestyle}
+
+\listoftodos
+\vspace{1em}
+
+% content begin
+%
+
+\section*{Prefix}
+The code for our project can be found at this location: \url{https://github.com/paulmyr/DD2356-MethodsHPC/tree/master/2_hpc_arch_perf_model}. 
+
+\tableofcontents
+\newpage
+
+
+\section{}
+\todo[inline]{Check headers}
+
+
+
+\section{Exercise 1: Supercomputer Architecture with hwloc}
+
+\section{Exercise 2: Roofline Model}
+
+\section{Exercise 3: Modeling Sparse Matrix-Vector Multiply}
+
+\section{Exercise 4: Measure the Performance with Perf}
+\subsection{Matrix Multiply}
+We created files \verb|matrix_multiply.c| and \verb|matrix_multiply_opt.c|, which were the default and optimized versions of the algorithm provided, respectively. We used the follogin \verb|salloc| command to allocate resources: 
+
+\begin{lstlisting}[language=bash,basicstyle=\ttfamily]
+salloc -t 00:30:00 --nodes 1  -A edu25.DD2356 -p shared
+\end{lstlisting}
+Since no \verb|--cpus-per-task| argument was provided, we believe that the default value of 1 was used. Additionally, since no \verb|-n| flag was provided either, we believe that the code was execute on 1 core. 
+
+Compiling using the provided commands, then executed \verb|perf| using the following command: 
+\begin{lstlisting}[language=bash,basicstyle=\tiny\ttfamily]
+srun -n 1 perf stat -e instructions,cycles,L1-dcache-load-misses,L1-dcache-loads ./matrix_multiply.out
+\end{lstlisting}
+The same thing was done for the optimized version. We varied \verb|MSIZE| manually, recompiled, and then re-executed the commands above for the different \verb|MSIZE| values. 
+Doing so, we obtained the following table (for \textit{Elapsed time}, we record the values obtained from \verb|perf| and not the one produced by the algorithm) 
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c|p{2.5cm}|p{2.5cm}|p{2.5cm}|p{2.5cm}|}
+\hline
+\textbf{Event Name} & \textbf{Naive (MSIZE 64)} & \textbf{Optimized (MSIZE 64)} & \textbf{Naive (MSIZE 1000)} & \textbf{Optimized (MSIZE 1000)} \\
+\hline
+\textbf{Elapsed time (sec)} & 0.008982713 & 0.008476052 & 17.968526050 & 1.685069089 \\
+\hline
+\textbf{Instructions per cycle} & 1.16 & 1.28 & 0.58 & 2.17 \\
+\hline
+\textbf{L1 cache miss ratio} & 0.1817 & 0.0610 & 0.5618 & 0.1649 \\
+\hline
+\textbf{L1 cache miss rate PTI} & 101.5736 & 26.5007 & 400.6424 & 131.9917  \\
+\hline
+\end{tabular}
+\caption{Perf Stats for Default and Optimized Matrix-Multiply}
+\end{table}
+The raw outputs for the different values of \verb|MSIZE| for the \verb|matrix_multiply.out| and \verb|matrix_multiply_opt.out| binaries can be found in the file \verb|matrix_multiply_outputs.txt| in the repository \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/2_hpc_arch_perf_model/exercise4/matrix_multiply_outputs.txt}{here}. For the \verb|L1 cache miss ratio| and the \verb|L1 cache miss rate PTI|, we used the formulas \href{https://canvas.kth.se/courses/53216/pages/tutorial-the-perf-tool?module_item_id=1067474}{here}.
+
+\todo{Answer the question for this section}
+
+\subsection{Matrix Transpose}
+
+
+\section{Bonus: Network Latency \& Bandwidth Analysis with MPI Ping-Pong}
+
+% content end
+%###############################################################################
+
+% \printbibliography
+
+\end{document}
