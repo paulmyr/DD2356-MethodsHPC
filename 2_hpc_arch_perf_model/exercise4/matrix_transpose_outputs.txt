@@ -1,0 +1,63 @@
+[N=64]
+$ srun -n 1 perf stat -e instructions,cycles,L1-dcache-load-misses,L1-dcache-loads ./transpose_n64.out
+Transpose 64 x 64
+BaseTime = 1.31e-06 s, Base Rate = 2.50e+04 MB/s
+
+ Performance counter stats for './transpose_n64.out':
+
+         7,204,215      instructions:u                   #    1.38  insn per cycle         
+         5,207,237      cycles:u                                                           
+           171,031      L1-dcache-load-misses:u          #    5.09% of all L1-dcache accesses
+         3,357,244      L1-dcache-loads:u                                                  
+
+       0.040026827 seconds time elapsed
+
+       0.000000000 seconds user
+       0.034904000 seconds sys
+
+
+$
+
+==============================================================================================================
+
+[N=128]
+$ srun -n 1 perf stat -e instructions,cycles,L1-dcache-load-misses,L1-dcache-loads ./transpose_n128.out
+Transpose 128 x 128
+BaseTime = 1.89e-05 s, Base Rate = 6.94e+03 MB/s
+
+ Performance counter stats for './transpose_n128.out':
+
+        10,713,255      instructions:u                   #    0.91  insn per cycle         
+        11,747,062      cycles:u                                                           
+         1,879,688      L1-dcache-load-misses:u          #   16.83% of all L1-dcache accesses
+        11,166,793      L1-dcache-loads:u                                                  
+
+       0.008985869 seconds time elapsed
+
+       0.003526000 seconds user
+       0.003526000 seconds sys
+
+
+$
+
+==============================================================================================================
+
+[N=2048]
+$ srun -n 1 perf stat -e instructions,cycles,L1-dcache-load-misses,L1-dcache-loads ./transpose_n2048.out
+Transpose 2048 x 2048
+BaseTime = 3.54e-01 s, Base Rate = 9.48e+01 MB/s
+
+ Performance counter stats for './transpose_n2048.out':
+
+     1,292,668,538      instructions:u                   #    0.01  insn per cycle         
+   120,152,054,289      cycles:u                                                           
+     4,332,866,491      L1-dcache-load-misses:u          #   20.33% of all L1-dcache accesses
+    21,314,875,138      L1-dcache-loads:u                                                  
+
+      35.493702241 seconds time elapsed
+
+      35.478662000 seconds user
+       0.011999000 seconds sys
+
+
+$
