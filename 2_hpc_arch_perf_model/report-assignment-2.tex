@@ -207,6 +207,8 @@ The code for our project can be found at this location: \url{https://github.com/
 \section{Exercise 1: Supercomputer Architecture with hwloc}
 
 \section{Exercise 2: Roofline Model}
+\todo{How to build the roofline model? What should the array size in stream benchmark be? Using 200mil causes errors during compilation. The default size seems too small according to comments in the code}
+\todo{How to establish the peak compute using the information of the processor?}
 
 \section{Exercise 3: Modeling Sparse Matrix-Vector Multiply}
 
@@ -250,6 +252,10 @@ The raw outputs for the different values of \verb|MSIZE| for the \verb|matrix_mu
 
 
 \section{Bonus: Network Latency \& Bandwidth Analysis with MPI Ping-Pong}
+
+\todo{The program hangs and output needs to be flushed out (despite recommendation on discussion board)}
+\todo{The output is a bit flat for the provided sizes. Increasing ths size (to about 16384) causes segmentation fault at different points in time}
+\todo{Submit with these annotations or try and "fix" the problem}
 
 % content end
 %###############################################################################
