@@ -1,0 +1,93 @@
+[msize=64]
+$ srun -n 1 perf stat -e instructions,cycles,L1-dcache-load-misses,L1-dcache-loads ./matrix_multiply.out
+1. Initializing Matrices 
+2. Matrix Multiply 
+3. Sum = 15.948628 
+4. time = 0.000244
+
+ Performance counter stats for './matrix_multiply.out':
+
+        15,354,300      instructions:u                   #    1.16  insn per cycle         
+        13,204,221      cycles:u                                                           
+         1,559,591      L1-dcache-load-misses:u          #   18.17% of all L1-dcache accesses
+         8,584,708      L1-dcache-loads:u                                                  
+
+       0.008982713 seconds time elapsed
+
+       0.003929000 seconds user
+       0.003929000 seconds sys
+
+
+$
+
+==========================================================================================================================
+
+[msize=64]
+$ srun -n 1 perf stat -e instructions,cycles,L1-dcache-load-misses,L1-dcache-loads ./matrix_multiply_opt.out
+1. Initializing Matrices 
+2. Matrix Multiply 
+3. Sum = 15.948628 
+4. time = 0.000042
+
+ Performance counter stats for './matrix_multiply_opt.out':
+
+         8,442,238      instructions:u                   #    1.28  insn per cycle         
+         6,599,855      cycles:u                                                           
+           223,725      L1-dcache-load-misses:u          #    6.10% of all L1-dcache accesses
+         3,670,106      L1-dcache-loads:u                                                  
+
+       0.008476052 seconds time elapsed
+
+       0.003085000 seconds user
+       0.003085000 seconds sys
+
+
+$
+
+==========================================================================================================================
+
+[msize=1000]
+$ srun -n 1 perf stat -e instructions,cycles,L1-dcache-load-misses,L1-dcache-loads ./matrix_multiply.out
+1. Initializing Matrices 
+2. Matrix Multiply 
+3. Sum = 249.968991 
+4. time = 1.629754
+
+ Performance counter stats for './matrix_multiply.out':
+
+    31,067,227,595      instructions:u                   #    0.58  insn per cycle         
+    53,788,058,841      cycles:u                                                           
+    12,446,847,861      L1-dcache-load-misses:u          #   56.18% of all L1-dcache accesses
+    22,153,847,387      L1-dcache-loads:u                                                  
+
+      17.968526050 seconds time elapsed
+
+      17.955255000 seconds user
+       0.011999000 seconds sys
+
+
+$
+
+==========================================================================================================================
+
+[msize=1000]
+$ srun -n 1 perf stat -e instructions,cycles,L1-dcache-load-misses,L1-dcache-loads ./matrix_multiply_opt.out
+1. Initializing Matrices 
+2. Matrix Multiply 
+3. Sum = 249.968991 
+4. time = 0.150104
+
+ Performance counter stats for './matrix_multiply_opt.out':
+
+    10,717,246,062      instructions:u                   #    2.17  insn per cycle         
+     4,940,665,450      cycles:u                                                           
+     1,414,587,700      L1-dcache-load-misses:u          #   16.49% of all L1-dcache accesses
+     8,577,139,889      L1-dcache-loads:u                                                  
+
+       1.685069089 seconds time elapsed
+
+       1.675302000 seconds user
+       0.007996000 seconds sys
+
+
+$
