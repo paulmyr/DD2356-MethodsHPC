@@ -249,11 +249,77 @@ The raw outputs for the different values of \verb|MSIZE| for the \verb|matrix_mu
 \todo{Answer the question for this section}
 
 \subsection{Matrix Transpose}
+We created the file \verb|transpose.c| and compiled the program into 3 different binaries using the following command: 
+\begin{lstlisting}[language=bash,basicstyle=\ttfamily]
+cc -O2 -o transpose_n{grid_size}.out transpose.c
+\end{lstlisting}
+Here, the \verb|grid_size| depended on the size of \verb|N| required in the handout. Thus, it varied from 64 to 128 to 2048. 
 
+We allocated compute nodes using the same \verb|salloc| command described for matrix multiplication. Finally, we ran each of the compiled binaries using the following \verb|srun| command: 
+\begin{lstlisting}[language=bash,basicstyle=\tiny\ttfamily]
+srun -n 1 perf stat -e instructions,cycles,L1-dcache-load-misses,L1-dcache-loads ./transpose_n{grid_size}.out
+\end{lstlisting}
+With this, we obtained the following outputs (\textit{Elapsed time} was recorded based on the output in \verb|perf|, not on the one produced by the program)
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c|p{2.5cm}|p{2.5cm}|p{2.5cm}|}
+\hline
+\textbf{Event Name} & \textbf{N 64} & \textbf{N 128} & \textbf{N 2048}  \\
+\hline
+\textbf{Elapsed time (sec)} & 0.040026827 & 0.008985869 & 35.493702241  \\
+\hline
+\textbf{Bandwidth / Rate} & 2.50e+04 MB/s & 6.94e+03 MB/s & 9.48e+01 MB/s \\
+\hline
+\textbf{Instructions per cycle} & 1.38 & 0.91 & 0.01 \\ 
+\hline
+\textbf{L1 cache miss ratio} & 0.0509 & 0.1683 & 0.2033 \\
+\hline
+\textbf{L1 cache miss rate PTI} & 23.7404 & 175.4544 & 3351.8774  \\
+\hline
+\end{tabular}
+\caption{Perf Stats for Default and Optimized Matrix-Multiply}
+\end{table}
+
+
+
+\todo{Answer the questions for this section}
 
 \section{Bonus: Network Latency \& Bandwidth Analysis with MPI Ping-Pong}
+\subsection{Modifications to the Code}
+There were some issues encountered in the provided code for \verb|mpi_ping_pong.c| file. 
+\begin{itemize}
+\item \verb|d| to \verb|lu| conversion when printing bytes: The original code gave a warning when compiled using \verb|cc mpi_ping_pong.c -o mpi_ping_pong|. \\
+\item \verb|fflush(stdout)| immediately after printing information: As highlighted in the \href{https://canvas.kth.se/courses/53216/discussion_topics/456480}{discussion forum}, the code did not seem to terminate. Thus, adding \verb|fflush| statements after \verb|printf|s ensured that we get the output in this case. \textit{(Note: There was an answer provided by a student w.r.t modifying the code to ensure termination, but that did not seem to resolve the issue either. The student provided their entire modified code in the follow-up, but we did not use that version as we weren't sure if that matched with the semantics of the original code. Thus, we are not reporting the runtimes of the student-modified code here)}. 
+\end{itemize}
+The modified file can be found \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/2_hpc_arch_perf_model/bonus/mpi_ping_pong.c}{here}.
 
-\todo{The program hangs and output needs to be flushed out (despite recommendation on discussion board)}
+\subsection{Compiling, Allocating Nodes, and Running}
+We allocated 2 different nodes, with 1 task per node, using the following command: 
+\begin{lstlisting}[language=bash,basicstyle=\tiny\ttfamily]
+salloc -t 00:30:00 --nodes 2 --ntasks-per-node 1 --cpus-per-task 1 -A edu25.DD2356 -p shared 
+\end{lstlisting}
+For compiling the file, we used the following command mentioned earlier: 
+\begin{lstlisting}[language=bash,basicstyle=\ttfamily]
+cc mpi_ping_pong.c -o mpi_ping_pong
+\end{lstlisting}
+Finally, to run the program, we used the following command provided in the handout: 
+\begin{lstlisting}[language=bash,basicstyle=\ttfamily]
+srun -N2 --ntasks=2 ./mpi_ping_pong
+\end{lstlisting}
+
+\subsection{Results}
+The default code in \verb| only allowed \verb|size| to be atmost 1024 in the main loop. With this confirguration, apart from the very first send-receive interaction, the RTT for the other interactions seems to be relatively constant.
+
+\todo{insert graph}
+
+We believe that the first interaction has a very high RTT because of the time required to setup the initial infrastructure that will be used for the rest of the communication. On the recommendation of Professor Peng, we increased the \verb|size| limit to see some increase in the RTT to 65536 instead of 1024. With this setup, however, we started receiving segmentation faults after 16384 bytes (in one run, this was after 32768 bytes). This means that after \verb|size| reaches $32768 / 4 = 4096$ (since the printed size is multiplied with 4), there seems to be an error with the code which causes a segmentation fault. 
+
+We did not attempt to spend time fixing the issue as we haven't yet been introduced to MPI in the course and because we did not wish to change the semantics of the original code. However, even with the output that was produced, we were able to see a gradual increasing trend in RTT as the size increases, as illustrated in the graph below. 
+
+\todo{insert graph}
+
+The textual outputs for the 2 runs plotted above can be found in the 
+
 \todo{The output is a bit flat for the provided sizes. Increasing ths size (to about 16384) causes segmentation fault at different points in time}
 \todo{Submit with these annotations or try and "fix" the problem}
 
