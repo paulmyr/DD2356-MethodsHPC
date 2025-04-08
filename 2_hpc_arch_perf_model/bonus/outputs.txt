@@ -1,0 +1,34 @@
+================ USING DEFAULT SIZE (1024) =========================
+Size: 4 Bytes, RTT: 3277.695000 microseconds
+Size: 8 Bytes, RTT: 7.003000 microseconds
+Size: 16 Bytes, RTT: 21.010000 microseconds
+Size: 32 Bytes, RTT: 1.062000 microseconds
+Size: 64 Bytes, RTT: 0.831000 microseconds
+Size: 128 Bytes, RTT: 0.762000 microseconds
+Size: 256 Bytes, RTT: 0.902000 microseconds
+Size: 512 Bytes, RTT: 1.513000 microseconds
+Size: 1024 Bytes, RTT: 0.842000 microseconds
+Size: 2048 Bytes, RTT: 0.852000 microseconds
+Size: 4096 Bytes, RTT: 2.765000 microseconds
+
+=================== USING GREATER SIZE (65536) ========================
+$ srun -N2 --ntasks=2 ./mpi_ping_pong
+Size: 4 Bytes, RTT: 6828.931000 microseconds
+Size: 8 Bytes, RTT: 8.125000 microseconds
+Size: 16 Bytes, RTT: 24.657000 microseconds
+Size: 32 Bytes, RTT: 0.972000 microseconds
+Size: 64 Bytes, RTT: 0.781000 microseconds
+Size: 128 Bytes, RTT: 0.742000 microseconds
+Size: 256 Bytes, RTT: 0.831000 microseconds
+Size: 512 Bytes, RTT: 1.343000 microseconds
+Size: 1024 Bytes, RTT: 1.002000 microseconds
+Size: 2048 Bytes, RTT: 0.892000 microseconds
+Size: 4096 Bytes, RTT: 2.985000 microseconds
+Size: 8192 Bytes, RTT: 4.219000 microseconds
+Size: 16384 Bytes, RTT: 6.903000 microseconds
+srun: error: nid001018: task 1: Segmentation fault (core dumped)
+srun: Terminating StepId=9450987.0
+slurmstepd: error: *** STEP 9450987.0 ON nid001017 CANCELLED AT 2025-04-06T15:35:45 ***
+srun: error: nid001017: task 0: Terminated
+srun: Force Terminated StepId=9450987.0
+$
