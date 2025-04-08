@@ -206,12 +206,17 @@ The code for our project can be found at this location: \url{https://github.com/
 
 
 \section{Exercise 1: Supercomputer Architecture with hwloc}
-We retreive the Architecture using \verb|hwloc-ls --of svg > topology.svg| and then copying the file from the cluster to our repository using the securecopy \verb|scp| command. The resulting graphical representation can be seen below.
-\begin{figure}
-  \includesvg[width=\textwidth]{img\topology.svg}
-  \caption{Dardel Architecture}
-  \label{DardelArchitectureFigure}
-\end{figure}
+We first allocated a compute node using the following command: 
+\begin{lstlisting}[language=bash,basicstyle=\ttfamily]
+salloc -t 00:30:00 --nodes 1 --ntasks-per-node 128 --cpus-per-task 1 -A edu25.DD2356 -p shared
+\end{lstlisting}
+
+We retreive the Architecture using \verb|hwloc-ls --of svg > topology.svg| on the allocated node and then copying the file from the cluster to our repository using the securecopy \verb|scp| command. The resulting graphical representation can be seen in the repository \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/2_hpc_arch_perf_model/exercise1/topology.svg}{here}.
+% \begin{figure}
+ % \includesvg[width=\textwidth]{img/topology.svg}
+%  \caption{Dardel Architecture}
+ % \label{DardelArchitectureFigure}
+% \end{figure}
 
 We can see the following structure:
 \begin{enumerate}
@@ -327,20 +332,43 @@ srun -N2 --ntasks=2 ./mpi_ping_pong
 \end{lstlisting}
 
 \subsection{Results}
-The default code in \verb| only allowed \verb|size| to be atmost 1024 in the main loop. With this confirguration, apart from the very first send-receive interaction, the RTT for the other interactions seems to be relatively constant.
+The default code in \verb|mpi_ping_pong.c| only allowed \verb|size| to be atmost 1024 in the main loop. With this confirguration, apart from the very first send-receive interaction, the RTT for the other interactions seems to be relatively constant (the downward trend below can largely be attributed to the incredibly high RTT for the first interaction)
 
-\todo{insert graph}
+  \begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{img/bonus_lim1024}
+    \caption{RTT Times (default limit)}
+    \label{fig:bonus_rtt_default}
+  \end{figure}
+  
+The graph of the output above was produced using the provided python plotting script, which can be found \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/2_hpc_arch_perf_model/bonus/graph_latency.py}{here}
 
-We believe that the first interaction has a very high RTT because of the time required to setup the initial infrastructure that will be used for the rest of the communication. On the recommendation of Professor Peng, we increased the \verb|size| limit to see some increase in the RTT to 65536 instead of 1024. With this setup, however, we started receiving segmentation faults after 16384 bytes (in one run, this was after 32768 bytes). This means that after \verb|size| reaches $32768 / 4 = 4096$ (since the printed size is multiplied with 4), there seems to be an error with the code which causes a segmentation fault. 
+We believe that the first interaction has a very high RTT because of the time required to setup the initial infrastructure that will be used for the rest of the communication. On the recommendation of Professor Peng, we increased the \verb|size| limit (\href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/2_hpc_arch_perf_model/bonus/mpi_ping_pong.c#L14}{here}) to see some increase in the RTT to 65536 instead of 1024. With this setup, however, we started receiving segmentation faults after either 16384 bytes or 32768 bytes (this seems to vary on a run-by-run basis). This means that after \verb|size| reaches $32768 / 4 = 4096$ (since the printed size is multiplied with 4), there seems to be an error with the code which causes a segmentation fault. 
 
-We did not attempt to spend time fixing the issue as we haven't yet been introduced to MPI in the course and because we did not wish to change the semantics of the original code. However, even with the output that was produced, we were able to see a gradual increasing trend in RTT as the size increases, as illustrated in the graph below. 
+We did not attempt to spend time fixing the issue as we haven't yet been introduced to MPI in the course and because we did not wish to change the semantics of the original code. However, even with the output that was produced, we were able to see a gradual increasing trend in RTT as the size increases, as illustrated in the graph below (for a run which failed after 32768 bytes of data being sent). 
 
-\todo{insert graph}
+  \begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{img/bonus_lim65536}
+    \caption{RTT Times (size limit changed to 65536)}
+    \label{fig:bonus_rtt_large}
+  \end{figure}
 
-The textual outputs for the 2 runs plotted above can be found in the 
+The textual outputs for the 2 runs plotted above can be found in the \verb|outputs.txt| file \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/2_hpc_arch_perf_model/bonus/outputs.txt}{here}
 
-\todo{The output is a bit flat for the provided sizes. Increasing ths size (to about 16384) causes segmentation fault at different points in time}
-\todo{Submit with these annotations or try and "fix" the problem}
+The incredibly high RTT time for the first send-receive interaction seems to makes it difficult to draw conclusions from the graph that can be drawn from the textual output. Thus, if we omit the plotting of the first recorded interaction, we obtain the following graph (\textit{Note: it is not clear to us if the extrapolated time at 0 message size recorded in the graph below serves a purpose any longer, but we still include the default output of the plotting script given the messages sizes and RTT without the first interaction})
+
+  \begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{img/bonus_large_pattern}
+    \caption{RTT Times (omitting outlier RTT in first interaction)}
+    \label{fig:bonus_rtt_pattern}
+  \end{figure}
+
+
+Through this, we can clearly see the following pattern in both the textual outputs and the graph: The RTT for the very first communication is an outlier, likely because of the initial cost of the send-receive infrastructue setup. After the first transmission, the RTT seems to be relatively constant for the next few sizes (except for a slight jump at 16 bytes). However, after a certain limit (in this case, it seems to be 4096 bytes of data sent), there seems to be an increase in RTT for each successive size. While the assignment does not ask for an explanation of these results, we believe this increase in RTT with increase in sizes after a certain point could be attributed to the multiple chunks in which data needs to be sent across nodes by MPI for larger sizes. 
+
+
 
 % content end
 %###############################################################################
