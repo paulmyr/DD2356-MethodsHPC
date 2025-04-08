@@ -74,6 +74,7 @@
 \usepackage{titlesec}
 \usepackage[nocheck]{fancyhdr}
 \usepackage{lastpage}
+\usepackage{svg}
 
 \usepackage{kantlipsum}
 \usepackage[colorinlistoftodos,prependcaption,textsize=tiny]{todonotes}
@@ -205,6 +206,24 @@ The code for our project can be found at this location: \url{https://github.com/
 
 
 \section{Exercise 1: Supercomputer Architecture with hwloc}
+We retreive the Architecture using \verb|hwloc-ls --of svg > topology.svg| and then copying the file from the cluster to our repository using the securecopy \verb|scp| command. The resulting graphical representation can be seen below.
+\begin{figure}
+  \includesvg[width=\textwidth]{img\topology.svg}
+  \caption{Dardel Architecture}
+  \label{DardelArchitectureFigure}
+\end{figure}
+
+We can see the following structure:
+\begin{enumerate}
+  \item Two NUMA nodes
+  \item 16 CPU Sockets per node \todo{recheck}
+  \item 4 CPU cores per Socket
+\end{enumerate}
+The cache per core consists of a $32 KB$ L1 instruction cache and a $32 KB$ L1 data cache, followed by a $512 KB$ L2 cache. The $16 MB$ L3 Cache is allocated per socket and thus shared between 4 CPU cores.
+
+\todo{Document how memory is organized across NUMA nodes and how this affects performance.}
+\todo{Specify 2 scenarios where memory locality influences execution time and resource efficiency.}
+\todo{Contrast Dardel’s architecture with Top 5 supercomputers and discuss its implications for workload execution.}
 
 \section{Exercise 2: Roofline Model}
 \todo{How to build the roofline model? What should the array size in stream benchmark be? Using 200mil causes errors during compilation. The default size seems too small according to comments in the code}
