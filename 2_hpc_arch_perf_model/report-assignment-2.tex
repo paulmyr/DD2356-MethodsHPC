@@ -310,7 +310,7 @@ With this, we obtained the following outputs (\textit{Elapsed time} was recorded
 
 Similar to the \ref{sec:matrix_multiply} analysis, we see that higher L1 cache misses lead to lower instructions per cycle and bandwidth. The elapsed time can be misleading in analysis here, since we have only one implementation, and higher values of \verb|N| will have more operations to perform, and thus a higher elapsed time for higher \verb|N| values could be expected. However, the bandwidth and instructions per cycle being lower for higher values of \verb|N| can be directly tied to the L1 cache miss ratios (as these are all unitary values). In short, the higher the L1 cache miss ratio for a run of the algorithm, the less efficient that run seems to be. 
 
-\todo{Write 2-3 sentences on using cache-aware and cache-oblivious versions of the algorithm for matrix transpose}.
+The matrix transpose implementation can be made more efficient with the help of implementations that reduce cache misses: such as the cache-aware or cache-oblivious paradigms discussed in lecture. In these paradigms, the problem (in this case, the input matrix) is divided into smaller chunks/blocks and then the result is obtained by the output produced on these smaller chunks. These promote re-use of data in cache and lead to fewer cache misses, thus improving algorithm efficiency. 
 
 \section{Bonus: Network Latency \& Bandwidth Analysis with MPI Ping-Pong}
 \subsection{Modifications to the Code}
