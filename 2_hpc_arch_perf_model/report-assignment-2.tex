@@ -241,6 +241,45 @@ The main difference between Dardel compared to the TOP5 current supercomuters is
 Dardel's dedicated GPU partition shares a lot of similarities with machines like El Capitan, however on a much smaller scale.
 
 \section{Exercise 2: Roofline Model}
+To allocate computing resources on Dardel, we use the SLURM batch scheduler. To establish the roofline
+model, we use the given Stream.c code to determine the bandwidth of Dardel.  
+The algorithmic intensity is assumed to be a constant, given by the compute architecture and clock frequency.
+We assume that no SIMD instructions are being used and that the pipeline data width equals one Byte and thus is able to archeive 1 Floating point operation per instruction cycle.
+With the clock frequency of $2.25 GHz$, we calculate based on our assumptions an algorithmic intensity (AI) of $ 2.25 GFLOP/Byte $.
+Using the AI and the Bandwidth, we can determine the Performance defined as $Performance = BW * AI$.
+
+Running the given C program gives us the following results for different N sizes:
+
+We can thus calculate the FLOPs as $FLOPs = N/t_execute$:
+
+We can calculate the Operational Intensity (OI) as $OI = N/24$:
+
+In the plots below we can see the Operational Intensity vs. Performance with regard to the roofline model.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{img/bonus_lim1024}
+  \caption{arithmetic Intensity (x-axis)[FLOPs/Byte], Performance (y-axis)[GFLOPs]}
+  \label{fig:roofline}
+\end{figure}
+
+The dots in the figure indicate our measurements for the given code simulating a compuational workload
+on a node. We can observe, that we are closer to the Bandwidth limit, indicating that our computation is 
+memory-bound. \todo{recheck}
+
+The measured FLOP/s (Operational Intensity) of our sample workload are ... to the peak FLOP/s of the system, determined via the ... \todo{question 5} .
+
+The Operational Intensity [FLOPs/Byte] of the sample workload is related to our array size $N$.
+It scales with larger array sizes. \todo{question 6}.
+
+To move the workload closer to the compute bound we could apply techniques as blocking to more efficiently use
+the cache size and minimize memory fetching to a necessary minimum.
+
+
+
+
+
+
 x - axis: AI (arithmetic complexity) -> FLOPs / Byte
 Here: Bytes is moved from main memory (especially read access).
 Classify AI in O notation: O(1) very far to the left in roofline model
