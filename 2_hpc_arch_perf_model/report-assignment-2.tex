@@ -208,27 +208,37 @@ The code for our project can be found at this location: \url{https://github.com/
 \section{Exercise 1: Supercomputer Architecture with hwloc}
 We first allocated a compute node using the following command: 
 \begin{lstlisting}[language=bash,basicstyle=\ttfamily]
-salloc -t 00:30:00 --nodes 1 --ntasks-per-node 128 --cpus-per-task 1 -A edu25.DD2356 -p shared
+salloc -t 00:30:00 --nodes 1 --ntasks-per-node 128 --cpus-per-task \
+ 1 -A edu25.DD2356 -p shared
 \end{lstlisting}
 
-We retreive the Architecture using \verb|hwloc-ls --of svg > topology.svg| on the allocated node and then copying the file from the cluster to our repository using the securecopy \verb|scp| command. The resulting graphical representation can be seen in the repository \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/2_hpc_arch_perf_model/exercise1/topology.svg}{here}.
+We retreive the Architecture using \verb|hwloc-ls --of svg > topology.svg| on the allocated node and then copying the file from the cluster to our repository using the securecopy \verb|scp| command. The resulting graphical representation can be seen in the repository \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/2_hpc_arch_perf_model/exercise1/topology.svg}{here (link)}.
 % \begin{figure}
  % \includesvg[width=\textwidth]{img/topology.svg}
 %  \caption{Dardel Architecture}
  % \label{DardelArchitectureFigure}
 % \end{figure}
 
-We can see the following structure:
+We can see the following structure (we assume package means socket here, since in the \href{https://www.pdc.kth.se/hpc-services/computing-systems/dardel-hpc-system/about-the-dardel-system-1.1053338#:~:text=Each%20node%20has%20two%20AMD%20EPYC™%C2%A0Zen2%202.25%20GHz%2064%2Dcore%20processors%2C%20which%20means%20that%20each%20compute%20node%20has%20a%20total%20of%20128%20physical%20CPU%20cores}{documentation} it is specified that each nodes hosts two AMD processors):
 \begin{enumerate}
-  \item Two NUMA nodes
-  \item 16 CPU Sockets per node \todo{recheck}
-  \item 4 CPU cores per Socket
+  \item Two Packages (or sockets)
+  \item 4 NUMA nodes per socket = 8 nodes in total
+  \item 16 physical cores per NUMA node = 128 physical cores in total
+  \item 2 virtual cores per physical core = 256 virtual cores in total.
 \end{enumerate}
-The cache per core consists of a $32 KB$ L1 instruction cache and a $32 KB$ L1 data cache, followed by a $512 KB$ L2 cache. The $16 MB$ L3 Cache is allocated per socket and thus shared between 4 CPU cores.
+The cache per core consists of a $32 KB$ L1 instruction cache and a $32 KB$ L1 data cache, followed by a $512 KB$ L2 cache. The $16 MB$ L3 Cache is shared between 4 cores and therefore an average of $4MB$ per core.
 
-\todo{Document how memory is organized across NUMA nodes and how this affects performance.}
-\todo{Specify 2 scenarios where memory locality influences execution time and resource efficiency.}
-\todo{Contrast Dardel’s architecture with Top 5 supercomputers and discuss its implications for workload execution.}
+Not all cores share a common L3 cache within a dedicated NUMA node.
+This can result in worse performance in accessing data within shared memory applications (multithreading).
+
+A Scenario where memory locality influences execution time is when two threads work on the data within the same cacheline, but from different NUMA nodes.
+Each write operation invalidates the cache of the other thread.
+
+A different scenario is when (for example the OS) interrupts the execution of a thread and resumes it on a different NUMA node.
+All caches have to be restored which results in additional execution time.
+
+The main difference between Dardel compared to the TOP5 current supercomuters is that the top machines have magnitudes more cores than Dardel.
+Dardel's dedicated GPU partition shares a lot of similarities with machines like El Capitan, however on a much smaller scale.
 
 \section{Exercise 2: Roofline Model}
 x - axis: AI (arithmetic complexity) -> FLOPs / Byte
@@ -250,12 +260,11 @@ For this one can use perf.
 
 Note: On dardel: Linaro-forge installed (gperf not available because of missing sudo privileges).
 
-
 \todo{How to establish the peak compute using the information of the processor?}
 - FLOPs/sec limited given by the core (Hardware limit -> higher is never achievable)
 
-
 \section{Exercise 3: Modeling Sparse Matrix-Vector Multiply}
+
 
 \section{Exercise 4: Measure the Performance with Perf}
 \subsection{Matrix Multiply}
