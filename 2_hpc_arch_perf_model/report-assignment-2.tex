@@ -324,7 +324,55 @@ Note: On dardel: Linaro-forge installed (gperf not available because of missing 
 - FLOPs/sec limited given by the core (Hardware limit -> higher is never achievable)
 
 \section{Exercise 3: Modeling Sparse Matrix-Vector Multiply}
+\textbf{What is the performance in total execution time?}\\
+For this question we do not consider data movement.
+The formula from the slides is 
+$$TIME = nnz \cdot (2c + 2.5r) + nrows \cdot (0.5r + w)$$.
+Without data movement we get
+$$TIME = nnz \cdot 2c$$
+So with \(nnz = nrows * 5\) and
+$\frac{1}{c} = 2.25\ GHz \Rightarrow c = \frac{1}{2.25 \cdot 10^9}\frac{s}{FLOP}$
+we recieved the values of \verb|modeled TIME (s)| in table \ref{tab:spmm}:
 
+\renewcommand{\arraystretch}{1.2}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|p{1cm}|p{1.4cm}|p{2cm}|p{1.4cm}|p{2cm}|p{1.4cm}|p{1.6cm}|}
+\hline
+nrows & nnz & modeled TIME (s) & measured TIME (s) & flops measured (GHz) & flops expected (GHz) & Bandwidth (GB/s)\\
+\hline
+10\textsuperscript{2} & 500 & 4.4444444e-7 & 0.000001 & 1. & 2.25 & 11.2\\
+10\textsuperscript{4} & 50000 & 4.4444444e-5 & 0.000074 & 1.3513514 & 2.25 & 15.135135\\
+10\textsuperscript{6} & 5000000 & 4.4444444e-3 & 0.005331 & 1.8758207 & 2.25 & 21.009192\\
+10\textsuperscript{8} & 500000000 & 0.44444444 & 0.915794 & 1.0919486 & 2.25 & 12.229825\\
+\hline
+\end{tabular}
+\caption{Sparse Matrix Multiplication}
+\label{tab:spmm}
+\end{table}
+
+\textbf{What is the measured performance in total execution time and floating-point operations per second?}\\
+See column \verb|measured Time (s)| in \ref{tab:spmm}.\\
+
+\textbf{What is the main reason for the observed difference between the modeled value and the measured value?}\\
+The main reason is that we do not consider data movement. SpMV has a verly low arithmetic intenisty, therefor is memory bound.
+Ignoring this, results in bad performance estimates.\\
+
+\textbf{What are the read bandwidth values you measure running spmv.c for different sizes  = 10**2, 10**4, 10**6, and 10**8?}\\
+Under the assumption that we can simultaniously read data and perform computation we can reformulate the equation like this
+\begin{align*}
+TIME &= 2 \cdot nnz \cdot c + 2.5 \cdot nnz \cdot r + nrows \cdot 1.5 \cdot r\\
+\Leftrightarrow TIME &= \max(2 \cdot nnz \cdot c,\ 2.5 \cdot nnz \cdot r + nrows \cdot 1.5 \cdot r)
+\end{align*}
+We also assume r = w, then we can compute
+$$r = w = TIME / (2.5 \cdot nnz + nrows \cdot 1.5)$$
+Then the bandwidth is \(\frac{1}{r}\).\\
+See column \verb|Bandwidth| in table \ref{tab:spmm}.\\
+
+\textbf{What is the bandwidth you obtain by running the STREAM benchmark on your system? How does it compare to the bandwidth you measured in SpMV? Discuss the comparison.}\\
+When running the STREAM benchmark on a single core, we recieved between 20 to 30GB/s peak bandwidth, depending on the application.
+Comparing this our results, which are between 11GB/s - 21GB/s, we see that they achieve around 50\% of the peak bandwidth.
 
 \section{Exercise 4: Measure the Performance with Perf}
 \subsection{Matrix Multiply}
