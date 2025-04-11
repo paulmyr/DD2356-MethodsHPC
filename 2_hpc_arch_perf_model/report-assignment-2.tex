@@ -187,7 +187,7 @@
 \extrafootertext{\textsuperscript{\textdagger}Authors made equal contribution to the project}
 \thispagestyle{firstpagestyle}
 
-\listoftodos
+% \listoftodos
 \vspace{1em}
 
 % content begin
@@ -198,12 +198,6 @@ The code for our project can be found at this location: \url{https://github.com/
 
 \tableofcontents
 \newpage
-
-
-\section{}
-\todo[inline]{Check headers}
-
-
 
 \section{Exercise 1: Supercomputer Architecture with hwloc}
 We first allocated a compute node using the following command: 
@@ -295,33 +289,6 @@ The Operational Intensity [FLOPs/Byte] of the sample workload is $1/24$, which i
 
 To move the workload closer to the compute bound we could apply techniques as blocking (e.g. STRIP) to more efficiently use
 the cache size and minimize memory fetching to a necessary minimum by fully utilizing the cache locality and preventing cache misses.
-
-
-
-
-\todo{remove}
-
-x - axis: AI (arithmetic complexity) -> FLOPs / Byte
-Here: Bytes is moved from main memory (especially read access).
-Classify AI in O notation: O(1) very far to the left in roofline model
-O(n) is far to the right in the roofline model!
-Depends strongly on cache misses!
-\todo{How to build the roofline model? What should the array size in stream benchmark be? Using 200mil causes errors during compilation. The default size seems too small according to comments in the code}
-MEM/BW -> using stream line code to compute this line
-
-To rank an application in the roofline model, one needs to determine the BYTE in AI.
-For this one can use perf.
--> What hardware counter to use for this (we want to see cache misses)?
-
-1) Query list of events that can be measured on a specific hardware
-2) Select events that are related to cache misses, e.g. L2 cache misses.
-
--> What options do you have to link cache misses to parts of code? (out of scope of this lecture)
-
-Note: On dardel: Linaro-forge installed (gperf not available because of missing sudo privileges).
-
-\todo{How to establish the peak compute using the information of the processor?}
-- FLOPs/sec limited given by the core (Hardware limit -> higher is never achievable)
 
 \section{Exercise 3: Modeling Sparse Matrix-Vector Multiply}
 \textbf{What is the performance in total execution time?}\\
