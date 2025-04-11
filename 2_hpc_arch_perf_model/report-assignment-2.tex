@@ -253,8 +253,22 @@ We assume that SIMD instructions are being used and that the pipeline data width
 With the clock frequency of $2.25 GHz$, we calculate based on our assumptions  $ 2.25 GFLOP/s $ peak.
 Using the AI and the Bandwidth, we can determine the Bandwidth limit defined as $Bandwidth Limit = BW * AI$.
 
-Running the given C program gives us the following results for different N sizes:
-{1000: 0.000007,10000: 0.000066,100000: 0.000655,1000000: 0.004609,10000000: 0.048994}
+Running the given C program gives us the following results for different array sizes $N$:
+\begin{table}[h!]
+  \centering
+  \begin{tabular}{|r|l|}
+  \hline
+  \textbf{N} & \textbf{Execution time [s]} \\
+  \hline
+  1,000      & 0.000007 \\
+  10,000     & 0.000066 \\
+  100,000    & 0.000655 \\
+  1,000,000  & 0.004609 \\
+  10,000,000 & 0.048994 \\
+  \hline
+  \end{tabular}
+  \caption{Execution time for varying array sizes $N$}
+  \end{table}
 
 We can thus calculate the FLOPs as $FLOPs = N/t_execute$:
 
