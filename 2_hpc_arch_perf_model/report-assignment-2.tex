@@ -235,6 +235,7 @@ The main difference between Dardel compared to the TOP5 current supercomuters is
 Dardel's dedicated GPU partition shares a lot of similarities with machines like El Capitan, however on a much smaller scale.
 
 \section{Exercise 2: Roofline Model}
+\textbf{Describe how you allocate computing resources on Dardel and establish the roofline model (memory and compute peak) on the allocated resources.}\\
 To allocate computing resources on Dardel, we use the SLURM batch scheduler. To establish the roofline
 model, we use the given Stream.c code to determine the bandwidth of Dardel.  
 The results can be seen in the repo under \verb|stream_benchmark.log|.
@@ -245,8 +246,9 @@ The peak FLOP/s is assumed to be a constant, given by the compute architecture a
 We assume that SIMD instructions are being used and that the pipeline data width equals one Byte and thus is able to archeive 16 Floating point operation per instruction cycle (as stated in comparable AMD documentation 
 \url(https://www.amd.com/content/dam/amd/en/documents/epyc-technical-docs/tuning-guides/amd-epyc-7002-tg-hpc-56827.pdf)(p.39)).
 With the clock frequency of $2.25 GHz$, we calculate based on our assumptions  $ 2.25 GFLOP/s $ peak.
-Using the AI and the Bandwidth, we can determine the Bandwidth limit defined as $Bandwidth Limit = BW * AI$.
+Using the AI and the Bandwidth, we can determine the Bandwidth limit defined as $ Bandwidth Limit = BW * AI$.
 
+\textbf{Compute the FLOP/s of the above C program}\\
 Running the given C program gives us the following results for different array sizes $N$:
 \begin{table}[h!]
   \centering
@@ -268,9 +270,9 @@ We can thus calculate the FLOPs as $FLOPs = N/t_execute$:
 
 We can calculate the Operational Intensity (OI) as $OI = N/24 * N = 1/24$:
 
+\textbf{Plot Operational Intensity vs. Performance (FLOP/s) using Python}\\
 In the plots below we can see the Operational Intensity vs. Performance with regard to the roofline model. 
-Simulations for $10e8 Bytes$ and larger array sizes fail to run on one CPU due to running out of memory (Slurm returning OOM error). 
-We chose the biggest possible constellation with $10e7$.
+For the roofline model, wechose the biggest possible constellation with $10e7$.
 
 \begin{figure}[H]
   \centering
@@ -279,14 +281,16 @@ We chose the biggest possible constellation with $10e7$.
   \label{fig:roofline}
 \end{figure}
 
+\textbf{Analyze the placement on the Roofline model. Interpret whether the computation is memory-bound or compute-bound.}\\
 The dots in the figure indicate our measurements for the given code simulating a computational workload
 on a node. We can observe, that we are closer to the Bandwidth limit, indicating that our computation is 
 memory-bound. 
+\textbf{Does the measured FLOP/s approach the peak FLOP/s of the system? If not, why?}\\
 The measured FLOP/s (Operational Intensity) of our sample workload is far below the peak FLOP/s of the system as shown in the plot. Since the memory limit is a bottleneck it cannot
 fully utilize the computing resources.
-
+\textbf{Is the operational intensity high or low, and how does that impact performance?}\\
 The Operational Intensity [FLOPs/Byte] of the sample workload is $1/24$, which is relatively low and can be explained due to matrix entries only used once.
-
+\textbf{What optimizations could be applied to move the workload closer to the compute-bound region?}\\
 To move the workload closer to the compute bound we could apply techniques as blocking (e.g. STRIP) to more efficiently use
 the cache size and minimize memory fetching to a necessary minimum by fully utilizing the cache locality and preventing cache misses.
 
