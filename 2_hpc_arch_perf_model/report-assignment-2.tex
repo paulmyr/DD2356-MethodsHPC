@@ -244,47 +244,48 @@ Dardel's dedicated GPU partition shares a lot of similarities with machines like
 To allocate computing resources on Dardel, we use the SLURM batch scheduler. To establish the roofline
 model, we use the given Stream.c code to determine the bandwidth of Dardel.  
 The results can be seen in the repo under \verb|stream_benchmark.log|.
-For the addition, we get a bandwidth of $21497.8 MB/s$.
+For the addition, we get a bandwidth of $29389.9 MB/s$.
+The sample workload is run on the shared partition of Dardel using only one core. 
 
 The peak FLOP/s is assumed to be a constant, given by the compute architecture and clock frequency.
 We assume that SIMD instructions are being used and that the pipeline data width equals one Byte and thus is able to archeive 16 Floating point operation per instruction cycle (as stated in comparable AMD documentation 
 \url(https://www.amd.com/content/dam/amd/en/documents/epyc-technical-docs/tuning-guides/amd-epyc-7002-tg-hpc-56827.pdf)(p.39)).
 With the clock frequency of $2.25 GHz$, we calculate based on our assumptions  $ 2.25 GFLOP/s $ peak.
-Using the AI and the Bandwidth, we can determine the Performance defined as $Performance = BW * AI$.
+Using the AI and the Bandwidth, we can determine the Bandwidth limit defined as $Bandwidth Limit = BW * AI$.
 
 Running the given C program gives us the following results for different N sizes:
 {1000: 0.000007,10000: 0.000066,100000: 0.000655,1000000: 0.004609,10000000: 0.048994}
 
 We can thus calculate the FLOPs as $FLOPs = N/t_execute$:
 
-We can calculate the Operational Intensity (OI) as $OI = N/24$:
+We can calculate the Operational Intensity (OI) as $OI = N/24 * N = 1/24$:
 
 In the plots below we can see the Operational Intensity vs. Performance with regard to the roofline model. 
-Simulations for $10e8 Bytes$ and larger array sizes fail to run on one CPU due to running out of memory (Slurm returning OOM error). We adress this by allocating additional memory of 200GB for the simulations for $10e8 B$ and above.
+Simulations for $10e8 Bytes$ and larger array sizes fail to run on one CPU due to running out of memory (Slurm returning OOM error). 
+We chose the biggest possible constellation with $10e7$.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.9\textwidth]{img/bonus_lim1024}
-  \caption{arithmetic Intensity (x-axis)[FLOPs/Byte], Performance (y-axis)[GFLOPs]}
+  \includegraphics[width=0.9\textwidth]{img/roofline_model.png}
+  \caption{Dardel roofline model: Operational Intensity vs. Performance}
   \label{fig:roofline}
 \end{figure}
 
-The dots in the figure indicate our measurements for the given code simulating a compuational workload
+The dots in the figure indicate our measurements for the given code simulating a computational workload
 on a node. We can observe, that we are closer to the Bandwidth limit, indicating that our computation is 
-memory-bound. \todo{recheck}
+memory-bound. 
+The measured FLOP/s (Operational Intensity) of our sample workload is far below the peak FLOP/s of the system as shown in the plot. Since the memory limit is a bottleneck it cannot
+fully utilize the computing resources.
 
-The measured FLOP/s (Operational Intensity) of our sample workload is close to the peak FLOP/s of the system as shown in the plot. Hence the computation is compute bound. 
+The Operational Intensity [FLOPs/Byte] of the sample workload is $1/24$, which is relatively low and can be explained due to matrix entries only used once.
 
-The Operational Intensity [FLOPs/Byte] of the sample workload is related to our array size $N$.
-It scales with larger array sizes. Since the sample code does perform a vector addition, where each element is used once, the data is not reused and thus result in low oper
-
-To move the workload closer to the compute bound we could apply techniques as blocking to more efficiently use
-the cache size and minimize memory fetching to a necessary minimum.
-
+To move the workload closer to the compute bound we could apply techniques as blocking (e.g. STRIP) to more efficiently use
+the cache size and minimize memory fetching to a necessary minimum by fully utilizing the cache locality and preventing cache misses.
 
 
 
 
+\todo{remove}
 
 x - axis: AI (arithmetic complexity) -> FLOPs / Byte
 Here: Bytes is moved from main memory (especially read access).
