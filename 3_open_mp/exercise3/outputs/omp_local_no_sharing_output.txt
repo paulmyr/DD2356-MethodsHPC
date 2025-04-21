@@ -1,0 +1,176 @@
+Running with 1 threads
+OMP w/ LOCAL SUM (NO SHARING)
+NUMBER OF THREADS TO RUN WITH: 1.
+Run 1: 0.325278 seconds. Sum was: 49992077.899
+Run 2: 0.324999 seconds. Sum was: 49992077.899
+Run 3: 0.325144 seconds. Sum was: 49992077.899
+Run 4: 0.325046 seconds. Sum was: 49992077.899
+Run 5: 0.325015 seconds. Sum was: 49992077.899
+Run 6: 0.324981 seconds. Sum was: 49992077.899
+Run 7: 0.325103 seconds. Sum was: 49992077.899
+Run 8: 0.324988 seconds. Sum was: 49992077.899
+Run 9: 0.325105 seconds. Sum was: 49992077.899
+Run 10: 0.325042 seconds. Sum was: 49992077.899
+
+Average time: 0.325 seconds
+Standard deviation: 0.000087 seconds
+Running with 2 threads
+OMP w/ LOCAL SUM (NO SHARING)
+NUMBER OF THREADS TO RUN WITH: 2.
+Run 1: 0.163190 seconds. Sum was: 49992077.899
+Run 2: 0.162582 seconds. Sum was: 49992077.899
+Run 3: 0.162559 seconds. Sum was: 49992077.899
+Run 4: 0.162697 seconds. Sum was: 49992077.899
+Run 5: 0.162682 seconds. Sum was: 49992077.899
+Run 6: 0.162553 seconds. Sum was: 49992077.899
+Run 7: 0.162595 seconds. Sum was: 49992077.899
+Run 8: 0.162641 seconds. Sum was: 49992077.899
+Run 9: 0.162576 seconds. Sum was: 49992077.899
+Run 10: 0.162678 seconds. Sum was: 49992077.899
+
+Average time: 0.163 seconds
+Standard deviation: 0.000179 seconds
+Running with 4 threads
+OMP w/ LOCAL SUM (NO SHARING)
+NUMBER OF THREADS TO RUN WITH: 4.
+Run 1: 0.082270 seconds. Sum was: 49992077.899
+Run 2: 0.081439 seconds. Sum was: 49992077.899
+Run 3: 0.081829 seconds. Sum was: 49992077.899
+Run 4: 0.081323 seconds. Sum was: 49992077.899
+Run 5: 0.081351 seconds. Sum was: 49992077.899
+Run 6: 0.081445 seconds. Sum was: 49992077.899
+Run 7: 0.081428 seconds. Sum was: 49992077.899
+Run 8: 0.081440 seconds. Sum was: 49992077.899
+Run 9: 0.081335 seconds. Sum was: 49992077.899
+Run 10: 0.081330 seconds. Sum was: 49992077.899
+
+Average time: 0.082 seconds
+Standard deviation: 0.000287 seconds
+Running with 8 threads
+OMP w/ LOCAL SUM (NO SHARING)
+NUMBER OF THREADS TO RUN WITH: 8.
+Run 1: 0.042183 seconds. Sum was: 49992077.899
+Run 2: 0.040905 seconds. Sum was: 49992077.899
+Run 3: 0.041405 seconds. Sum was: 49992077.899
+Run 4: 0.040842 seconds. Sum was: 49992077.899
+Run 5: 0.040982 seconds. Sum was: 49992077.899
+Run 6: 0.040854 seconds. Sum was: 49992077.899
+Run 7: 0.040867 seconds. Sum was: 49992077.899
+Run 8: 0.040905 seconds. Sum was: 49992077.899
+Run 9: 0.040760 seconds. Sum was: 49992077.899
+Run 10: 0.040736 seconds. Sum was: 49992077.899
+
+Average time: 0.041 seconds
+Standard deviation: 0.000419 seconds
+Running with 16 threads
+OMP w/ LOCAL SUM (NO SHARING)
+NUMBER OF THREADS TO RUN WITH: 16.
+Run 1: 0.024524 seconds. Sum was: 49992077.899
+Run 2: 0.020924 seconds. Sum was: 49992077.899
+Run 3: 0.020905 seconds. Sum was: 49992077.899
+Run 4: 0.020903 seconds. Sum was: 49992077.899
+Run 5: 0.020918 seconds. Sum was: 49992077.899
+Run 6: 0.020975 seconds. Sum was: 49992077.899
+Run 7: 0.020961 seconds. Sum was: 49992077.899
+Run 8: 0.020862 seconds. Sum was: 49992077.899
+Run 9: 0.020925 seconds. Sum was: 49992077.899
+Run 10: 0.020909 seconds. Sum was: 49992077.899
+
+Average time: 0.021 seconds
+Standard deviation: 0.001082 seconds
+Running with 20 threads
+OMP w/ LOCAL SUM (NO SHARING)
+NUMBER OF THREADS TO RUN WITH: 20.
+Run 1: 0.029958 seconds. Sum was: 49992077.899
+Run 2: 0.027943 seconds. Sum was: 49992077.899
+Run 3: 0.027954 seconds. Sum was: 49992077.899
+Run 4: 0.028148 seconds. Sum was: 49992077.899
+Run 5: 0.028163 seconds. Sum was: 49992077.899
+Run 6: 0.027867 seconds. Sum was: 49992077.899
+Run 7: 0.027596 seconds. Sum was: 49992077.899
+Run 8: 0.027725 seconds. Sum was: 49992077.899
+Run 9: 0.028013 seconds. Sum was: 49992077.899
+Run 10: 0.028225 seconds. Sum was: 49992077.899
+
+Average time: 0.028 seconds
+Standard deviation: 0.000628 seconds
+Running with 24 threads
+OMP w/ LOCAL SUM (NO SHARING)
+NUMBER OF THREADS TO RUN WITH: 24.
+Run 1: 0.026580 seconds. Sum was: 49992077.899
+Run 2: 0.024022 seconds. Sum was: 49992077.899
+Run 3: 0.024077 seconds. Sum was: 49992077.899
+Run 4: 0.024171 seconds. Sum was: 49992077.899
+Run 5: 0.024309 seconds. Sum was: 49992077.899
+Run 6: 0.024131 seconds. Sum was: 49992077.899
+Run 7: 0.023966 seconds. Sum was: 49992077.899
+Run 8: 0.024021 seconds. Sum was: 49992077.899
+Run 9: 0.023928 seconds. Sum was: 49992077.899
+Run 10: 0.024194 seconds. Sum was: 49992077.899
+
+Average time: 0.024 seconds
+Standard deviation: 0.000755 seconds
+Running with 28 threads
+OMP w/ LOCAL SUM (NO SHARING)
+NUMBER OF THREADS TO RUN WITH: 28.
+Run 1: 0.028389 seconds. Sum was: 49992077.899
+Run 2: 0.025187 seconds. Sum was: 49992077.899
+Run 3: 0.025140 seconds. Sum was: 49992077.899
+Run 4: 0.025341 seconds. Sum was: 49992077.899
+Run 5: 0.025478 seconds. Sum was: 49992077.899
+Run 6: 0.025275 seconds. Sum was: 49992077.899
+Run 7: 0.025268 seconds. Sum was: 49992077.899
+Run 8: 0.025189 seconds. Sum was: 49992077.899
+Run 9: 0.025931 seconds. Sum was: 49992077.899
+Run 10: 0.025088 seconds. Sum was: 49992077.899
+
+Average time: 0.026 seconds
+Standard deviation: 0.000948 seconds
+Running with 32 threads
+OMP w/ LOCAL SUM (NO SHARING)
+NUMBER OF THREADS TO RUN WITH: 32.
+Run 1: 0.026476 seconds. Sum was: 49992077.899
+Run 2: 0.021900 seconds. Sum was: 49992077.899
+Run 3: 0.021891 seconds. Sum was: 49992077.899
+Run 4: 0.022013 seconds. Sum was: 49992077.899
+Run 5: 0.022158 seconds. Sum was: 49992077.899
+Run 6: 0.022048 seconds. Sum was: 49992077.899
+Run 7: 0.021897 seconds. Sum was: 49992077.899
+Run 8: 0.021919 seconds. Sum was: 49992077.899
+Run 9: 0.022018 seconds. Sum was: 49992077.899
+Run 10: 0.022090 seconds. Sum was: 49992077.899
+
+Average time: 0.022 seconds
+Standard deviation: 0.001348 seconds
+Running with 64 threads
+OMP w/ LOCAL SUM (NO SHARING)
+NUMBER OF THREADS TO RUN WITH: 64.
+Run 1: 0.029756 seconds. Sum was: 49992077.899
+Run 2: 0.021630 seconds. Sum was: 49992077.899
+Run 3: 0.021558 seconds. Sum was: 49992077.899
+Run 4: 0.021520 seconds. Sum was: 49992077.899
+Run 5: 0.021678 seconds. Sum was: 49992077.899
+Run 6: 0.021667 seconds. Sum was: 49992077.899
+Run 7: 0.021497 seconds. Sum was: 49992077.899
+Run 8: 0.021466 seconds. Sum was: 49992077.899
+Run 9: 0.021488 seconds. Sum was: 49992077.899
+Run 10: 0.021618 seconds. Sum was: 49992077.899
+
+Average time: 0.022 seconds
+Standard deviation: 0.002457 seconds
+Running with 128 threads
+OMP w/ LOCAL SUM (NO SHARING)
+NUMBER OF THREADS TO RUN WITH: 128.
+Run 1: 0.045642 seconds. Sum was: 49992077.899
+Run 2: 0.022207 seconds. Sum was: 49992077.899
+Run 3: 0.022107 seconds. Sum was: 49992077.899
+Run 4: 0.022274 seconds. Sum was: 49992077.899
+Run 5: 0.022392 seconds. Sum was: 49992077.899
+Run 6: 0.022122 seconds. Sum was: 49992077.899
+Run 7: 0.022076 seconds. Sum was: 49992077.899
+Run 8: 0.022139 seconds. Sum was: 49992077.899
+Run 9: 0.022275 seconds. Sum was: 49992077.899
+Run 10: 0.022395 seconds. Sum was: 49992077.899
+
+Average time: 0.025 seconds
+Standard deviation: 0.007027 seconds

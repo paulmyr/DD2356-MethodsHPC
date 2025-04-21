@@ -1,0 +1,176 @@
+Running with 1 threads
+OMP SUM
+NUMBER OF THREADS TO RUN WITH: 1.
+Run 1: 0.325246 seconds. Sum was: 49992077.899
+Run 2: 0.325188 seconds. Sum was: 49992077.899
+Run 3: 0.324976 seconds. Sum was: 49992077.899
+Run 4: 0.325000 seconds. Sum was: 49992077.899
+Run 5: 0.325028 seconds. Sum was: 49992077.899
+Run 6: 0.325050 seconds. Sum was: 49992077.899
+Run 7: 0.324945 seconds. Sum was: 49992077.899
+Run 8: 0.325159 seconds. Sum was: 49992077.899
+Run 9: 0.325003 seconds. Sum was: 49992077.899
+Run 10: 0.324966 seconds. Sum was: 49992077.899
+
+Average time: 0.325 seconds
+Standard deviation: 0.000099 seconds
+Running with 2 threads
+OMP SUM
+NUMBER OF THREADS TO RUN WITH: 2.
+Run 1: 0.575610 seconds. Sum was: 27236566.182
+Run 2: 0.573143 seconds. Sum was: 28213459.723
+Run 3: 0.583564 seconds. Sum was: 27612900.012
+Run 4: 0.572613 seconds. Sum was: 27624198.007
+Run 5: 0.577926 seconds. Sum was: 27202040.812
+Run 6: 0.583913 seconds. Sum was: 27261736.080
+Run 7: 0.579011 seconds. Sum was: 27124436.128
+Run 8: 0.576999 seconds. Sum was: 28301738.315
+Run 9: 0.578003 seconds. Sum was: 28130926.801
+Run 10: 0.574641 seconds. Sum was: 27505318.610
+
+Average time: 0.578 seconds
+Standard deviation: 0.003681 seconds
+Running with 4 threads
+OMP SUM
+NUMBER OF THREADS TO RUN WITH: 4.
+Run 1: 0.508244 seconds. Sum was: 14759982.529
+Run 2: 0.503931 seconds. Sum was: 15022253.883
+Run 3: 0.504889 seconds. Sum was: 14698524.506
+Run 4: 0.506822 seconds. Sum was: 14633962.171
+Run 5: 0.500619 seconds. Sum was: 15394757.912
+Run 6: 0.502348 seconds. Sum was: 14910698.546
+Run 7: 0.506009 seconds. Sum was: 14972140.583
+Run 8: 0.505936 seconds. Sum was: 14952885.222
+Run 9: 0.503189 seconds. Sum was: 14939993.670
+Run 10: 0.504248 seconds. Sum was: 14950377.029
+
+Average time: 0.505 seconds
+Standard deviation: 0.002134 seconds
+Running with 8 threads
+OMP SUM
+NUMBER OF THREADS TO RUN WITH: 8.
+Run 1: 0.454480 seconds. Sum was: 7454080.813
+Run 2: 0.453113 seconds. Sum was: 7765715.389
+Run 3: 0.454691 seconds. Sum was: 7560698.270
+Run 4: 0.460758 seconds. Sum was: 7409391.799
+Run 5: 0.455841 seconds. Sum was: 7730449.937
+Run 6: 0.454974 seconds. Sum was: 7557918.679
+Run 7: 0.454813 seconds. Sum was: 7626059.194
+Run 8: 0.453678 seconds. Sum was: 7497517.702
+Run 9: 0.454864 seconds. Sum was: 7460472.826
+Run 10: 0.453939 seconds. Sum was: 7826391.206
+
+Average time: 0.455 seconds
+Standard deviation: 0.002015 seconds
+Running with 16 threads
+OMP SUM
+NUMBER OF THREADS TO RUN WITH: 16.
+Run 1: 0.423723 seconds. Sum was: 3990237.404
+Run 2: 0.423933 seconds. Sum was: 4061058.998
+Run 3: 0.420931 seconds. Sum was: 4080743.969
+Run 4: 0.423400 seconds. Sum was: 4030077.110
+Run 5: 0.424926 seconds. Sum was: 4057061.818
+Run 6: 0.421880 seconds. Sum was: 4078115.773
+Run 7: 0.421372 seconds. Sum was: 4051546.398
+Run 8: 0.424602 seconds. Sum was: 3947426.171
+Run 9: 0.422093 seconds. Sum was: 4080973.515
+Run 10: 0.423022 seconds. Sum was: 3960648.009
+
+Average time: 0.423 seconds
+Standard deviation: 0.001298 seconds
+Running with 20 threads
+OMP SUM
+NUMBER OF THREADS TO RUN WITH: 20.
+Run 1: 0.572408 seconds. Sum was: 4771573.703
+Run 2: 0.569637 seconds. Sum was: 4897395.214
+Run 3: 0.568178 seconds. Sum was: 4869864.443
+Run 4: 0.569203 seconds. Sum was: 4871910.212
+Run 5: 0.569623 seconds. Sum was: 4750092.442
+Run 6: 0.573669 seconds. Sum was: 4720378.906
+Run 7: 0.571837 seconds. Sum was: 4722276.182
+Run 8: 0.572324 seconds. Sum was: 4736408.561
+Run 9: 0.571654 seconds. Sum was: 4718979.247
+Run 10: 0.572267 seconds. Sum was: 4648857.454
+
+Average time: 0.571 seconds
+Standard deviation: 0.001688 seconds
+Running with 24 threads
+OMP SUM
+NUMBER OF THREADS TO RUN WITH: 24.
+Run 1: 0.640355 seconds. Sum was: 3982263.874
+Run 2: 0.637444 seconds. Sum was: 3917652.733
+Run 3: 0.637303 seconds. Sum was: 3944927.214
+Run 4: 0.635029 seconds. Sum was: 3940472.531
+Run 5: 0.632870 seconds. Sum was: 4018297.758
+Run 6: 0.633701 seconds. Sum was: 4012808.542
+Run 7: 0.632783 seconds. Sum was: 4002961.501
+Run 8: 0.631780 seconds. Sum was: 4003636.819
+Run 9: 0.633950 seconds. Sum was: 3929379.437
+Run 10: 0.633952 seconds. Sum was: 4046331.742
+
+Average time: 0.635 seconds
+Standard deviation: 0.002522 seconds
+Running with 28 threads
+OMP SUM
+NUMBER OF THREADS TO RUN WITH: 28.
+Run 1: 0.511402 seconds. Sum was: 2670673.995
+Run 2: 0.507818 seconds. Sum was: 2758691.061
+Run 3: 0.507355 seconds. Sum was: 2728921.706
+Run 4: 0.507766 seconds. Sum was: 2771347.964
+Run 5: 0.508366 seconds. Sum was: 2733778.642
+Run 6: 0.507599 seconds. Sum was: 2740930.166
+Run 7: 0.507398 seconds. Sum was: 2694137.741
+Run 8: 0.507286 seconds. Sum was: 2719742.601
+Run 9: 0.507543 seconds. Sum was: 2698378.930
+Run 10: 0.507196 seconds. Sum was: 2624870.876
+
+Average time: 0.508 seconds
+Standard deviation: 0.001187 seconds
+Running with 32 threads
+OMP SUM
+NUMBER OF THREADS TO RUN WITH: 32.
+Run 1: 0.878126 seconds. Sum was: 1522882.926
+Run 2: 0.875702 seconds. Sum was: 1500332.088
+Run 3: 0.876022 seconds. Sum was: 1493948.238
+Run 4: 0.876310 seconds. Sum was: 1537919.047
+Run 5: 0.876166 seconds. Sum was: 1486808.185
+Run 6: 0.876252 seconds. Sum was: 1516046.259
+Run 7: 0.876253 seconds. Sum was: 1501857.496
+Run 8: 0.875794 seconds. Sum was: 1527504.904
+Run 9: 0.875939 seconds. Sum was: 1497232.863
+Run 10: 0.876482 seconds. Sum was: 1516696.203
+
+Average time: 0.876 seconds
+Standard deviation: 0.000649 seconds
+Running with 64 threads
+OMP SUM
+NUMBER OF THREADS TO RUN WITH: 64.
+Run 1: 0.837231 seconds. Sum was: 965233.594
+Run 2: 0.832255 seconds. Sum was: 975692.295
+Run 3: 0.832676 seconds. Sum was: 953594.794
+Run 4: 0.833003 seconds. Sum was: 974205.478
+Run 5: 0.833231 seconds. Sum was: 977544.221
+Run 6: 0.835241 seconds. Sum was: 978455.801
+Run 7: 0.834425 seconds. Sum was: 980493.250
+Run 8: 0.834468 seconds. Sum was: 982423.959
+Run 9: 0.835027 seconds. Sum was: 978009.672
+Run 10: 0.835436 seconds. Sum was: 988844.903
+
+Average time: 0.834 seconds
+Standard deviation: 0.001449 seconds
+Running with 128 threads
+OMP SUM
+NUMBER OF THREADS TO RUN WITH: 128.
+Run 1: 0.767556 seconds. Sum was: 522244.466
+Run 2: 0.742138 seconds. Sum was: 527756.683
+Run 3: 0.742378 seconds. Sum was: 527191.826
+Run 4: 0.743010 seconds. Sum was: 531991.500
+Run 5: 0.742823 seconds. Sum was: 526497.165
+Run 6: 0.742572 seconds. Sum was: 525972.886
+Run 7: 0.742438 seconds. Sum was: 524503.176
+Run 8: 0.742484 seconds. Sum was: 520969.682
+Run 9: 0.742870 seconds. Sum was: 528264.226
+Run 10: 0.742832 seconds. Sum was: 531047.311
+
+Average time: 0.745 seconds
+Standard deviation: 0.007486 seconds

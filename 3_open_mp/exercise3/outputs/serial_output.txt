@@ -1,0 +1,13 @@
+Run 1: 0.331673 seconds. Sum was: 49992077.899
+Run 2: 0.332052 seconds. Sum was: 49992077.899
+Run 3: 0.331963 seconds. Sum was: 49992077.899
+Run 4: 0.331599 seconds. Sum was: 49992077.899
+Run 5: 0.331718 seconds. Sum was: 49992077.899
+Run 6: 0.334790 seconds. Sum was: 49992077.899
+Run 7: 0.333500 seconds. Sum was: 49992077.899
+Run 8: 0.331631 seconds. Sum was: 49992077.899
+Run 9: 0.331659 seconds. Sum was: 49992077.899
+Run 10: 0.332391 seconds. Sum was: 49992077.899
+
+Average time: 0.332 seconds
+Standard deviation: 0.000995 seconds
