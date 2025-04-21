@@ -31,7 +31,7 @@ void compute() {
 }
 
 void write_output() {
-    FILE *f = fopen("output.txt", "w");
+    FILE *f = fopen("serial_output.txt", "w");
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             fprintf(f, "%f ", h[i][j]);
@@ -43,8 +43,12 @@ void write_output() {
 
 int main() {
     initialize();
+    double t_start = omp_get_wtime();
     compute();
-    write_output();
-    printf("Computation completed.\n");
+    double t_end = omp_get_wtime();
+    double t_comp = t_end - t_start;
+    // write_output();
+    // printf("Tstart: %d, Tend %d", t_start, t_end);
+    printf("[SERIAL] Computation completed in: %.3f seconds.\n", t_comp);
     return 0;
 }
