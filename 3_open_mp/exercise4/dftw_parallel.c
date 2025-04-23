@@ -32,8 +32,8 @@ int printResults(double *xr, double *xi, int N);
 
 int main(int argc, char *argv[]) {
   // size of input array
-  int N = 8000; // 8,000 is a good number for testing
-  printf("DFTW calculation with N = %d \n", N);
+  int N = 10000; // 8,000 is a good number for testing
+  printf("DFTW calculation with N = %d, using %d threads \n", N, omp_get_max_threads());
 
   // Allocate array for input vector
   double *xr = (double *)malloc(N * sizeof(double));
@@ -62,7 +62,7 @@ int main(int argc, char *argv[]) {
 
   // stop timer
   double run_time = omp_get_wtime() - start_time;
-  printf("DFTW computation in %f seconds\n", run_time);
+  printf("Time(seconds):%f\n", run_time);
 
   // check the results: easy to make correctness errors with openMP
   checkResults(xr, xi, xr_check, xi_check, Xr_o, Xi_o, N);

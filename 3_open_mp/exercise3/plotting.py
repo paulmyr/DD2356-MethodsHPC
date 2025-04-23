@@ -11,10 +11,10 @@ plt.style.use('seaborn-v0_8-muted')
 
 fig, ax = plt.subplots(figsize=(10, 6))
 
-ax.plot(THREAD_COUNTS, SERIAL_RUNTIME, label="Serial", marker='o', linestyle='-', color='#1f77b4', linewidth=2)
-ax.plot(THREAD_COUNTS, OMP_OUTPUT, label="Vanilla OMP", marker='s', linestyle='--', color='#ff7f0e', linewidth=2)
-ax.plot(THREAD_COUNTS, OMP_LOCAL_OUTPUT, label="OMP w/ Local Sum", marker='^', linestyle=':', color='#2ca02c', linewidth=2)
-ax.plot(THREAD_COUNTS, OMP_LOCAL_NO_SHARING_OUTPUT, label="OMP w/ Local Sum (no sharing)", marker='d', linestyle='-.', color='#9467bd', linewidth=2)
+ax.plot(THREAD_COUNTS, SERIAL_RUNTIME, label='Serial', marker='o', linestyle='-', color='#1f77b4', linewidth=2)
+ax.plot(THREAD_COUNTS, OMP_OUTPUT, label='Vanilla OMP', marker='s', linestyle='--', color='#ff7f0e', linewidth=2)
+ax.plot(THREAD_COUNTS, OMP_LOCAL_OUTPUT, label='OMP w/ Local Sum', marker='^', linestyle=':', color='#2ca02c', linewidth=2)
+ax.plot(THREAD_COUNTS, OMP_LOCAL_NO_SHARING_OUTPUT, label='OMP w/ Local Sum (no sharing)', marker='d', linestyle='-.', color='#9467bd', linewidth=2)
 # ax.plot(THREAD_COUNTS, OMP_CRITICAL_OUTPUT, label="OMP w/ Critical Region", marker='p', linestyle='-', color='#8c564b', linewidth=2)
 
 ax.set_xlabel("Number of Threads", fontsize=14, fontweight='bold', color='darkblue')
