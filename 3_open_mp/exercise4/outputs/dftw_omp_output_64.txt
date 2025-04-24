@@ -1,0 +1,171 @@
+----------------------------------
+Running with 1 threads
+#### RUN ####
+DFTW calculation with N = 10000, using 1 threads 
+Time(seconds):17.581508
+Xre[0] = 10000.000000 
+#### RUN ####
+DFTW calculation with N = 10000, using 1 threads 
+Time(seconds):17.581468
+Xre[0] = 10000.000000 
+#### RUN ####
+DFTW calculation with N = 10000, using 1 threads 
+Time(seconds):17.575873
+Xre[0] = 10000.000000 
+#### RUN ####
+DFTW calculation with N = 10000, using 1 threads 
+Time(seconds):17.590026
+Xre[0] = 10000.000000 
+#### RUN ####
+DFTW calculation with N = 10000, using 1 threads 
+Time(seconds):17.579617
+Xre[0] = 10000.000000 
+#### RUN ####
+DFTW calculation with N = 10000, using 1 threads 
+Time(seconds):17.567653
+Xre[0] = 10000.000000 
+#### RUN ####
+DFTW calculation with N = 10000, using 1 threads 
+Time(seconds):17.576166
+Xre[0] = 10000.000000 
+#### RUN ####
+DFTW calculation with N = 10000, using 1 threads 
+Time(seconds):17.576486
+Xre[0] = 10000.000000 
+#### RUN ####
+DFTW calculation with N = 10000, using 1 threads 
+Time(seconds):17.583799
+Xre[0] = 10000.000000 
+#### RUN ####
+DFTW calculation with N = 10000, using 1 threads 
+Time(seconds):17.583326
+Xre[0] = 10000.000000 
+----------------------------------
+Running with 32 threads
+#### RUN ####
+DFTW calculation with N = 10000, using 32 threads 
+Time(seconds):0.559990
+Xre[0] = 10000.000000 
+#### RUN ####
+DFTW calculation with N = 10000, using 32 threads 
+Time(seconds):0.559720
+Xre[0] = 10000.000000 
+#### RUN ####
+DFTW calculation with N = 10000, using 32 threads 
+Time(seconds):0.566978
+Xre[0] = 10000.000000 
+#### RUN ####
+DFTW calculation with N = 10000, using 32 threads 
+Time(seconds):0.560898
+Xre[0] = 10000.000000 
+#### RUN ####
+DFTW calculation with N = 10000, using 32 threads 
+Time(seconds):0.559557
+Xre[0] = 10000.000000 
+#### RUN ####
+DFTW calculation with N = 10000, using 32 threads 
+Time(seconds):0.559652
+Xre[0] = 10000.000000 
+#### RUN ####
+DFTW calculation with N = 10000, using 32 threads 
+Time(seconds):0.560333
+Xre[0] = 10000.000000 
+#### RUN ####
+DFTW calculation with N = 10000, using 32 threads 
+Time(seconds):0.563769
+Xre[0] = 10000.000000 
+#### RUN ####
+DFTW calculation with N = 10000, using 32 threads 
+Time(seconds):0.566911
+Xre[0] = 10000.000000 
+#### RUN ####
+DFTW calculation with N = 10000, using 32 threads 
+Time(seconds):0.568101
+Xre[0] = 10000.000000 
+----------------------------------
+Running with 64 threads
+#### RUN ####
+DFTW calculation with N = 10000, using 64 threads 
+Time(seconds):0.422027
+Xre[0] = 10000.000000 
+#### RUN ####
+DFTW calculation with N = 10000, using 64 threads 
+Time(seconds):0.415039
+Xre[0] = 10000.000000 
+#### RUN ####
+DFTW calculation with N = 10000, using 64 threads 
+Time(seconds):0.411543
+Xre[0] = 10000.000000 
+#### RUN ####
+DFTW calculation with N = 10000, using 64 threads 
+Time(seconds):0.411697
+Xre[0] = 10000.000000 
+#### RUN ####
+DFTW calculation with N = 10000, using 64 threads 
+Time(seconds):0.397593
+Xre[0] = 10000.000000 
+#### RUN ####
+DFTW calculation with N = 10000, using 64 threads 
+Time(seconds):0.417291
+Xre[0] = 10000.000000 
+#### RUN ####
+DFTW calculation with N = 10000, using 64 threads 
+Time(seconds):0.410755
+Xre[0] = 10000.000000 
+#### RUN ####
+DFTW calculation with N = 10000, using 64 threads 
+Time(seconds):0.407222
+Xre[0] = 10000.000000 
+#### RUN ####
+DFTW calculation with N = 10000, using 64 threads 
+Time(seconds):0.407842
+Xre[0] = 10000.000000 
+#### RUN ####
+DFTW calculation with N = 10000, using 64 threads 
+Time(seconds):0.401989
+Xre[0] = 10000.000000 
+----------------------------------
+Running with 128 threads
+#### RUN ####
+DFTW calculation with N = 10000, using 128 threads 
+Time(seconds):0.492094
+Xre[0] = 10000.000000 
+#### RUN ####
+DFTW calculation with N = 10000, using 128 threads 
+Time(seconds):0.479600
+Xre[0] = 10000.000000 
+#### RUN ####
+DFTW calculation with N = 10000, using 128 threads 
+Time(seconds):0.491998
+Xre[0] = 10000.000000 
+#### RUN ####
+DFTW calculation with N = 10000, using 128 threads 
+Time(seconds):0.505311
+Xre[0] = 10000.000000 
+#### RUN ####
+DFTW calculation with N = 10000, using 128 threads 
+Time(seconds):0.526487
+Xre[0] = 10000.000000 
+#### RUN ####
+DFTW calculation with N = 10000, using 128 threads 
+Time(seconds):0.525234
+Xre[0] = 10000.000000 
+#### RUN ####
+DFTW calculation with N = 10000, using 128 threads 
+Time(seconds):0.497248
+Xre[0] = 10000.000000 
+#### RUN ####
+DFTW calculation with N = 10000, using 128 threads 
+Time(seconds):0.487249
+Xre[0] = 10000.000000 
+#### RUN ####
+DFTW calculation with N = 10000, using 128 threads 
+Time(seconds):0.448737
+Xre[0] = 10000.000000 
+#### RUN ####
+DFTW calculation with N = 10000, using 128 threads 
+Time(seconds):0.462498
+Xre[0] = 10000.000000 
+----------------------------------
+Ran with 64 Logical CPUs
+----------------------------------

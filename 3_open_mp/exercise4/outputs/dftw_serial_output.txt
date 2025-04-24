@@ -1,0 +1,40 @@
+#### RUN ####
+DFTW calculation with N = 10000 
+Time(seconds):17.514721
+Xre[0] = 10000.000000 
+#### RUN ####
+DFTW calculation with N = 10000 
+Time(seconds):17.519437
+Xre[0] = 10000.000000 
+#### RUN ####
+DFTW calculation with N = 10000 
+Time(seconds):17.521928
+Xre[0] = 10000.000000 
+#### RUN ####
+DFTW calculation with N = 10000 
+Time(seconds):17.518260
+Xre[0] = 10000.000000 
+#### RUN ####
+DFTW calculation with N = 10000 
+Time(seconds):17.521249
+Xre[0] = 10000.000000 
+#### RUN ####
+DFTW calculation with N = 10000 
+Time(seconds):17.520465
+Xre[0] = 10000.000000 
+#### RUN ####
+DFTW calculation with N = 10000 
+Time(seconds):17.520509
+Xre[0] = 10000.000000 
+#### RUN ####
+DFTW calculation with N = 10000 
+Time(seconds):17.512802
+Xre[0] = 10000.000000 
+#### RUN ####
+DFTW calculation with N = 10000 
+Time(seconds):17.519048
+Xre[0] = 10000.000000 
+#### RUN ####
+DFTW calculation with N = 10000 
+Time(seconds):17.519652
+Xre[0] = 10000.000000 
