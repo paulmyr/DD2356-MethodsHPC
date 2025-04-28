@@ -1,0 +1,5 @@
+Time: 0.052771 
+Grid size: 500 
+Schedule: dynamic,100 
+Threads: 32 
+Write output id:0

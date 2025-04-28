@@ -78,6 +78,8 @@
 \usepackage{kantlipsum}
 \usepackage[colorinlistoftodos,prependcaption,textsize=tiny]{todonotes}
 
+\usepackage{svg}
+
 % packages end
 %###############################################################################
 
@@ -198,22 +200,74 @@ The code for our project can be found at this location: \url{}.
 \tableofcontents
 \newpage
 
+\todo[inline]{Check headers}
+
 \section{Exercise 1 - OpenMP Hello World}
 \subsection{Question 1 - Write an OpenMP C code with each thread printing Hello World from Thread X! where X is the thread ID.}
-We wrote the c code 
-\subsection{Question 2 - How do you compile the code? Which compiler and flags have you used?}
-\subsection{Question 3 - Use what you've learned from hwloc/numactl to discover how many cores your job is allocated with. }
-\subsection{Question 4 - How do you run the OpenMP code on Dardel? What flags did you set?}
-\subsection{Question 5 - How is the number of threads compared to the number of cores your job is assigned to?}
+We wrote the c code using the lecture material. The code is attachted in the GitHub repository.
 
-\todo[inline]{Check headers}
+\subsection{Question 2 - How do you compile the code? Which compiler and flags have you used?}
+We compile the code using \verb|gcc| compiler. 
+The code is compiled using the \verb|-fopenmp| flag to utilize \verb|OpenMP|. The full command is: 
+$ srun -n 1 gcc -fopenmp a3/ex1/hello_world.c -o a3/ex1/hello_world.out$
+We attached the slurmfile to run the code on \verb|Dardel| in the repo (\verb|ex1.slurm|).
+
+\subsection{Question 3 - Use what you've learned from hwloc/numactl to discover how many cores your job is allocated with. }
+The hwloc output is attached in the figure below.
+\begin{figure}
+  \includesvg[width=\textwidth]{img/ex1/topology.svg}
+  \label{ex1topology}
+\end{figure}
+We can observe that four virtual cores are being utilized on two physical cores. We can see the 4 specified (virtual) cpu cores from our 
+jobscript in the figure.
+
+\subsection{Question 4 - How do you run the OpenMP code on Dardel? What flags did you set?}
+As stated in question 2, we use the \verb|-fopenmp| flag for the \verb|gcc| compiler to utilize \verb|OpenMP| on \verb|Dardel|.
+
+\subsection{Question 5 - How is the number of threads compared to the number of cores your job is assigned to?}
+As shown in \ref{ex1topology} we can see that the number of threads resembles the number of virtual cores, which is $2 * physical cores$.
+\todo{recheck}
 
 \section{Exercise 5 - Parallelizing a Shallow Water Simulation}
 \subsection{1. Parallelize the loops}
+We parallelize the loops given the \verb|#pragma omp parallel for collapse(2)| pragma. 
+We implement the different scheduling strategies in the slurm file with is attached to the repository (ex5.slurm).
+The timing of the \verb|compute()| method is measured using \verb|omp_get_wtime()|.
+The code is run on the cluster using a jobarray in the slurmfile, where we iterate through the permuations.
 
 \subsection{2. Evaluate Performance}
+We evaluate based on scheduling strategy, gridsize ($N$) and threadcount ($threads$).
+
+For our static scheduling, we observe the fastest exectution for a chunksize of $ 1000 $ for $64 threads$ and a gridsize $N=500$ with $0.040567 s$.
+The results (df_static.csv) display the six fastest calculations for $64 threads$ and $N=500$, which are surprisingly faster than a higher threadcount for the same gridsize.
+
+For the dynamic scheduling, we assume even better results since the computational load could theoretically be better distributed. 
+We observe the fastest exectution for a chunksize of $ 200 $ for $64 threads$ and a gridsize $N=500$ with $0.041169 s$.
+The results (df_dynamic.csv) display the four fastest calculations for $64 threads$ and $N=500$, which are interestingly again faster than a higher threadcount for the same gridsize.
+Interestingly the dynamic scheduling is slower than the static scheduling.
+
+For the guided scheduling (df_guided.csv), we observe the following results. The fastest exectution time ($0.040684 s$) is archieved for $64 threads$ and a gridsize $N=500$ for a chunksize of $100$.
+Again the $64 threads$ are superior to other threadcounts.
+
+\todo{Speedup to baseline}
 
 \subsection{3. Visualize the output}
+The figure below shows the output for a gridsize of $N=500$ calculated using $32 threads$ and the \verb|OMP_SCHEDULE| set to dynamic with a 
+chunksize of $ 100 $.
+The exectution time of the parallel exectution takes $0.052771s$ while the serial computation for the same gridsize of $N=500$ takes $1.387342s$.  
+
+\begin{figure}
+  \includepng[width=\textwidth]{img/ex5/parallel_plot.png}
+  \label{ex5parallel}
+\end{figure}
+
+To check the correctness of our results, we plot the serial implementation result below which displays the same water simulation result.
+\begin{figure}
+  \includepng[width=\textwidth]{img/ex5/serial_plot.png}
+  \label{ex5serial}
+\end{figure}
+
+The code and slurmfile to replicate our results are attached to the repository.
 % content end
 %###############################################################################
 
