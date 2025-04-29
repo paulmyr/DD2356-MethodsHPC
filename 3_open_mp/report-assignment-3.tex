@@ -245,6 +245,7 @@ The timing of the \verb|compute()| method is measured using \verb|omp_get_wtime(
 The code is run on the cluster using a jobarray in the slurmfile, where we iterate through the permuations.
 
 \subsection{2. Evaluate Performance}
+All the data can be found in the repo (\href{https://github.com/paulmyr/DD2356-MethodsHPC/tree/master/3_open_mp/exercise5/data}{Dataset directory}).
 We evaluate based on scheduling strategy, gridsize ($N$) and threadcount ($threads$).
 
 For our static scheduling, we observe the fastest exectution for a chunksize of $ 1000 $ for $64 threads$ and a gridsize $N=500$ with $0.040567 s$.
@@ -257,6 +258,26 @@ Interestingly the dynamic scheduling is slower than the static scheduling.
 
 For the guided scheduling (df_guided.csv), we observe the following results. The fastest exectution time ($0.040684 s$) is archieved for $64 threads$ and a gridsize $N=500$ for a chunksize of $100$.
 Again the $64 threads$ are superior to other threadcounts.
+
+We compare the gridsizes and threads for static scheduling with a chunksize of $1000$:
+When looking at different gridsizes we observe:
+Time,Grid size,Schedule,Threads,Id
+0.040567,500,"static,1000",64,22
+0.124492,1000,"static,1000",64,46
+0.445595,2000,"static,1000",64,70
+3.171261,4000,"static,1000",64,94
+14.403611,8000,"static,1000",64,118
+
+Unsurprisingly with a larger gridsize the runtime increases for constant parameters.
+
+When looking at different threadsizes we observe:
+Time,Grid size,Schedule,Threads,Write output id, Speedup
+1.45063,500,"static,1000",1,20,1.0
+0.051778,500,"static,1000",32,21,28.01633898566959
+0.040567,500,"static,1000",64,22,35.75886804545567
+0.067249,500,"static,1000",128,23,21.57102707846957
+
+Interestingly after 64 threads, the speedup decreases again, which we assume to be due to overhead of creating and managing a higher number of thread (such as scheduling, spawning, etc).
 
 \subsection{3. Visualize the output}
 The figure below shows the output for a gridsize of $N=500$ calculated using $32 threads$ and the \verb|OMP_SCHEDULE| set to dynamic with a 

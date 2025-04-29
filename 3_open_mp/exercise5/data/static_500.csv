@@ -1,0 +1,6 @@
+Unnamed: 0,Time,Grid size,Schedule,Threads,Write output id
+47,1.45063,500,"static,1000",1,20
+27,0.051778,500,"static,1000",32,21
+10,0.040567,500,"static,1000",64,22
+124,0.067249,500,"static,1000",128,23
+125,0.067249,500,"static,1000",128,23
