@@ -205,6 +205,12 @@ The code for our project can be found at this location: \url{}.
 \section{Exercise 1 - OpenMP Hello World}
 \subsection{Question 1 - Write an OpenMP C code with each thread printing Hello World from Thread X! where X is the thread ID.}
 We wrote the c code using the lecture material. The code is attachted in the GitHub repository.
+The output looks as follows (exercise1/output.txt):
+Hello World from Thread 0! \n
+Hello World from Thread 2! \n
+Hello World from Thread 1! \n
+Hello World from Thread 3! \n
+
 
 \subsection{Question 2 - How do you compile the code? Which compiler and flags have you used?}
 We compile the code using \verb|gcc| compiler. 
@@ -218,15 +224,18 @@ The hwloc output is attached in the figure below.
   \includesvg[width=\textwidth]{img/ex1/topology.svg}
   \label{ex1topology}
 \end{figure}
-We can observe that four virtual cores are being utilized on two physical cores. We can see the 4 specified (virtual) cpu cores from our 
+We can observe that four virtual cores are being utilized on two physical cores. We can see the 4 specified (virtual) CPU cores from our 
 jobscript in the figure.
 
 \subsection{Question 4 - How do you run the OpenMP code on Dardel? What flags did you set?}
 As stated in question 2, we use the \verb|-fopenmp| flag for the \verb|gcc| compiler to utilize \verb|OpenMP| on \verb|Dardel|.
+To run the compiled binary, we use \verb|srun -n 1 a3/ex1/hello_world.out > a3/ex1/output.txt| without setting additional flags.
 
 \subsection{Question 5 - How is the number of threads compared to the number of cores your job is assigned to?}
-As shown in \ref{ex1topology} we can see that the number of threads resembles the number of virtual cores, which is $2 * physical cores$.
-\todo{recheck}
+We assigned 4 virtual CPU cores in our jobscript. As shown in \ref{ex1topology} we can see that the number of threads resembles the number of virtual cores, which is $2 * physical cores$. Running on less cores is possible either, 
+the threads will then be executed in a Multithreading manner on the fewer cores, making use of stalls or I/O operations of other threads to use the available ressources as efficiently as possible. However if the number of logical cores
+is fewer than the number of threads spawned, we receive a warning indicating that the number of threads is greater than the number of cores to run the program on, but the code still executes.
+
 
 \section{Exercise 5 - Parallelizing a Shallow Water Simulation}
 \subsection{1. Parallelize the loops}
@@ -249,12 +258,11 @@ Interestingly the dynamic scheduling is slower than the static scheduling.
 For the guided scheduling (df_guided.csv), we observe the following results. The fastest exectution time ($0.040684 s$) is archieved for $64 threads$ and a gridsize $N=500$ for a chunksize of $100$.
 Again the $64 threads$ are superior to other threadcounts.
 
-\todo{Speedup to baseline}
-
 \subsection{3. Visualize the output}
 The figure below shows the output for a gridsize of $N=500$ calculated using $32 threads$ and the \verb|OMP_SCHEDULE| set to dynamic with a 
 chunksize of $ 100 $.
 The exectution time of the parallel exectution takes $0.052771s$ while the serial computation for the same gridsize of $N=500$ takes $1.387342s$.  
+This leaves us with a \verb|speedup ratio| ($speedup = Time_serial / Time_parallel$) of $speedup = 1.387342s/0.052771s = 26.28986 $. 
 
 \begin{figure}
   \includepng[width=\textwidth]{img/ex5/parallel_plot.png}
