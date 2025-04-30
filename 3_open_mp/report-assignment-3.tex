@@ -206,10 +206,10 @@ The code for our project can be found at this location: \url{}.
 \subsection{Question 1 - Write an OpenMP C code with each thread printing Hello World from Thread X! where X is the thread ID.}
 We wrote the c code using the lecture material. The code is attachted in the GitHub repository.
 The output looks as follows (exercise1/output.txt):
-Hello World from Thread 0! \n
-Hello World from Thread 2! \n
-Hello World from Thread 1! \n
-Hello World from Thread 3! \n
+Hello World from Thread 0! \\
+Hello World from Thread 2! \\
+Hello World from Thread 1! \\
+Hello World from Thread 3! \\
 
 
 \subsection{Question 2 - How do you compile the code? Which compiler and flags have you used?}
@@ -219,11 +219,7 @@ $ srun -n 1 gcc -fopenmp a3/ex1/hello_world.c -o a3/ex1/hello_world.out$
 We attached the slurmfile to run the code on \verb|Dardel| in the repo (\verb|ex1.slurm|).
 
 \subsection{Question 3 - Use what you've learned from hwloc/numactl to discover how many cores your job is allocated with. }
-The hwloc output is attached in the figure below.
-\begin{figure}
-  \includesvg[width=\textwidth]{img/ex1/topology.svg}
-  \label{ex1topology}
-\end{figure}
+The hwloc output can be found \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/3_open_mp/img/ex1/topology.svg}{here}.
 We can observe that four virtual cores are being utilized on two physical cores. We can see the 4 specified (virtual) CPU cores from our 
 jobscript in the figure.
 
@@ -232,10 +228,109 @@ As stated in question 2, we use the \verb|-fopenmp| flag for the \verb|gcc| comp
 To run the compiled binary, we use \verb|srun -n 1 a3/ex1/hello_world.out > a3/ex1/output.txt| without setting additional flags.
 
 \subsection{Question 5 - How is the number of threads compared to the number of cores your job is assigned to?}
-We assigned 4 virtual CPU cores in our jobscript. As shown in \ref{ex1topology} we can see that the number of threads resembles the number of virtual cores, which is $2 * physical cores$. Running on less cores is possible either, 
+We assigned 4 virtual CPU cores in our jobscript. As shown in the hwloc output (\href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/3_open_mp/img/ex1/topology.svg}{here}) we can see that the number of threads resembles the number of virtual cores, which is $2 * physical cores$. Running on less cores is possible either, 
 the threads will then be executed in a Multithreading manner on the fewer cores, making use of stalls or I/O operations of other threads to use the available ressources as efficiently as possible. However if the number of logical cores
 is fewer than the number of threads spawned, we receive a warning indicating that the number of threads is greater than the number of cores to run the program on, but the code still executes.
 
+
+\section{Exercise 3 - Parallel Sum}
+For this section, the job scripts that were used to run the experiments on Dardel can be found under the \verb|job_scripts/| directory \href{https://github.com/paulmyr/DD2356-MethodsHPC/tree/master/3_open_mp/exercise3/job_scripts}{here}. In general, we used 1 node and 128 logical CPUs on Dardel for all our experiments. 
+
+The outputs generated and plotted from the scripts can be found \href{https://github.com/paulmyr/DD2356-MethodsHPC/tree/master/3_open_mp/exercise3/outputs}{here}. 
+
+The code for the different implementations of the summation algorithm can be found \href{https://github.com/paulmyr/DD2356-MethodsHPC/tree/master/3_open_mp/exercise3}{here}.
+
+To initialize, the arrays in each run, we used a seed of 42. The arrays had $10^8$ elements each. This helped us ensure the correctness of the results across different implementations. We repeated the experiment 10 times before reporting the average run for a given setting (given number of threads for the parallel implementations, for example). 
+
+\subsection{Serial Performance}
+The average time for the serial code was 0.332 seconds, with a standard deviation of 0.000995 seconds. This can be seen in \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/3_open_mp/exercise3/outputs/serial_output.txt}{this} output file.
+
+\subsection{Implementing \textit{omp\_sum}}
+The code for \verb|omp_sum| can be found in \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/3_open_mp/exercise3/omp_sum.c}{this} file. Here, we just add the \verb|#pragma omp parallel for| directive above the thread responsible for computing the sum. We used the allocation above -- 1 task per node with 128 CPUs per task. Using this and the job script \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/3_open_mp/exercise3/job_scripts/omp_sum_job.sh}{here}, we observed the following results (the speedup was computed by comparing with the serial runtime described above). 
+
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Threads} & \textbf{Runtime w/ Std Dev (seconds)} & \textbf{Speedup} \\
+\hline
+1 Thread  & $0.325 \pm 0.000099$  & $1.021$ \\
+2 Threads & $0.578 \pm 0.003681$  & $0.574$ \\
+4 Threads & $0.505 \pm 0.002134$  & $0.657$ \\
+8 Threads & $0.455 \pm 0.002015$  & $0.730$ \\
+16 Threads & $0.423 \pm 0.001298$ & $0.785$ \\
+20 Threads & $0.571 \pm 0.001688$ & $0.581$ \\
+24 Threads & $0.635 \pm 0.002522$ & $0.523$ \\
+28 Threads & $0.508 \pm 0.001187$ & $0.653$ \\
+32 Threads & $0.876 \pm 0.000649$ & $0.378$ \\
+64 Threads & $0.834 \pm 0.001449$ & $0.398$ \\
+128 Threads & $0.745 \pm 0.007486$ & $0.446$ \\
+\hline
+\end{tabular}
+\caption{Measurements for Simple \textit{omp\_sum} Implementation}
+\end{table}
+
+As can be seen with the outputs produced by the algorithm \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/3_open_mp/exercise3/outputs/omp_output.txt}{here}, apart from when we use 1 thread, the sum computed is incorrect when multiple threads are used. This is in line with our expectations. 
+
+This is because of the lack of critical region protection for the piece of code that updates the \verb|sum_val| variable. Multiple threads can attempt to perform this update at the same time, and since this is not atomic, it can lead to inconsistent and different (and thus incorrect) results.  
+
+As mentioned above, we allocated 128 logical CPUs for these runs for the different threads we experimented with. Thus, the \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/3_open_mp/img/ex3/ex3_topology_omp_sum.svg}{following} hierarchy infrastructure was allocated to us for performing the runs above. For all cases, apart from when 1 thread was used, the speed-up for all other runs was was less than 1, meaning it was even worse than sublinear. We believe that the reason for this poor performance could be the frequent updates to the same shared varible \verb|sum_val| by multiple threads at once. This would cause cache-invalidation, and thus not promote re-use of cache -- as each update to the shared \verb|sum_val| would force the thread to not be able to read the variable from cache. 
+
+When only one thread was used, the speedup is close to 1 -- meaning the the runtime for this case was similar to the serial version. While the 
+
+\subsection{Implementing \textit{omp\_critical\_sum}}
+This implementation can be found \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/3_open_mp/exercise3/omp_critical_sum.c}{here}. The output (runtime, standard deviation, along with the sums) can be found in the file \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/3_open_mp/exercise3/outputs/omp_critical_output.txt}{here}. As can be seen by the outputs, no matter the number of threads used, the output is the same and above all, is correct (compared to the serial output). 
+
+However, no matter how many threads we use, the runtime of this implementation is worse compared to the implementation of \verb|omp_sum| above and to the serial implementation. The \verb|critical| directive ensures that only 1 thread can execute the \verb|sum_val| update at a time. Thus, with the increase in the number of threads, contention to perform this update among the threads increases as well. So, with an increase in the number of threads, we see an increase in the runtime as well. Interestingly, even with just 1 thread, there is an increase in the runtime for the \verb|critical_sum| implementation. This indicates to us that there might be some overhead in establishing the critical section with the \verb|critical| directive, which would only add to the contention-related performance losses seen when even more threads are involved.
+
+Plots comparing the runtimes of the different implementations along with the number of threads is available at the end of this section.
+
+\subsection{Implementing \textit{omp\_local\_sum}}
+The implementation can be found \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/3_open_mp/exercise3/omp_local_sum.c}{here}. The outputs produced for different thread counts (including standard deviation, the sum computed and the time taken) can be found \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/3_open_mp/exercise3/outputs/omp_local_output.txt}{here}. The output shows that in each run, no matter the number of threads, the same and the correct sum is computed. 
+
+The performance of this implementation seems to be a lot better than the previous implementations. Its improved performance over the \verb|omp_critical_sum| implementation can be explained by the fact that we are not using any critical region in the computation of the sum. Thus, multiple threads can operate on their own copy of a local sum at the same time, which eliminates a bottleneck. 
+
+It's already better than the \verb|omp_sum| implementation since it produces a correct output. Moreever, it also generally seems to be faster when using multiple threads (the performance with 1 thread is similar). We believe that this might be because of fewer cache-coherency/false-sharing issues with this implementation compared to the incorrect implementation of \verb|omp_parallel|. Here, each thread is responsible for computing the and storing its own \textit{local} sum in an index of the shared array. While there could still be some false-sharing between the array elements between the threads, the runtimes obtained here indicate that it is much better compared to the definitive false-sharing/cache-coherency issues cased by the \verb|omp_parallel| implementation. 
+
+As above, a graph comparing the runtimes of the different implementations with varying threads are available at the end of this section.
+
+\subsection{Implementing \textit{omp\_local\_sum} Without False-Sharing}
+This implementation can be found \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/3_open_mp/exercise3/omp_local_no_sharing_sum.c}{here}. We create a new data structure to store the local-sums, where each element stores the local-sum for the individual thread, along with some padding. The cache-line size on dardel compute nodes was determined to be 64 bytes using the following command 
+
+\begin{center}
+\verb|srun getconf LEVEL1_DCACHE_LINESIZE|
+\end{center}
+
+Thus, we padded each local-sum with a 56 byte char array (with 8 bytes used by the local-sum of type \verb|double|).  With this, our hope is that each local-sum is on its own cache-line, which will help eliminate false-sharing between threads and solve cache-coherency, leading to (hopefully) better runtimes. 
+
+The outputs produced with this implementation can be seen \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/3_open_mp/exercise3/outputs/omp_local_no_sharing_output.txt}{here}. Here, we also see that the output sum computed is the same for all threads (in all runs), and is correct. 
+
+We see that this implementation seems to perform the best as the number of threads increase. This is in accordance with our expectations. 
+
+Next, we present a graph which compares the runtimes for the different implementations as we change the number of threads.
+
+\subsection{Final Plot of Runtimes}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{img/ex3/ex3_comparison_all.png}
+  \caption{Runtime Comparison of Different Implementations}
+  \label{fig:ex3_runtime_all}
+\end{figure}
+
+
+The figure \ref{fig:ex3_runtime_all} shows the runtimes of the different implementations plotted against the number of threads. We can see that the OMP implementation with the critical region has the highest runtimes because of the reasons discussed above. The runtime is so large that it makes a visual comparison between the other implementations more difficult. 
+
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{img/ex3/ex3_comparison_no_critical.png}
+  \caption{Runtime Comparison (without OMP w/ Critical)}
+  \label{fig:ex3_runtime_no_critical}
+\end{figure}
+
+Figure \ref{fig:ex3_runtime_no_critical} shows the same runtimes without the outlier of \verb|OMP w/ Critical Region|. Here, we can see that the local sum implementation, where each thread computes its own local sum in parallel and then we serially combine the individual local sums, combined with padding to avoid false sharing of local sums between threads -- performs the best. The reasons for this has been analyzed earlier. 
 
 \section{Exercise 5 - Parallelizing a Shallow Water Simulation}
 \subsection{1. Parallelize the loops}
@@ -249,14 +344,14 @@ All the data can be found in the repo (\href{https://github.com/paulmyr/DD2356-M
 We evaluate based on scheduling strategy, gridsize ($N$) and threadcount ($threads$).
 
 For our static scheduling, we observe the fastest exectution for a chunksize of $ 1000 $ for $64 threads$ and a gridsize $N=500$ with $0.040567 s$.
-The results (df_static.csv) display the six fastest calculations for $64 threads$ and $N=500$, which are surprisingly faster than a higher threadcount for the same gridsize.
+The results (present in the file \verb|df_static.csv|) display the six fastest calculations for $64 threads$ and $N=500$, which are surprisingly faster than a higher threadcount for the same gridsize.
 
 For the dynamic scheduling, we assume even better results since the computational load could theoretically be better distributed. 
 We observe the fastest exectution for a chunksize of $ 200 $ for $64 threads$ and a gridsize $N=500$ with $0.041169 s$.
-The results (df_dynamic.csv) display the four fastest calculations for $64 threads$ and $N=500$, which are interestingly again faster than a higher threadcount for the same gridsize.
+The results (\verb|df_dynamic.csv|) display the four fastest calculations for $64 threads$ and $N=500$, which are interestingly again faster than a higher threadcount for the same gridsize.
 Interestingly the dynamic scheduling is slower than the static scheduling.
 
-For the guided scheduling (df_guided.csv), we observe the following results. The fastest exectution time ($0.040684 s$) is archieved for $64 threads$ and a gridsize $N=500$ for a chunksize of $100$.
+For the guided scheduling (\verb|df_guided.csv|), we observe the following results. The fastest exectution time ($0.040684 s$) is archieved for $64 threads$ and a gridsize $N=500$ for a chunksize of $100$.
 Again the $64 threads$ are superior to other threadcounts.
 
 We compare the gridsizes and threads for static scheduling with a chunksize of $1000$:
@@ -285,16 +380,23 @@ chunksize of $ 100 $.
 The exectution time of the parallel exectution takes $0.052771s$ while the serial computation for the same gridsize of $N=500$ takes $1.387342s$.  
 This leaves us with a \verb|speedup ratio| ($speedup = Time_serial / Time_parallel$) of $speedup = 1.387342s/0.052771s = 26.28986 $. 
 
-\begin{figure}
-  \includepng[width=\textwidth]{img/ex5/parallel_plot.png}
-  \label{ex5parallel}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{img/ex5/parallel_plot.png}
+  \caption{Parallel Plot}
+  \label{fig:ex5_parallel}
 \end{figure}
 
 To check the correctness of our results, we plot the serial implementation result below which displays the same water simulation result.
-\begin{figure}
-  \includepng[width=\textwidth]{img/ex5/serial_plot.png}
-  \label{ex5serial}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{img/ex5/serial_plot.png}
+  \caption{Parallel Plot}
+  \label{fig:ex5_serial}
 \end{figure}
+
 
 The code and slurmfile to replicate our results are attached to the repository.
 % content end
