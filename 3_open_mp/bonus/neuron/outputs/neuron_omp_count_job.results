@@ -1,0 +1,150 @@
+----------------------------
+Running with 256 neurons
+OMP NEURON SIMULATION. NUMBER OF THREADS TO RUN WITH: 64. NUMBER OF NEURONS: 256. FIRING THRESHOLD: 50.000
+Run 1: 0.283630 seconds
+Run 2: 0.283244 seconds
+Run 3: 0.286066 seconds
+Run 4: 0.287414 seconds
+Run 5: 0.282795 seconds
+Run 6: 0.285839 seconds
+Run 7: 0.281752 seconds
+Run 8: 0.274771 seconds
+Run 9: 0.274490 seconds
+Run 10: 0.274959 seconds
+
+Average time: 0.281 seconds
+Standard deviation: 0.004703 seconds
+SERIAL OMP SIMULATION. NUMBER OF NEURONS: 256. FIRING THRESHOLD: 50.000
+Run 1: 0.000618 seconds
+Run 2: 0.000613 seconds
+Run 3: 0.000612 seconds
+Run 4: 0.000613 seconds
+Run 5: 0.000616 seconds
+Run 6: 0.000612 seconds
+Run 7: 0.000612 seconds
+Run 8: 0.000620 seconds
+Run 9: 0.000611 seconds
+Run 10: 0.000612 seconds
+
+Average time: 0.001 seconds
+Standard deviation: 0.000003 seconds
+----------------------------
+Running with 512 neurons
+OMP NEURON SIMULATION. NUMBER OF THREADS TO RUN WITH: 64. NUMBER OF NEURONS: 512. FIRING THRESHOLD: 50.000
+Run 1: 0.569245 seconds
+Run 2: 0.558579 seconds
+Run 3: 0.555278 seconds
+Run 4: 0.550026 seconds
+Run 5: 0.549461 seconds
+Run 6: 0.547806 seconds
+Run 7: 0.546943 seconds
+Run 8: 0.544881 seconds
+Run 9: 0.547230 seconds
+Run 10: 0.549748 seconds
+
+Average time: 0.552 seconds
+Standard deviation: 0.006953 seconds
+SERIAL OMP SIMULATION. NUMBER OF NEURONS: 512. FIRING THRESHOLD: 50.000
+Run 1: 0.001217 seconds
+Run 2: 0.001224 seconds
+Run 3: 0.001224 seconds
+Run 4: 0.001241 seconds
+Run 5: 0.001224 seconds
+Run 6: 0.001224 seconds
+Run 7: 0.001227 seconds
+Run 8: 0.001224 seconds
+Run 9: 0.001228 seconds
+Run 10: 0.001222 seconds
+
+Average time: 0.001 seconds
+Standard deviation: 0.000006 seconds
+----------------------------
+Running with 1024 neurons
+OMP NEURON SIMULATION. NUMBER OF THREADS TO RUN WITH: 64. NUMBER OF NEURONS: 1024. FIRING THRESHOLD: 50.000
+Run 1: 0.935082 seconds
+Run 2: 0.902804 seconds
+Run 3: 0.898596 seconds
+Run 4: 0.897233 seconds
+Run 5: 0.893855 seconds
+Run 6: 0.891697 seconds
+Run 7: 0.900040 seconds
+Run 8: 0.898004 seconds
+Run 9: 0.894441 seconds
+Run 10: 0.895272 seconds
+
+Average time: 0.901 seconds
+Standard deviation: 0.011863 seconds
+SERIAL OMP SIMULATION. NUMBER OF NEURONS: 1024. FIRING THRESHOLD: 50.000
+Run 1: 0.002445 seconds
+Run 2: 0.002445 seconds
+Run 3: 0.002470 seconds
+Run 4: 0.002461 seconds
+Run 5: 0.002455 seconds
+Run 6: 0.002455 seconds
+Run 7: 0.002453 seconds
+Run 8: 0.002456 seconds
+Run 9: 0.002458 seconds
+Run 10: 0.002460 seconds
+
+Average time: 0.002 seconds
+Standard deviation: 0.000007 seconds
+----------------------------
+Running with 2048 neurons
+OMP NEURON SIMULATION. NUMBER OF THREADS TO RUN WITH: 64. NUMBER OF NEURONS: 2048. FIRING THRESHOLD: 50.000
+Run 1: 1.161033 seconds
+Run 2: 1.169526 seconds
+Run 3: 1.153461 seconds
+Run 4: 1.109268 seconds
+Run 5: 1.090355 seconds
+Run 6: 1.086379 seconds
+Run 7: 1.095498 seconds
+Run 8: 1.099284 seconds
+Run 9: 1.100414 seconds
+Run 10: 1.094781 seconds
+
+Average time: 1.116 seconds
+Standard deviation: 0.030446 seconds
+SERIAL OMP SIMULATION. NUMBER OF NEURONS: 2048. FIRING THRESHOLD: 50.000
+Run 1: 0.004897 seconds
+Run 2: 0.004897 seconds
+Run 3: 0.004896 seconds
+Run 4: 0.004893 seconds
+Run 5: 0.004905 seconds
+Run 6: 0.004903 seconds
+Run 7: 0.004896 seconds
+Run 8: 0.004923 seconds
+Run 9: 0.004891 seconds
+Run 10: 0.004897 seconds
+
+Average time: 0.005 seconds
+Standard deviation: 0.000009 seconds
+----------------------------
+Running with 4196 neurons
+OMP NEURON SIMULATION. NUMBER OF THREADS TO RUN WITH: 64. NUMBER OF NEURONS: 4196. FIRING THRESHOLD: 50.000
+Run 1: 1.516299 seconds
+Run 2: 1.502379 seconds
+Run 3: 1.506580 seconds
+Run 4: 1.506917 seconds
+Run 5: 1.503232 seconds
+Run 6: 1.503519 seconds
+Run 7: 1.499308 seconds
+Run 8: 1.504433 seconds
+Run 9: 1.495450 seconds
+Run 10: 1.495186 seconds
+
+Average time: 1.503 seconds
+Standard deviation: 0.005817 seconds
+SERIAL OMP SIMULATION. NUMBER OF NEURONS: 4196. FIRING THRESHOLD: 50.000
+Run 1: 0.009835 seconds
+Run 2: 0.009868 seconds
+Run 3: 0.009881 seconds
+Run 4: 0.009907 seconds
+Run 5: 0.009856 seconds
+Run 6: 0.009862 seconds
+Run 7: 0.009966 seconds
+Run 8: 0.009860 seconds
+Run 9: 0.009866 seconds
+Run 10: 0.009877 seconds
+
+Average time: 0.010 seconds
+Standard deviation: 0.000034 seconds

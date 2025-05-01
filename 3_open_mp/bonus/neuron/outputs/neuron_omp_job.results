@@ -1,0 +1,95 @@
+----------------------------
+Running with 1 threads
+OMP NEURON SIMULATION. NUMBER OF THREADS TO RUN WITH: 1. NUMBER OF NEURONS: 1024. FIRING THRESHOLD: 50.000
+Run 1: 0.037607 seconds
+Run 2: 0.036798 seconds
+Run 3: 0.036573 seconds
+Run 4: 0.036471 seconds
+Run 5: 0.036427 seconds
+Run 6: 0.036293 seconds
+Run 7: 0.036246 seconds
+Run 8: 0.036405 seconds
+Run 9: 0.036426 seconds
+Run 10: 0.036449 seconds
+
+Average time: 0.037 seconds
+Standard deviation: 0.000375 seconds
+----------------------------
+Running with 8 threads
+OMP NEURON SIMULATION. NUMBER OF THREADS TO RUN WITH: 8. NUMBER OF NEURONS: 1024. FIRING THRESHOLD: 50.000
+Run 1: 0.536030 seconds
+Run 2: 0.533140 seconds
+Run 3: 0.532139 seconds
+Run 4: 0.528761 seconds
+Run 5: 0.528974 seconds
+Run 6: 0.527902 seconds
+Run 7: 0.527818 seconds
+Run 8: 0.527848 seconds
+Run 9: 0.526487 seconds
+Run 10: 0.526685 seconds
+
+Average time: 0.530 seconds
+Standard deviation: 0.002979 seconds
+----------------------------
+Running with 32 threads
+OMP NEURON SIMULATION. NUMBER OF THREADS TO RUN WITH: 32. NUMBER OF NEURONS: 1024. FIRING THRESHOLD: 50.000
+Run 1: 0.570021 seconds
+Run 2: 0.564638 seconds
+Run 3: 0.562510 seconds
+Run 4: 0.562561 seconds
+Run 5: 0.561730 seconds
+Run 6: 0.560934 seconds
+Run 7: 0.557749 seconds
+Run 8: 0.558891 seconds
+Run 9: 0.548330 seconds
+Run 10: 0.547776 seconds
+
+Average time: 0.560 seconds
+Standard deviation: 0.006544 seconds
+----------------------------
+Running with 64 threads
+OMP NEURON SIMULATION. NUMBER OF THREADS TO RUN WITH: 64. NUMBER OF NEURONS: 1024. FIRING THRESHOLD: 50.000
+Run 1: 0.579697 seconds
+Run 2: 0.572475 seconds
+Run 3: 0.571666 seconds
+Run 4: 0.572250 seconds
+Run 5: 0.572117 seconds
+Run 6: 0.574113 seconds
+Run 7: 0.571471 seconds
+Run 8: 0.574752 seconds
+Run 9: 0.572364 seconds
+Run 10: 0.572135 seconds
+
+Average time: 0.573 seconds
+Standard deviation: 0.002348 seconds
+----------------------------
+Running with 128 threads
+OMP NEURON SIMULATION. NUMBER OF THREADS TO RUN WITH: 128. NUMBER OF NEURONS: 1024. FIRING THRESHOLD: 50.000
+Run 1: 0.703244 seconds
+Run 2: 0.676904 seconds
+Run 3: 0.680542 seconds
+Run 4: 0.677435 seconds
+Run 5: 0.675642 seconds
+Run 6: 0.674706 seconds
+Run 7: 0.674401 seconds
+Run 8: 0.676990 seconds
+Run 9: 0.672302 seconds
+Run 10: 0.674672 seconds
+
+Average time: 0.679 seconds
+Standard deviation: 0.008453 seconds
+----------------------------
+SERIAL OMP SIMULATION. NUMBER OF NEURONS: 1024. FIRING THRESHOLD: 50.000
+Run 1: 0.002484 seconds
+Run 2: 0.002551 seconds
+Run 3: 0.002487 seconds
+Run 4: 0.002505 seconds
+Run 5: 0.002565 seconds
+Run 6: 0.002472 seconds
+Run 7: 0.002523 seconds
+Run 8: 0.002493 seconds
+Run 9: 0.002497 seconds
+Run 10: 0.002478 seconds
+
+Average time: 0.003 seconds
+Standard deviation: 0.000030 seconds
