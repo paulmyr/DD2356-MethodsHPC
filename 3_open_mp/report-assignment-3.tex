@@ -26,7 +26,6 @@
 ]{biblatex}
 \addbibresource{bibliographie.bib}
 \usepackage[acronym]{glossaries}
-
 \usepackage{euscript}[mathcal]
 % e.g. \mathcal{A} for fancy letters in mathmode
 \usepackage{amsmath,amssymb,amstext,amsthm}
@@ -277,7 +276,7 @@ This is because of the lack of critical region protection for the piece of code 
 
 As mentioned above, we allocated 128 logical CPUs for these runs for the different threads we experimented with. Thus, the \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/3_open_mp/img/ex3/ex3_topology_omp_sum.svg}{following} hierarchy infrastructure was allocated to us for performing the runs above. For all cases, apart from when 1 thread was used, the speed-up for all other runs was was less than 1, meaning it was even worse than sublinear. We believe that the reason for this poor performance could be the frequent updates to the same shared varible \verb|sum_val| by multiple threads at once. This would cause cache-invalidation, and thus not promote re-use of cache -- as each update to the shared \verb|sum_val| would force the thread to not be able to read the variable from cache. 
 
-When only one thread was used, the speedup is close to 1 -- meaning the the runtime for this case was similar to the serial version. While the 
+When only one thread was used, the speedup is close to 1 -- meaning the the runtime for this case was similar to the serial version. 
 
 \subsection{Implementing \textit{omp\_critical\_sum}}
 This implementation can be found \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/3_open_mp/exercise3/omp_critical_sum.c}{here}. The output (runtime, standard deviation, along with the sums) can be found in the file \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/3_open_mp/exercise3/outputs/omp_critical_output.txt}{here}. As can be seen by the outputs, no matter the number of threads used, the output is the same and above all, is correct (compared to the serial output). 
@@ -331,6 +330,76 @@ The figure \ref{fig:ex3_runtime_all} shows the runtimes of the different impleme
 \end{figure}
 
 Figure \ref{fig:ex3_runtime_no_critical} shows the same runtimes without the outlier of \verb|OMP w/ Critical Region|. Here, we can see that the local sum implementation, where each thread computes its own local sum in parallel and then we serially combine the individual local sums, combined with padding to avoid false sharing of local sums between threads -- performs the best. The reasons for this has been analyzed earlier. 
+
+\section{Exercise 4 - The Fastest DFT in the West}
+The code for this section can be found under the \verb|excersie4/| directory in the project repository (\href{https://github.com/paulmyr/DD2356-MethodsHPC/tree/master/3_open_mp/exercise4}{here}). 
+
+\subsection{A Parallel Imlementation}
+We went with a simple parallelization of the main \verb|for| loop responsible for the computation. We added a \verb|#pragma omp parallel for| directive above the outer for-loop. This divided the responsibility of computing the different indices of the \verb|Xr_o| and \verb|Xi_o| arrays to different threads in the parallel implementation. The relevant code directive was added at \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/3_open_mp/exercise4/dftw_parallel.c#L88}{this} line to the original code. The file with the parallel code is \verb|dftw_parallel.c|, which can be found \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/3_open_mp/exercise4/dftw_parallel.c}{here}.
+
+
+\subsection{Performance Measurement}
+We assumed that 32 cores here meant \underline{physical cores}. Thus, all performance measurements were made requesting 64 \underline{logical cores} on dardel. Using an input size of $N = 10000$, we get a serial runtime average of 17.5188071 seconds and a standard deviation of about 0.002749 seconds. Compared to the serial implementation, Table \ref{table:ex4_64_cores} summarizes the average runtime and standard deviation for the parallel implementation (using the strategy above). \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/3_open_mp/exercise4/job_scripts/dftw_parallel_job.sh}{This} was the job script for the 64 logical cores run.
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Threads} & \textbf{Runtime w/ Std Dev (seconds)} & \textbf{Speedup} \\
+\hline
+1 Thread  & $17.5795922 \pm 0.005705$  & $0.99654229$ \\
+32 Threads & $0.5625909 \pm 0.003324$ & $31.13951381$ \\
+64 Threads & $0.4102998 \pm 0.006772$ & $42.6975765$ \\
+128 Threads & $0.4916456 \pm 0.023272$ & $35.63299885$ \\
+\hline
+\end{tabular}
+\caption{Measurements for Parallel DFTW on 32 Physical (64 Logical) Cores}
+\label{table:ex4_64_cores}
+\end{table}
+
+We notice an increase in runtime (and decrease in speed-up) in going from 64 to 128 threads. This is likely because of the fact that there are fewer (logical) cores available than there are threads, and thus there is contention and scheduling overhead which hinders the amount of work which can be done by the 128 threads. This is confirmed by the fact that when we run the program on 128 logical cores, the runtime using 128 threads is the fastest (\href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/3_open_mp/exercise4/job_scripts/dftw_parallel_all_cores_job.sh}{this} was the job-script for the 128-core run), as seen in Table \ref{table:ex4_128_cores}. 
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Threads} & \textbf{Runtime w/ Std Dev (seconds)} & \textbf{Speedup} \\
+\hline
+1 Thread  & $17.5752934 \pm 0.004707$  & $0.99678604$ \\
+32 Threads & $0.5612639 \pm 0.000900$ & $31.21313717$ \\
+64 Threads & $0.3177174 \pm 0.002636$ & $55.13958977$ \\
+128 Threads & $0.2221419 \pm 0.011786$ & $78.86313703$ \\
+\hline
+\end{tabular}
+\caption{Measurements for Parallel DFTW on 64 Physical (128 Logical) Cores}
+\label{table:ex4_128_cores}
+\end{table}
+
+The files containing the outputs for the 2 runs above can be found \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/3_open_mp/exercise4/outputs/dftw_omp_output_64.txt}{here} (for the 64 logical cores) and \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/3_open_mp/exercise4/outputs/dftw_omp_output_128.txt}{here} (for the 128 logical cores). They also illustrate that the parallel code remains correct (with the output of the \verb|checkResults| function in the original code). There was a script which parsed these files and produced a summary of results and the plots (in the next section), which can be found \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/3_open_mp/exercise4/outputs/plotting_script_output.txt}{here}. The script itself can be found \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/3_open_mp/exercise4/parse_output_and_plot.py}{here}.
+
+\subsection{Performance and Speed-Up Plot}
+
+Figure \ref{fig:ex4_performance} shows the raw performance comparison as a function of number of threads for the serial implementation compared to the parallel ones on different number of logical cores. These values are plotted from the tables above, and show the pattern discussed there.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{img/ex4/performance_comparison.png}
+  \caption{Runtime Comparison of Parallel and Serial}
+  \label{fig:ex4_performance}
+\end{figure}
+
+Figure \ref{fig:ex4_speedup} shows the speedup of the parallel implementation on different number of logical cores. As argued earlier, the speeup keeps getting better (although with a lower rate of improvement) as the number of threads increase for 128 (logical) cores compared to 64 (logical) cores. The reason for this was discussed earlier.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{img/ex4/speedup_plot.png}
+  \caption{Speedup Plot}
+  \label{fig:ex4_speedup}
+\end{figure}
+
+
+
+\subsection{Non-Parallel Performance Optimizations}
+\todo{Not entirely sure what to write here...maybe loop order change to prevent cache misses?}
 
 \section{Exercise 5 - Parallelizing a Shallow Water Simulation}
 \subsection{1. Parallelize the loops}
