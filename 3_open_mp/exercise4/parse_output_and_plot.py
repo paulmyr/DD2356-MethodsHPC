@@ -158,6 +158,11 @@ if __name__ == "__main__":
     serial_average = np.average(serial_runtime)
     serial_std = np.std(serial_runtime)
 
+    print("######### INFORMATION FOR SERIAL RUN ON 64 LOGICAL CORES #########")
+    print(f"Individual Runtimes (Serial): {serial_runtime}")
+    print(f"Average Runtime for Serial: {serial_average}")
+    print(f"Standard Deviation for Serial: {serial_std}\n\n")
+
     # Parallel Info (on 128 logical CPUs and on 64 logical CPUs)
     runtimes_info_all_cores, num_cpus_all = get_parallel_run_info(args.all_core_output)
     runtimes_info_some_cores, num_cpus_some = get_parallel_run_info(args.some_core_output)
@@ -170,11 +175,11 @@ if __name__ == "__main__":
 
 
     print(f"Thread Counts: {threads}")
-    print(f"Avg All Cores: {runtime_avg_all_cores}")
-    print(f"Avg Some Cores: {runtime_avg_some_cores}")
+    print(f"Avg All (128) Cores: {runtime_avg_all_cores}")
+    print(f"Avg Some (64) Cores: {runtime_avg_some_cores}")
     print(f"Avg Serial: {runtime_avg_serial}")
-    print(f"All Cores Speedup: {all_core_speedup}")
-    print(f"Some Cores Speedup: {some_core_speedup}")
+    print(f"All Cores (128) Speedup: {all_core_speedup}")
+    print(f"Some Cores (64) Speedup: {some_core_speedup}")
 
     get_performance_plot(runtime_avg_all_cores, runtime_avg_some_cores, runtime_avg_serial, threads, num_cpus_all, num_cpus_some)
     get_speedup_plot(speedup_all_cores=all_core_speedup, speedup_some_cores=some_core_speedup, threads=threads, all_cores_count=num_cpus_all, some_cores_count=num_cpus_some)
