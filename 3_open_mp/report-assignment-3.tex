@@ -421,25 +421,46 @@ The results (\verb|df_dynamic.csv|) display the four fastest calculations for $6
 Interestingly the dynamic scheduling is slower than the static scheduling.
 
 For the guided scheduling (\verb|df_guided.csv|), we observe the following results. The fastest exectution time ($0.040684 s$) is archieved for $64 threads$ and a gridsize $N=500$ for a chunksize of $100$.
-Again the $64 threads$ are superior to other threadcounts.
+Again the $64 threads$ are superior to other thread counts.
 
-We compare the gridsizes and threads for static scheduling with a chunksize of $1000$:
-When looking at different gridsizes we observe:
-Time,Grid size,Schedule,Threads,Id
-0.040567,500,"static,1000",64,22
-0.124492,1000,"static,1000",64,46
-0.445595,2000,"static,1000",64,70
-3.171261,4000,"static,1000",64,94
-14.403611,8000,"static,1000",64,118
+We compare the gridsizes and threads for static scheduling with a chunksize of $1000$ and a threads being used kept to a constant of 64. When looking at different gridsizes we observe the results in Table \ref{table:ex5_grid_changes}:
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Grid Size} & \textbf{Time} \\
+\hline
+500  & $0.040567$  \\
+1000 & $0.124492$ \\
+2000 & $0.445595$ \\
+4000 & $3.1712616$ \\
+8000 & $14.403611$ \\
+\hline
+\end{tabular}
+\caption{Runtimes for Different Grid Sizes (1000 chunk size, 64 threads, static schedule)}
+\label{table:ex5_grid_changes}
+\end{table}
 
 Unsurprisingly with a larger gridsize the runtime increases for constant parameters.
 
-When looking at different threadsizes we observe:
-Time,Grid size,Schedule,Threads,Write output id, Speedup
-1.45063,500,"static,1000",1,20,1.0
-0.051778,500,"static,1000",32,21,28.01633898566959
-0.040567,500,"static,1000",64,22,35.75886804545567
-0.067249,500,"static,1000",128,23,21.57102707846957
+
+When looking at different thread counts we observe the data in Table \ref{table:ex5_thread_changes}. We keep a constant grid size of 500 and a static schedule with a chunk size of 1000 (for reference, the serial runtime for a grid size of 500 was found to be 1.387342 seconds):
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Threads} & \textbf{Runtime} & \textbf{Speedup} \\
+\hline
+1 Thread  & $1.45063$  & $0.95637$ \\
+32 Threads & $0.051778$ & $26.7940$ \\
+64 Threads & $0.040567$ & $34.19878$ \\
+128 Threads & $0.067249$ & $20.62993$ \\
+\hline
+\end{tabular}
+\caption{Runtimes for Different Thread Counts (1000 chunk size, static schedule, 500 grid size)}
+\label{table:ex5_thread_changes}
+\end{table}
 
 Interestingly after 64 threads, the speedup decreases again, which we assume to be due to overhead of creating and managing a higher number of thread (such as scheduling, spawning, etc).
 
