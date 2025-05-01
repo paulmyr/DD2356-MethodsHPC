@@ -38,6 +38,6 @@ do
     echo "----------------------------"
     echo "Running with $threshold threshold"
     # Getting both the serial and the parallel runtimes at once
-    srun -n 1 ./neuron_omp 0 1024 $threshold "neuron_omp_threshold_$threshold.txt"
-    srun -n 1 ./neuron_serial 0 1024 $threshold "neuron_omp_threshold_serial_$threshold.txt"
+    srun -n 1 ../neuron_omp 0 1024 $threshold "neuron_omp_threshold_$threshold.txt"
+    srun -n 1 ../neuron_serial 0 1024 $threshold "neuron_omp_threshold_serial_$threshold.txt"
 done

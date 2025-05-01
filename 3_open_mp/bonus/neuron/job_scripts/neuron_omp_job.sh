@@ -36,9 +36,9 @@ do
     echo "----------------------------"
     echo "Running with $threads threads"
     export OMP_NUM_THREADS=$threads
-    srun -n 1 ./neuron_omp 0 1024 50 "neuron_omp_threads_$threads.txt"
+    srun -n 1 ../neuron_omp 0 1024 50 "neuron_omp_threads_$threads.txt"
 done
 
 # Serial Run
 echo "----------------------------"
-srun -n 1 ./neuron_serial 0 1024 50 "neuron_omp_threads_serial.txt"
+srun -n 1 ../neuron_serial 0 1024 50 "neuron_omp_threads_serial.txt"

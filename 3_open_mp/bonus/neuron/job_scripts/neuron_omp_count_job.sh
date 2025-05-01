@@ -38,6 +38,6 @@ do
     echo "----------------------------"
     echo "Running with $neuron neurons"
     # Getting both the serial and the parallel runtimes at once
-    srun -n 1 ./neuron_omp 0 $neuron 50 "neuron_omp_count_$neuron.txt"
-    srun -n 1 ./neuron_serial 0 $neuron 50 "neuron_omp_count_serial_$neuron.txt"
+    srun -n 1 ../neuron_omp 0 $neuron 50 "neuron_omp_count_$neuron.txt"
+    srun -n 1 ../neuron_serial 0 $neuron 50 "neuron_omp_count_serial_$neuron.txt"
 done
