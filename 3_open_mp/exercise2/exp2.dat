@@ -1,0 +1,4 @@
+#Schedule Mean_Bandwidth  Std_Dev
+static    48674           1212.74939002252
+dynamic   49646           1458.51880070159
+guided    49384           1107.38706737978
