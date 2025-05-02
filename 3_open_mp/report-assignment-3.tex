@@ -231,6 +231,27 @@ We assigned 4 virtual CPU cores in our jobscript. As shown in the hwloc output (
 the threads will then be executed in a Multithreading manner on the fewer cores, making use of stalls or I/O operations of other threads to use the available ressources as efficiently as possible. However if the number of logical cores
 is fewer than the number of threads spawned, we receive a warning indicating that the number of threads is greater than the number of cores to run the program on, but the code still executes.
 
+\section{Exercise 2 - STREAM benchmark with OpenMP}
+\subsection{Question 1: Use what you've learned from hwloc/numactl to discover how many cores your job is allocated with.}
+We allocated the whole node: 128 pysical cores with 256 virtual cores.
+
+\subsection{Question 2: Run the STREAM benchmark five times and record the average bandwidth values and its standard deviation for the copy kernel. Prepare a plot (with error bars) comparing the bandwidth using 1,32,64, and 128 threads.}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{img/ex2/ex2_threads.png}
+  \caption{Stream bandwidth vs \#threads}
+  \label{fig:ex2-threads}
+\end{figure}
+
+\subsection{Question 3: How does the measured bandwidth with the copy kernel depend on the number of threads?}
+\subsection{Question 4: Prepare another plot comparing the bandwidth measured with copy kernel with static, dynamic, and guided schedules using 128 threads.}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{img/ex2/ex2_schedule.png}
+  \caption{Stream bandwidth for different schedulings}
+  \label{fig:ex2-schedule}
+\end{figure}
+\subsection{Question 5: How do you set the schedule in the STREAM code? What is the fastest schedule, and why?}
 
 \section{Exercise 3 - Parallel Sum}
 For this section, the job scripts that were used to run the experiments on Dardel can be found under the \verb|job_scripts/| directory \href{https://github.com/paulmyr/DD2356-MethodsHPC/tree/master/3_open_mp/exercise3/job_scripts}{here}. In general, we used 1 node and 128 logical CPUs on Dardel for all our experiments. 
