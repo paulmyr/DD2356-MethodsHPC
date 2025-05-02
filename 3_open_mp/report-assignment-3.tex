@@ -234,6 +234,7 @@ is fewer than the number of threads spawned, we receive a warning indicating tha
 \section{Exercise 2 - STREAM benchmark with OpenMP}
 \subsection{Question 1: Use what you've learned from hwloc/numactl to discover how many cores your job is allocated with.}
 We allocated the whole node: 128 pysical cores with 256 virtual cores.
+As default scheduling we used the guided scheduler (as it was the default in the STREAM benchmark code).
 
 \subsection{Question 2: Run the STREAM benchmark five times and record the average bandwidth values and its standard deviation for the copy kernel. Prepare a plot (with error bars) comparing the bandwidth using 1,32,64, and 128 threads.}
 \begin{figure}[H]
@@ -244,6 +245,9 @@ We allocated the whole node: 128 pysical cores with 256 virtual cores.
 \end{figure}
 
 \subsection{Question 3: How does the measured bandwidth with the copy kernel depend on the number of threads?}
+As depicted in \ref{fig:ex2-threads}, increasing the threads improves the bandwidth significantly.
+The bandwidth is proportional to the number of threads, approachung a pleateu around 50GBit/s.
+
 \subsection{Question 4: Prepare another plot comparing the bandwidth measured with copy kernel with static, dynamic, and guided schedules using 128 threads.}
 \begin{figure}[H]
   \centering
@@ -252,6 +256,13 @@ We allocated the whole node: 128 pysical cores with 256 virtual cores.
   \label{fig:ex2-schedule}
 \end{figure}
 \subsection{Question 5: How do you set the schedule in the STREAM code? What is the fastest schedule, and why?}
+To use different scheduler, we used the omp pragma \verb|omp parallel for schedule(runtime)| and set the environment variable using \verb|export OMP_SCHEDULE=<static,dynamic,guided>|.
+We saw a huge difference in performance, to the point one might call it shocking.
+By far the best performance was the static scheduling.
+It outperformed the second best (guided sheduling) by magnitudes.
+To me this looks suspecious, but double checking the scripts, everything else was the same.
+The dynamic scheduler performed so bad, it's bar is not even really visible in the plot.
+All this indicates to us, that the omp overhead is magnitudes more influencial than the runtime within the loop.
 
 \section{Exercise 3 - Parallel Sum}
 For this section, the job scripts that were used to run the experiments on Dardel can be found under the \verb|job_scripts/| directory \href{https://github.com/paulmyr/DD2356-MethodsHPC/tree/master/3_open_mp/exercise3/job_scripts}{here}. In general, we used 1 node and 128 logical CPUs on Dardel for all our experiments. 
