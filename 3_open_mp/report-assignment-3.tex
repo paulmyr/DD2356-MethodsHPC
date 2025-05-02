@@ -428,10 +428,15 @@ Figure \ref{fig:ex4_speedup} shows the speedup of the parallel implementation on
   \label{fig:ex4_speedup}
 \end{figure}
 
-
-
 \subsection{Non-Parallel Performance Optimizations}
-\todo{Not entirely sure what to write here...maybe loop order change to prevent cache misses?}
+For big enough arrays, one can assume that memory access is the runtime bottleneck.
+In the current implementation, \verb|Xr_o[k]| and \verb|Xi_o[k]| is updated not very cache efficient.
+One could optimize this by cache-blocking.
+This way, when \verb|Xr_o[k]| and \verb|Xi_o[k]| are loaded into cache only once.
+Simply changing the loop order might also have an effect on the runtime.
+
+Depending on the compiler optimizations, one might also generate by a small improvement by explicitly storing the \verb|sin(...)| and \verb|cos(...)| calculation in an intermediate variable.
+This could reduce redundant computations.
 
 \section{Exercise 5 - Parallelizing a Shallow Water Simulation}
 \subsection{1. Parallelize the loops}
