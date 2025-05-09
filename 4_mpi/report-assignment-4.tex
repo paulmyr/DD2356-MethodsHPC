@@ -201,6 +201,47 @@ The code for our project can be found at this location: \url{https://github.com/
 \section{1D Halo Exchange in a Wave Equation Simulation}
 
 \section{Parallel Row Sum Computation using MPI Collectives}
+We started by running the code in the seqential version:
+The generated image looks as follows:
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{img/ex2_seq}
+  \caption{row summation using sequential implementation.}
+  \label{fig:ex2_seq}
+\end{figure}
+
+To paralleise the code, we use \verb|MPI_Scatter(...)|.
+To use MPI, we first initialise the application.
+
+\lstinputlisting[language=C, firstline=52, lastline=56]{ex2/parallel_row_sum.c}
+
+The main idea, is to distribute the matrix equally onto the available threads.
+Our strategy is to split the matrix into chunks, each chunk contains an equal number of rows.
+To achieve this, we first compute the chunk size, which is the number of rows each thread has to compute.
+The basic formula for this is $\frac{N}{M}$, where $N$ is the number of rows and $M$ is the number of threads.
+Because by default $N$ does not have to be divisible by $M$, we pad the matrix so that it has length $N^*$, where $N^* \mod M = 0$.
+\lstinputlisting[language=C, firstline=60, lastline=61]{ex2/parallel_row_sum.c}
+We initialize the matrix only on the root process and use scatter to distribute it to the rest of the threads.
+This can be achieved by the following code:
+\lstinputlisting[language=c, firstline=63, lastline=79]{ex2/parallel_row_sum.c}
+Note, that the full matrix is only allocated on the root process!
+The summation is then done on subsets of the matrix individually.
+We gather all the solutions by using \verb|MPI_Gather(...)|:
+\lstinputlisting[language=c, firstline=83, lastline=93]{ex2/parallel_row_sum.c}
+
+The image looks identical to the sequential version:
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{img/ex2_para}
+  \caption{row summation using parallel implementation.}
+  \label{fig:ex2_seq}
+\end{figure}
+
+To compute the total sum, we first reduce the local result into a single local sum.
+These we can then reduce globally using \verb|MPI_Reduce(...)|:
+\lstinputlisting[language=c, firstline=95, lastline=102]{ex2/parallel_row_sum.c}
+
+\todo[inline]{ex2 scaling tests...}
 
 \section{Profiling MPI applications with Score-P and Vampir}
 
