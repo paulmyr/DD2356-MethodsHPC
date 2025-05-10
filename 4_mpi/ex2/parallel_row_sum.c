@@ -1,10 +1,20 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/time.h>
 
 #include <mpi.h>
 
-#define N 1000 // Matrix size
+#define N 32000 // Matrix size
+
+double mysecond() {
+  struct timeval tp;
+  struct timezone tzp;
+  int i;
+
+  i = gettimeofday(&tp, &tzp);
+  return ((double)tp.tv_sec + (double)tp.tv_usec * 1.e-6);
+}
 
 void initialize_matrix(double matrix[][N], int num_rows) {
   for (int i = 0; i < N; i++) {
@@ -51,10 +61,16 @@ int main(int argc, char *argv[]) {
   // init MPI
   MPI_Init(&argc, &argv);
 
+  double tstart, tend;
   int root_process = 0;
   int mpi_size, mpi_rank;
   MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
   MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
+
+  if (mpi_rank == 0) {
+    printf("Running with %d processes.\n", mpi_size);
+    tstart = mysecond();
+  }
 
   // Calculate chunk size:
   int chunk_size = (int)ceil((float)N / (float)mpi_size);
@@ -63,16 +79,14 @@ int main(int argc, char *argv[]) {
   double (*matrix)[N] = NULL;
   double (*working_matrix)[N] = malloc(sizeof(double) * chunk_size * N);
   double *local_row_sums = malloc(sizeof(double) * chunk_size);
-  printf("thread %d: initialized.\n", mpi_rank);
 
   if (mpi_rank == root_process) {
     matrix = malloc(sizeof(double) * num_rows * N);
     initialize_matrix(matrix, num_rows);
-    printf("thread %d: matrix initialized.\n", mpi_rank);
     MPI_Scatter(matrix, chunk_size * N, MPI_DOUBLE, working_matrix,
                 chunk_size * N, MPI_DOUBLE, root_process, MPI_COMM_WORLD);
-
     free(matrix);
+    matrix = NULL; // prevent uaf
   } else {
     MPI_Scatter(NULL, 0, MPI_DOUBLE, working_matrix, chunk_size * N, MPI_DOUBLE,
                 root_process, MPI_COMM_WORLD);
@@ -86,7 +100,8 @@ int main(int argc, char *argv[]) {
                MPI_DOUBLE, root_process, MPI_COMM_WORLD);
     // implicit barrier here.
     write_output(row_sums);
-    printf("Row sum computation complete.\n");
+    tend = mysecond();
+    printf("Complete: took %fs.\n", tend - tstart);
   } else {
     MPI_Gather(local_row_sums, chunk_size, MPI_DOUBLE, NULL, 0, MPI_DOUBLE,
                root_process, MPI_COMM_WORLD);
@@ -103,6 +118,8 @@ int main(int argc, char *argv[]) {
 
   free(working_matrix);
   free(local_row_sums);
+  working_matrix = NULL;
+  local_row_sums = NULL;
 
   MPI_Finalize();
   return 0;
