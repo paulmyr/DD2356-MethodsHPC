@@ -67,7 +67,7 @@ int main(int argc, char *argv[]) {
   MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
   MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
 
-  if (mpi_rank == 0) {
+  if (mpi_rank == root_process) {
     printf("Running with %d processes.\n", mpi_size);
     tstart = mysecond();
   }
