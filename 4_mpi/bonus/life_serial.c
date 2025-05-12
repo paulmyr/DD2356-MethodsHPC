@@ -51,7 +51,7 @@ void update() {
 
 void write_output(int step) {
     char filename[50];
-    sprintf(filename, "gol_output_serial_%d.txt", step);
+    sprintf(filename, "outputs/serial/gol_output_serial_%d.txt", step);
     FILE *f = fopen(filename, "w");
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {

@@ -224,7 +224,7 @@ void print_grid(int process_rank, int dims[2], MPI_Comm cart_comm, int local_row
 
         // Print the global grid now to file
         char filename[50];
-        sprintf(filename, "gol_output_parallel_%d.txt", step);
+        sprintf(filename, "outputs/parallel/gol_output_parallel_%d.txt", step);
         FILE *f = fopen(filename, "w");
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
