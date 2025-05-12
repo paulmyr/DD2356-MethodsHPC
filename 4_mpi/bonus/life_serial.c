@@ -70,7 +70,7 @@ int main(int argc, char** argv) {
     double start = MPI_Wtime();
     for (int step = 0; step < STEPS; step++) {
         update();
-        if (step % 10 == 0) write_output(step);
+        // if (step % 10 == 0) write_output(step);
     }
     double end = MPI_Wtime();
     printf("[SERIAL] Grid size: %d x %d. Took: %.4f seconds\n", N, N, end - start);

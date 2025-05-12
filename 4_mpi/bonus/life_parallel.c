@@ -357,7 +357,7 @@ int main(int argc, char** argv) {
 
         MPI_Barrier(cart_comm);
 
-        if (step % 10 == 0) print_grid(rank, dims, cart_comm, local_rows, local_cols, step);
+        // if (step % 10 == 0) print_grid(rank, dims, cart_comm, local_rows, local_cols, step);
     }
     
     if (rank == 0) {
