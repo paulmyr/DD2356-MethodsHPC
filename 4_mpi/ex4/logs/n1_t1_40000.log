@@ -1,0 +1,3 @@
+Running with 1 processes.
+chunk_size is 40000, n_padded is 40000.
+BLAS matrix-vector multiplication completed in 8.518175 sec.
