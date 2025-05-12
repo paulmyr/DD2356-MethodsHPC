@@ -365,7 +365,7 @@ int main(int argc, char** argv) {
         printf("[PARALLEL] Run with %d processes. Grid size: %d x %d. Took: %.4f seconds\n", size, N, N, end - start);
     }
 
-    
+    MPI_Comm_free(&cart_comm);
     MPI_Type_free(&column);
     free(grid);
     free(new_grid);
