@@ -47,6 +47,7 @@ done
 for count in {1..3}
 do
     echo "SERIAL RUN $count"
-    mpiexec -n 1 ./life_serial.out
+    # mpiexec -n 1 ./life_serial.out
+    srun -n 1 ./life_serial.out
     echo "----------------------------"
 done
