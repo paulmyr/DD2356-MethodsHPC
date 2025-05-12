@@ -3,7 +3,7 @@
 #include <string.h>
 #include <mpi.h>
 
-#define N 320 // Grid size
+#define N 640 // Grid size
 #define STEPS 100  // Simulation steps
 
 #define SEND_NORTH_TAG 100
@@ -344,6 +344,12 @@ int main(int argc, char** argv) {
 
     initialize_and_send_grids(rank, dims, cart_comm, local_rows, local_cols);
 
+    double start, end;
+    
+    // Root will handle the timing
+    if (rank == 0) {
+        start = MPI_Wtime();
+    }
 
     for (int step = 0; step < STEPS; step++) {
         perform_halo_exchange(local_rows, local_cols, cart_comm, column);
@@ -354,8 +360,12 @@ int main(int argc, char** argv) {
         if (step % 10 == 0) print_grid(rank, dims, cart_comm, local_rows, local_cols, step);
     }
     
+    if (rank == 0) {
+        end = MPI_Wtime();
+        printf("[PARALLEL] Run with %d processes. Grid size: %d x %d. Took: %.4f seconds\n", size, N, N, end - start);
+    }
 
-
+    
     MPI_Type_free(&column);
     free(grid);
     free(new_grid);

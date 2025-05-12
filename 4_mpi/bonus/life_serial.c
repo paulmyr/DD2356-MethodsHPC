@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <mpi.h>
 
-#define N 320  // Grid size
+#define N 640  // Grid size
 #define STEPS 100 // Simulation steps
 
 int grid[N][N], new_grid[N][N];
@@ -66,10 +66,14 @@ int main(int argc, char** argv) {
     MPI_Init(&argc, &argv);
     
     initialize();
+
+    double start = MPI_Wtime();
     for (int step = 0; step < STEPS; step++) {
         update();
         if (step % 10 == 0) write_output(step);
     }
+    double end = MPI_Wtime();
+    printf("[SERIAL] Grid size: %d x %d. Took: %.4f seconds\n", N, N, end - start);
     
     MPI_Finalize();
     return 0;
