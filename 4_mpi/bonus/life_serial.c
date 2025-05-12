@@ -2,12 +2,13 @@
 #include <stdlib.h>
 #include <mpi.h>
 
-#define N 20  // Grid size
-#define STEPS 100  // Simulation steps
+#define N 320  // Grid size
+#define STEPS 100 // Simulation steps
 
 int grid[N][N], new_grid[N][N];
 
 void initialize() {
+    srand(42);
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             grid[i][j] = rand() % 2;  // Random initial state
@@ -50,7 +51,7 @@ void update() {
 
 void write_output(int step) {
     char filename[50];
-    sprintf(filename, "gol_output_%d.txt", step);
+    sprintf(filename, "gol_output_serial_%d.txt", step);
     FILE *f = fopen(filename, "w");
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
