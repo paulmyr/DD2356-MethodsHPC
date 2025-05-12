@@ -3,7 +3,7 @@
 #include <string.h>
 #include <mpi.h>
 
-#define N 16 // Grid size
+#define N 4 // Grid size
 #define STEPS 100  // Simulation steps
 
 #define SEND_NORTH_TAG 100
@@ -163,39 +163,24 @@ void perform_halo_exchange(int local_rows, int local_cols, MPI_Comm cart_comm, M
     MPI_Request requests[16];
     int req_idx = 0;
 
-    // Send and receive from UP neighbour
+    // All Receives first so that they can be immediately processed when sends arrive
     MPI_Irecv(&grid[get_index(0, 1, local_cols+2)], local_cols, MPI_INT, up, SEND_SOUTH_TAG, cart_comm, &requests[req_idx++]);
-    MPI_Isend(&grid[get_index(1, 1, local_cols+2)], local_cols, MPI_INT, up, SEND_NORTH_TAG, cart_comm, &requests[req_idx++]);
-
-
-    // Send and receive from DOWN neighbour
     MPI_Irecv(&grid[get_index(local_rows+1, 1, local_cols+2)], local_cols, MPI_INT, down, SEND_NORTH_TAG, cart_comm, &requests[req_idx]);
-    MPI_Isend(&grid[get_index(local_rows, 1, local_cols+2)], local_cols, MPI_INT, down, SEND_SOUTH_TAG, cart_comm, &requests[req_idx]);
-
-    // Send and receive from RIGHT neighbour
-    MPI_Irecv(&grid[get_index(1, local_cols+1, local_cols+2)], 1, column, right, SEND_WEST_TAG, cart_comm, &requests[req_idx++]);
-    MPI_Isend(&grid[get_index(1, local_cols, local_cols+2)], 1, column, right, SEND_EAST_TAG, cart_comm, &requests[req_idx++]);
-
-    // Send and recieve from LEFT neighbour
+    MPI_Irecv(&grid[get_index(1, local_cols+1, local_cols+2)], 1, column, right, SEND_WEST_TAG, cart_comm, &requests[req_idx++]);   
     MPI_Irecv(&grid[get_index(1, 0, local_cols+2)], 1, column, left, SEND_EAST_TAG, cart_comm, &requests[req_idx++]);
-    MPI_Isend(&grid[get_index(1, 1, local_cols+2)], 1, column, left, SEND_WEST_TAG, cart_comm, &requests[req_idx++]);
-
-    // Send and receive from TOP-LEFT (North-West) neighbour
     MPI_Irecv(&grid[get_index(0, 0, local_cols+2)], 1, MPI_INT, nw, SEND_SE_TAG, cart_comm, &requests[req_idx++]);
-    MPI_Isend(&grid[get_index(1, 1, local_cols+2)], 1, MPI_INT, nw, SEND_NW_TAG, cart_comm, &requests[req_idx++]);
-
-    // Send and receive from TOP-RIGHT (North-East) neighbour
     MPI_Irecv(&grid[get_index(0, local_cols+1, local_cols+2)], 1, MPI_INT, ne, SEND_SW_TAG, cart_comm, &requests[req_idx++]);
-    MPI_Isend(&grid[get_index(1, local_cols, local_cols+2)], 1, MPI_INT, ne, SEND_NE_TAG, cart_comm, &requests[req_idx++]);
-    
-
-    // Send and receive from BOTTOM-LEFT (South-West) neighbour
     MPI_Irecv(&grid[get_index(local_rows+1, 0, local_cols+2)], 1, MPI_INT, sw, SEND_NE_TAG, cart_comm, &requests[req_idx++]);
-    MPI_Isend(&grid[get_index(local_rows, 1, local_cols+2)], 1, MPI_INT, sw, SEND_SW_TAG, cart_comm, &requests[req_idx++]);
-
-
-    // Send and receive from BOTTOM-RIGHT (South-East) neighbour
     MPI_Irecv(&grid[get_index(local_rows+1, local_cols+1, local_cols+2)], 1, MPI_INT, se, SEND_NW_TAG, cart_comm, &requests[req_idx++]);
+    
+    // All sends later 
+    MPI_Isend(&grid[get_index(1, 1, local_cols+2)], local_cols, MPI_INT, up, SEND_NORTH_TAG, cart_comm, &requests[req_idx++]);
+    MPI_Isend(&grid[get_index(local_rows, 1, local_cols+2)], local_cols, MPI_INT, down, SEND_SOUTH_TAG, cart_comm, &requests[req_idx]);
+    MPI_Isend(&grid[get_index(1, local_cols, local_cols+2)], 1, column, right, SEND_EAST_TAG, cart_comm, &requests[req_idx++]);
+    MPI_Isend(&grid[get_index(1, 1, local_cols+2)], 1, column, left, SEND_WEST_TAG, cart_comm, &requests[req_idx++]);
+    MPI_Isend(&grid[get_index(1, 1, local_cols+2)], 1, MPI_INT, nw, SEND_NW_TAG, cart_comm, &requests[req_idx++]);
+    MPI_Isend(&grid[get_index(1, local_cols, local_cols+2)], 1, MPI_INT, ne, SEND_NE_TAG, cart_comm, &requests[req_idx++]);
+    MPI_Isend(&grid[get_index(local_rows, 1, local_cols+2)], 1, MPI_INT, sw, SEND_SW_TAG, cart_comm, &requests[req_idx++]);
     MPI_Isend(&grid[get_index(local_rows, local_cols, local_cols+2)], 1, MPI_INT, se, SEND_SE_TAG, cart_comm, &requests[req_idx++]);
 
 
