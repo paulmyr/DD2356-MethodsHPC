@@ -45,16 +45,11 @@ void initialize_and_send_grids(int process_rank, int dims[2], MPI_Comm cart_comm
         int coords[2], start[2], sub[2], full_size[2] = {N, N};
 
         // Initialize the entire grid
-        // printf("Initial Grid: \n\n");
         for (int row = 0; row < N; row++) {
             for (int col = 0; col < N; col++) {
                 total_grid[(row * N) + col] = rand() % 2; 
-                // total_grid[(row * N) + col] = row * N + col; 
-                // printf("%4d ", total_grid[(row * N) + col]);
             }
-            // printf("\n");
         }
-        // fflush(stdout);
 
         // No need to send to yourself so just copy. Note that we leave room for the ghost cells
         MPI_Cart_coords(cart_comm, 0, 2, coords);
@@ -100,7 +95,6 @@ void initialize_and_send_grids(int process_rank, int dims[2], MPI_Comm cart_comm
         MPI_Type_commit(&recv_subarray);
 
         MPI_Request request;
-        // int *recv_buff = malloc(local_rows * local_cols * sizeof(int));
         MPI_Irecv(grid, 1, recv_subarray, 0, 0, MPI_COMM_WORLD, &request);
         MPI_Wait(&request, MPI_STATUS_IGNORE);
         MPI_Type_free(&recv_subarray);
@@ -230,7 +224,7 @@ void print_grid(int process_rank, int dims[2], MPI_Comm cart_comm, int local_row
 
         // Print the global grid now to file
         char filename[50];
-        sprintf(filename, "gol_output_%d.txt", step);
+        sprintf(filename, "gol_output_parallel_%d.txt", step);
         FILE *f = fopen(filename, "w");
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
@@ -293,6 +287,10 @@ void update(int local_rows, int local_cols) {
     }
 }
 
+/**
+ * Debugging utility to help print the local grid for the provided process. Has the option
+ * of including halos for more information
+ */
 void print_local_grid(int rank, int rows, int cols, int include_halos, MPI_Comm cart_comm) {
     int coords[2];
     MPI_Cart_coords(cart_comm, rank, 2, coords);
@@ -300,10 +298,9 @@ void print_local_grid(int rank, int rows, int cols, int include_halos, MPI_Comm 
     printf("Rank %d grid @ (%d, %d):\n", rank, coords[0], coords[1]);
     for (int i = 0; i < rows + 2; i++) {
         for (int j = 0; j < cols + 2; j++) {
-            // Visual clarity: clearly separate ghost/halo cells with borders
             if ((i == 0 || i == rows + 1 || j == 0 || j == cols + 1)) {
                 if (include_halos) {
-                printf("[%4d] ", grid[i * (cols + 2) + j]);  // Halo cells in brackets
+                    printf("[%4d] ", grid[i * (cols + 2) + j]);  // Halo cells in brackets
                 }
 
             } else {
@@ -345,79 +342,20 @@ int main(int argc, char** argv) {
     MPI_Type_vector(local_rows, 1, local_cols + 2, MPI_INT, &column);
     MPI_Type_commit(&column);
 
-    if (rank == 0) {
-        printf("Local Rows: %d, Local Cols: %d\n", local_rows, local_cols);
-    }
-
     initialize_and_send_grids(rank, dims, cart_comm, local_rows, local_cols);
-
-    
-    // initialize();
-    // print_grid(rank, dims, cart_comm, local_rows, local_cols, 0);
-    // if (chunk_coords[0] == 0 && chunk_coords[1] == 1) {
-    //     printf("Local Rows are: %d, Local cols are: %d\n", local_rows, local_cols);
-    //     print_local_grid(rank, local_rows, local_cols, 1, cart_comm);
-    // }
-        
-    // perform_halo_exchange(local_rows, local_cols, cart_comm, column);
-    // MPI_Barrier(cart_comm);
-    // if (chunk_coords[0] == 0 && chunk_coords[1] == 1)
-    //     print_local_grid(rank, local_rows, local_cols, 1, cart_comm);
-
-    // if (chunk_coords[0] == 0  && chunk_coords[1] == 1) {
-    //     // printf("Before update, value at (2, 3): %d\n", grid[get_index(2, 3, local_cols+2)]);
-    // }
-    // update(local_rows, local_cols);
-    // if (chunk_coords[0] == 0  && chunk_coords[1] == 1) {
-    //     printf("After Update:\n");
-    //     print_local_grid(rank, local_rows, local_cols, 1, cart_comm);
-    // }
-
-    // print_grid(rank, dims, cart_comm, local_rows, local_cols, 0);
-
-    // print_grid(rank, dims, cart_comm, local_rows, local_cols, 1);
-
-    // char filename[50], file_before[50];
-    // sprintf(filename, "grid_process_%d.txt", rank);
-    // sprintf(file_before, "grid_init_after_halo_%d.txt", rank);
-    // FILE *f = fopen(filename, "w"), *f_init = fopen(file_before, "w");
 
 
     for (int step = 0; step < STEPS; step++) {
         perform_halo_exchange(local_rows, local_cols, cart_comm, column);
-        // MPI_Barrier(cart_comm);
-        // fprintf(f_init, "[Process %d] Before First Iteration (responsible for (%d, %d)):\n", rank, chunk_coords[0], chunk_coords[1]);
-        // for (int i = 0; i < local_rows + 2; i++) {
-        //     for (int j = 0; j < local_cols + 2; j++) {
-        //         if (i == 0 || i == local_rows + 1 || j == 0 || j == local_cols + 1) {
-        //             fprintf(f_init, "[%4d] ", grid[get_index(i, j, local_cols+2)]);  // Halo cells in brackets
-        //         } else {
-        //             fprintf(f_init, " %4d  ", grid[get_index(i, j, local_cols+2)]);
-        //         }
-        //     }
-        //     fprintf(f_init, "\n");
-        // }
-
         update(local_rows, local_cols);
-        MPI_Barrier(cart_comm);
-        if (step % 10 == 0) print_grid(rank, dims, cart_comm, local_rows, local_cols, step);
 
-        // fprintf(f, "[Process %d] After First Iteration (responsible for (%d, %d)):\n", rank, chunk_coords[0], chunk_coords[1]);
-        // for (int i = 0; i < local_rows + 2; i++) {
-        //     for (int j = 0; j < local_cols + 2; j++) {
-        //         if (i == 0 || i == local_rows + 1 || j == 0 || j == local_cols + 1) {
-        //             fprintf(f, "[%4d] ", grid[get_index(i, j, local_cols+2)]);  // Halo cells in brackets
-        //         } else {
-        //             fprintf(f, " %4d  ", grid[get_index(i, j, local_cols+2)]);
-        //         }
-        //     }
-        //     fprintf(f, "\n");
-        // }
+        MPI_Barrier(cart_comm);
+
+        if (step % 10 == 0) print_grid(rank, dims, cart_comm, local_rows, local_cols, step);
     }
     
 
-    // fclose(f);
-    // fclose(f_init);
+
     MPI_Type_free(&column);
     free(grid);
     free(new_grid);
