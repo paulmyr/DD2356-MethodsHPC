@@ -1,8 +1,13 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import glob
+import argparse
 
-files = sorted(glob.glob("4_mpi/ex1/wave_output_*.txt"))
+parser = argparse.ArgumentParser(description="Plotting Wave Equations")
+parser.add_argument("--mode", choices=["parallel", "serial"], required=True, help="Which outputs you want to plot")
+args = parser.parse_args()
+
+files = sorted(glob.glob(f"outputs/{args.mode}/wave_output_{args.mode}_*.txt"))
 
 for file in files:
     data = np.loadtxt(file)
