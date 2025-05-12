@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <sys/time.h>
 
-#define N 1000 // Matrix size
+#define N 40000 // Matrix size
 
 double mysecond() {
   struct timeval tp;
