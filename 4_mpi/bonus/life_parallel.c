@@ -164,36 +164,40 @@ void perform_halo_exchange(int local_rows, int local_cols, MPI_Comm cart_comm, M
     int req_idx = 0;
 
     // Send and receive from UP neighbour
-    MPI_Isend(&grid[get_index(1, 1, local_cols+2)], local_cols, MPI_INT, up, SEND_NORTH_TAG, cart_comm, &requests[req_idx++]);
     MPI_Irecv(&grid[get_index(0, 1, local_cols+2)], local_cols, MPI_INT, up, SEND_SOUTH_TAG, cart_comm, &requests[req_idx++]);
+    MPI_Isend(&grid[get_index(1, 1, local_cols+2)], local_cols, MPI_INT, up, SEND_NORTH_TAG, cart_comm, &requests[req_idx++]);
+
 
     // Send and receive from DOWN neighbour
-    MPI_Isend(&grid[get_index(local_rows, 1, local_cols+2)], local_cols, MPI_INT, down, SEND_SOUTH_TAG, cart_comm, &requests[req_idx]);
     MPI_Irecv(&grid[get_index(local_rows+1, 1, local_cols+2)], local_cols, MPI_INT, down, SEND_NORTH_TAG, cart_comm, &requests[req_idx]);
+    MPI_Isend(&grid[get_index(local_rows, 1, local_cols+2)], local_cols, MPI_INT, down, SEND_SOUTH_TAG, cart_comm, &requests[req_idx]);
 
     // Send and receive from RIGHT neighbour
-    MPI_Isend(&grid[get_index(1, local_cols, local_cols+2)], 1, column, right, SEND_EAST_TAG, cart_comm, &requests[req_idx++]);
     MPI_Irecv(&grid[get_index(1, local_cols+1, local_cols+2)], 1, column, right, SEND_WEST_TAG, cart_comm, &requests[req_idx++]);
+    MPI_Isend(&grid[get_index(1, local_cols, local_cols+2)], 1, column, right, SEND_EAST_TAG, cart_comm, &requests[req_idx++]);
 
     // Send and recieve from LEFT neighbour
-    MPI_Isend(&grid[get_index(1, 1, local_cols+2)], 1, column, left, SEND_WEST_TAG, cart_comm, &requests[req_idx++]);
     MPI_Irecv(&grid[get_index(1, 0, local_cols+2)], 1, column, left, SEND_EAST_TAG, cart_comm, &requests[req_idx++]);
+    MPI_Isend(&grid[get_index(1, 1, local_cols+2)], 1, column, left, SEND_WEST_TAG, cart_comm, &requests[req_idx++]);
 
     // Send and receive from TOP-LEFT (North-West) neighbour
-    MPI_Isend(&grid[get_index(1, 1, local_cols+2)], 1, MPI_INT, nw, SEND_NW_TAG, cart_comm, &requests[req_idx++]);
     MPI_Irecv(&grid[get_index(0, 0, local_cols+2)], 1, MPI_INT, nw, SEND_SE_TAG, cart_comm, &requests[req_idx++]);
+    MPI_Isend(&grid[get_index(1, 1, local_cols+2)], 1, MPI_INT, nw, SEND_NW_TAG, cart_comm, &requests[req_idx++]);
 
     // Send and receive from TOP-RIGHT (North-East) neighbour
-    MPI_Isend(&grid[get_index(1, local_cols, local_cols+2)], 1, MPI_INT, ne, SEND_NE_TAG, cart_comm, &requests[req_idx++]);
     MPI_Irecv(&grid[get_index(0, local_cols+1, local_cols+2)], 1, MPI_INT, ne, SEND_SW_TAG, cart_comm, &requests[req_idx++]);
+    MPI_Isend(&grid[get_index(1, local_cols, local_cols+2)], 1, MPI_INT, ne, SEND_NE_TAG, cart_comm, &requests[req_idx++]);
+    
 
     // Send and receive from BOTTOM-LEFT (South-West) neighbour
-    MPI_Isend(&grid[get_index(local_rows, 1, local_cols+2)], 1, MPI_INT, sw, SEND_SW_TAG, cart_comm, &requests[req_idx++]);
     MPI_Irecv(&grid[get_index(local_rows+1, 0, local_cols+2)], 1, MPI_INT, sw, SEND_NE_TAG, cart_comm, &requests[req_idx++]);
+    MPI_Isend(&grid[get_index(local_rows, 1, local_cols+2)], 1, MPI_INT, sw, SEND_SW_TAG, cart_comm, &requests[req_idx++]);
+
 
     // Send and receive from BOTTOM-RIGHT (South-East) neighbour
-    MPI_Isend(&grid[get_index(local_rows, local_cols, local_cols+2)], 1, MPI_INT, se, SEND_SE_TAG, cart_comm, &requests[req_idx++]);
     MPI_Irecv(&grid[get_index(local_rows+1, local_cols+1, local_cols+2)], 1, MPI_INT, se, SEND_NW_TAG, cart_comm, &requests[req_idx++]);
+    MPI_Isend(&grid[get_index(local_rows, local_cols, local_cols+2)], 1, MPI_INT, se, SEND_SE_TAG, cart_comm, &requests[req_idx++]);
+
 
     // Wait for everything to finish
     MPI_Waitall(req_idx, requests, MPI_STATUSES_IGNORE);   
@@ -338,11 +342,6 @@ int main(int argc, char** argv) {
 
     perform_halo_exchange(local_rows, local_cols, cart_comm, column);
 
-    MPI_Barrier(cart_comm);
-
-    if (rank == 0) {
-        printf("------------------------------------\n");
-    }
 
     printf("[Process %d] After Halo Exchange (responsible for (%d, %d)):\n", rank, chunk_coords[0], chunk_coords[1]);
     for (int i = 0; i < local_rows + 2; i++) {
