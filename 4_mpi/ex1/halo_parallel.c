@@ -4,7 +4,7 @@
 #include <string.h>
 #include <mpi.h>
 
-#define STEPS 1000 // Time steps
+#define STEPS 5000 // Time steps
 #define C 1.0   // Wave speed
 #define DT 0.01 // Time step
 #define DX 1.0  // Grid spacing
@@ -232,12 +232,12 @@ int main(int argc, char** argv) {
 
         MPI_Barrier(cart_comm);
 
-        // if (step % 100 == 0) print_grid(N, rank, dims, cart_comm, local_size, step, no_hallo_subarray_type);
+        if (step % 500 == 0) print_grid(N, rank, dims, cart_comm, local_size, step, no_hallo_subarray_type);
     }    
 
     if (rank == 0) {
         end_time = MPI_Wtime();
-        printf("[PARALLEL] Run with %d processes. Took: %.6f seconds\n", size, end_time - start_time);
+        printf("[PARALLEL] Run with %d processes (%d size, %d steps). Took: %.6f seconds\n", size, N, STEPS, end_time - start_time);
     }
 
     MPI_Comm_free(&cart_comm);

@@ -3,8 +3,7 @@
 #include <math.h>
 #include <mpi.h>
 
-// #define N 16000 // Grid size
-#define STEPS 1000 // Time steps
+#define STEPS 5000 // Time steps
 #define C 1.0   // Wave speed
 #define DT 0.01 // Time step
 #define DX 1.0  // Grid spacing
@@ -70,7 +69,7 @@ int main(int argc, char** argv) {
 
     for (int step = 0; step < STEPS; step++) {
         compute_step(N);
-        // if (step % 100 == 0) write_output(step, N);
+        if (step % 500 == 0) write_output(step, N);
     }
 
     double end = MPI_Wtime();
@@ -80,6 +79,6 @@ int main(int argc, char** argv) {
     free(u_prev);
 
     if(rank==0)
-      printf("[SERIAL] Simulation complete. Took: %.6f seconds\n", end - start);
+      printf("[SERIAL] Simulation complete (%d size, %d steps). Took: %.6f seconds\n", N, STEPS, end - start);
     return 0;
 }
