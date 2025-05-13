@@ -20,6 +20,11 @@ void initialize(int N) {
 
 void compute_step(int N) {
     double u_next[N];
+    // Explicitly setting u_next[0] and u_next[N-1] to 0 as they are not set in the first loop.
+    // This (value of 0) seems to be the value they are getting right now, but this removes ambiguity
+    // and possible garbage values. A post about this was made on the discussion forum.
+    u_next[0] = 0, u_next[N-1] = 0;
+
     for (int i = 1; i < N - 1; i++) {
         u_next[i] = 2.0 * u[i] - u_prev[i] + C * C * DT * DT / (DX * DX) * (u[i+1] - 2.0 * u[i] + u[i-1]);
     }
@@ -47,13 +52,13 @@ int main(int argc, char** argv) {
 
     if (argc < 2) {
         if (rank == 0) {
-            printf("Usage: %s <N divisible by 64>. Using default N of 16000", argv[0]);
+            printf("Usage: %s <N divisible by 64>. Using default N of 16000\n", argv[0]);
         }
         N = 16000;
+    } else {
+        // We assume that IF provided, N is a multiple of 64
+        N = atoi(argv[1]);
     }
-
-    // We assume that IF provided, N is a multiple of 64
-    N = atoi(argv[1]);
     u = malloc(N * sizeof(double)), u_prev = malloc(N * sizeof(double));
 
     MPI_Comm_size(MPI_COMM_WORLD, &nprocs);

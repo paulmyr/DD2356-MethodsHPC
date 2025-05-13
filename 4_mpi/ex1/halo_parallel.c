@@ -188,13 +188,13 @@ int main(int argc, char** argv) {
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     if (argc < 2) {
         if (rank == 0) {
-            printf("Usage: %s <N divisible by 64>. Using default N of 16000", argv[0]);
+            printf("Usage: %s <N divisible by 64>. Using default N of 16000\n", argv[0]);
         }
         N = 16000;
+    } else {
+        // We assume that IF provided, N is a multiple of 64
+        N = atoi(argv[1]);
     }
-
-    // We assume that IF provided, N is a multiple of 64
-    N = atoi(argv[1]);
 
 
     MPI_Comm_size(MPI_COMM_WORLD, &size);
