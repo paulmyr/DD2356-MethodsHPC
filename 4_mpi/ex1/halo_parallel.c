@@ -232,7 +232,7 @@ int main(int argc, char** argv) {
 
         MPI_Barrier(cart_comm);
 
-        if (step % 500 == 0) print_grid(N, rank, dims, cart_comm, local_size, step, no_hallo_subarray_type);
+        // if (step % 500 == 0) print_grid(N, rank, dims, cart_comm, local_size, step, no_hallo_subarray_type);
     }    
 
     if (rank == 0) {

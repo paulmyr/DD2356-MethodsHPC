@@ -38,7 +38,6 @@ do
     do
         echo "Run $count"
         srun -n $processes ./halo_parallel.out 64000
-        # mpiexec -n $processes ./life_parallel.out
         echo "----------------------------"
     done
 done
@@ -47,7 +46,6 @@ done
 for count in {1..3}
 do
     echo "SERIAL RUN $count"
-    # mpiexec -n 1 ./life_serial.out
     srun -n 1 ./halo_serial.out 64000
     echo "----------------------------"
 done

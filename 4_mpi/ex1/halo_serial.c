@@ -69,7 +69,7 @@ int main(int argc, char** argv) {
 
     for (int step = 0; step < STEPS; step++) {
         compute_step(N);
-        if (step % 500 == 0) write_output(step, N);
+        // if (step % 500 == 0) write_output(step, N);
     }
 
     double end = MPI_Wtime();
