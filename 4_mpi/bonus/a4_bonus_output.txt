@@ -1,79 +1,79 @@
 ########## RUNNING WITH 1 PROCESSES ##########
 Run 1
-[PARALLEL] Run with 1 processes. Grid size: 4096 x 4096. Took: 105.5805 seconds
+[PARALLEL] Run with 1 processes. Grid size: 4096 x 4096. Took: 97.6926 seconds
 ----------------------------
 Run 2
-[PARALLEL] Run with 1 processes. Grid size: 4096 x 4096. Took: 105.5297 seconds
+[PARALLEL] Run with 1 processes. Grid size: 4096 x 4096. Took: 97.7960 seconds
 ----------------------------
 Run 3
-[PARALLEL] Run with 1 processes. Grid size: 4096 x 4096. Took: 104.8792 seconds
+[PARALLEL] Run with 1 processes. Grid size: 4096 x 4096. Took: 98.2318 seconds
 ----------------------------
 ########## RUNNING WITH 2 PROCESSES ##########
 Run 1
-[PARALLEL] Run with 2 processes. Grid size: 4096 x 4096. Took: 107.3880 seconds
+[PARALLEL] Run with 2 processes. Grid size: 4096 x 4096. Took: 98.2427 seconds
 ----------------------------
 Run 2
-[PARALLEL] Run with 2 processes. Grid size: 4096 x 4096. Took: 110.6619 seconds
+[PARALLEL] Run with 2 processes. Grid size: 4096 x 4096. Took: 99.0113 seconds
 ----------------------------
 Run 3
-[PARALLEL] Run with 2 processes. Grid size: 4096 x 4096. Took: 109.7360 seconds
+[PARALLEL] Run with 2 processes. Grid size: 4096 x 4096. Took: 98.5466 seconds
 ----------------------------
 ########## RUNNING WITH 4 PROCESSES ##########
 Run 1
-[PARALLEL] Run with 4 processes. Grid size: 4096 x 4096. Took: 57.3439 seconds
+[PARALLEL] Run with 4 processes. Grid size: 4096 x 4096. Took: 50.5551 seconds
 ----------------------------
 Run 2
-[PARALLEL] Run with 4 processes. Grid size: 4096 x 4096. Took: 56.8017 seconds
+[PARALLEL] Run with 4 processes. Grid size: 4096 x 4096. Took: 50.7102 seconds
 ----------------------------
 Run 3
-[PARALLEL] Run with 4 processes. Grid size: 4096 x 4096. Took: 57.0639 seconds
+[PARALLEL] Run with 4 processes. Grid size: 4096 x 4096. Took: 49.1097 seconds
 ----------------------------
 ########## RUNNING WITH 8 PROCESSES ##########
 Run 1
-[PARALLEL] Run with 8 processes. Grid size: 4096 x 4096. Took: 32.5080 seconds
+[PARALLEL] Run with 8 processes. Grid size: 4096 x 4096. Took: 25.7885 seconds
 ----------------------------
 Run 2
-[PARALLEL] Run with 8 processes. Grid size: 4096 x 4096. Took: 32.0600 seconds
+[PARALLEL] Run with 8 processes. Grid size: 4096 x 4096. Took: 25.6606 seconds
 ----------------------------
 Run 3
-[PARALLEL] Run with 8 processes. Grid size: 4096 x 4096. Took: 32.7640 seconds
+[PARALLEL] Run with 8 processes. Grid size: 4096 x 4096. Took: 25.7140 seconds
 ----------------------------
 ########## RUNNING WITH 16 PROCESSES ##########
 Run 1
-[PARALLEL] Run with 16 processes. Grid size: 4096 x 4096. Took: 17.1266 seconds
+[PARALLEL] Run with 16 processes. Grid size: 4096 x 4096. Took: 12.4659 seconds
 ----------------------------
 Run 2
-[PARALLEL] Run with 16 processes. Grid size: 4096 x 4096. Took: 17.6133 seconds
+[PARALLEL] Run with 16 processes. Grid size: 4096 x 4096. Took: 12.8357 seconds
 ----------------------------
 Run 3
-[PARALLEL] Run with 16 processes. Grid size: 4096 x 4096. Took: 17.1017 seconds
+[PARALLEL] Run with 16 processes. Grid size: 4096 x 4096. Took: 12.4732 seconds
 ----------------------------
 ########## RUNNING WITH 32 PROCESSES ##########
 Run 1
-[PARALLEL] Run with 32 processes. Grid size: 4096 x 4096. Took: 10.9840 seconds
+[PARALLEL] Run with 32 processes. Grid size: 4096 x 4096. Took: 6.7424 seconds
 ----------------------------
 Run 2
-[PARALLEL] Run with 32 processes. Grid size: 4096 x 4096. Took: 10.8698 seconds
+[PARALLEL] Run with 32 processes. Grid size: 4096 x 4096. Took: 6.6829 seconds
 ----------------------------
 Run 3
-[PARALLEL] Run with 32 processes. Grid size: 4096 x 4096. Took: 10.4886 seconds
+[PARALLEL] Run with 32 processes. Grid size: 4096 x 4096. Took: 6.7104 seconds
 ----------------------------
 ########## RUNNING WITH 64 PROCESSES ##########
 Run 1
-[PARALLEL] Run with 64 processes. Grid size: 4096 x 4096. Took: 9.9374 seconds
+[PARALLEL] Run with 64 processes. Grid size: 4096 x 4096. Took: 3.2656 seconds
 ----------------------------
 Run 2
-[PARALLEL] Run with 64 processes. Grid size: 4096 x 4096. Took: 10.0128 seconds
+[PARALLEL] Run with 64 processes. Grid size: 4096 x 4096. Took: 3.4222 seconds
 ----------------------------
 Run 3
-[PARALLEL] Run with 64 processes. Grid size: 4096 x 4096. Took: 9.8625 seconds
+[PARALLEL] Run with 64 processes. Grid size: 4096 x 4096. Took: 3.3693 seconds
 ----------------------------
 SERIAL RUN 1
-[SERIAL] Grid size: 4096 x 4096. Took: 119.8934 seconds
+[SERIAL] Grid size: 4096 x 4096. Took: 62.4408 seconds
 ----------------------------
 SERIAL RUN 2
-[SERIAL] Grid size: 4096 x 4096. Took: 119.9178 seconds
+[SERIAL] Grid size: 4096 x 4096. Took: 62.2202 seconds
 ----------------------------
 SERIAL RUN 3
-[SERIAL] Grid size: 4096 x 4096. Took: 120.1142 seconds
+[SERIAL] Grid size: 4096 x 4096. Took: 60.9291 seconds
 ----------------------------
