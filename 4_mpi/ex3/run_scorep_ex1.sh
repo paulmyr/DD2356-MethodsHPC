@@ -18,10 +18,10 @@
 #SBATCH --ntasks=32                 
 
 # Number of nodes
-#SBATCH --nodes 8
+#SBATCH --nodes 16
 
 # Number of MPI processes per node
-#SBATCH --ntasks-per-node 4
+#SBATCH --ntasks-per-node 2
 
 # CPUs per task
 #SBATCH --cpus-per-task 1
@@ -34,4 +34,5 @@
 
 # Run the executable named myexe
 # and write the output into my output file
-srun ./halo_parallel.out 64000
+srun ./halo_parallel.out 6400000
+
