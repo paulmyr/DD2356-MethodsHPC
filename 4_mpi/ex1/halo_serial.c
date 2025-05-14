@@ -69,10 +69,13 @@ int main(int argc, char** argv) {
 
     for (int step = 0; step < STEPS; step++) {
         compute_step(N);
-        // if (step % 500 == 0) write_output(step, N);
+        if (step % 500 == 0) write_output(step, N);
     }
 
     double end = MPI_Wtime();
+
+    // Write final state to ensure it is correct
+    write_output(STEPS+1, N);
 
     MPI_Finalize();
     free(u);
