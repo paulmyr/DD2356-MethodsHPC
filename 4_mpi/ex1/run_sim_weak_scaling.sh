@@ -12,7 +12,7 @@
 #SBATCH -p shared
 
 # 10 hours wall clock time will be given to this job
-#SBATCH -t 2:00:00
+#SBATCH -t 3:00:00
 
 # Number of nodes
 #SBATCH --nodes 1
@@ -31,7 +31,7 @@
 
 
 # This is the size of the subproblem PER PROCESS (remains fixed)
-subprocess_problem=1000
+subprocess_problem=100000
 echo "WEAK SCALING: SIZE PER PROBLEM IS $subprocess_problem"
 # Run the executable named myexe
 # and write the output into my output file

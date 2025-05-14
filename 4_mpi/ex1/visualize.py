@@ -15,6 +15,6 @@ for file in files:
 
 plt.xlabel("Grid Point")
 plt.ylabel("Wave Amplitude")
-plt.title("Wave Equation Evolution")
+plt.title(f"Wave Equation Evolution ({args.mode})")
 plt.legend()
 plt.show()

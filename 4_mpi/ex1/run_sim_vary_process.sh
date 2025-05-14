@@ -12,7 +12,7 @@
 #SBATCH -p shared
 
 # 10 hours wall clock time will be given to this job
-#SBATCH -t 2:00:00
+#SBATCH -t 3:00:00
 
 # Number of nodes
 #SBATCH --nodes 1
@@ -37,7 +37,7 @@ do
     for count in {1..3}
     do
         echo "Run $count"
-        srun -n $processes ./halo_parallel.out 64000
+        srun -n $processes ./halo_parallel.out 6400000
         echo "----------------------------"
     done
 done
@@ -46,6 +46,6 @@ done
 for count in {1..3}
 do
     echo "SERIAL RUN $count"
-    srun -n 1 ./halo_serial.out 64000
+    srun -n 1 ./halo_serial.out 6400000
     echo "----------------------------"
 done

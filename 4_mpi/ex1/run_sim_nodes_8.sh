@@ -12,7 +12,7 @@
 #SBATCH -p shared
 
 # 10 hours wall clock time will be given to this job
-#SBATCH -t 2:00:00
+#SBATCH -t 3:00:00
 
 # Total number of MPI tasks (processes)
 #SBATCH --ntasks=32                 
@@ -38,6 +38,6 @@ echo "################# RUNNING ACROSS 8 NODES, 4 TASKS PER NODE, 32 TASKS TOTAL
 for count in {1..3}
 do
     echo "Run $count"
-    srun ./halo_parallel.out 64000
+    srun ./halo_parallel.out 6400000
     echo "----------------------------"
 done
