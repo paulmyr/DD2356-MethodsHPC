@@ -362,7 +362,7 @@ int main(int argc, char** argv) {
     }
    
     MPI_Barrier(cart_comm);
-    print_grid(rank, dims, cart_comm, local_rows, local_cols, STEPS+1);
+    // print_grid(rank, dims, cart_comm, local_rows, local_cols, STEPS+1);
 
     if (rank == 0) {
         end = MPI_Wtime();
