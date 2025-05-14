@@ -355,11 +355,15 @@ int main(int argc, char** argv) {
         perform_halo_exchange(local_rows, local_cols, cart_comm, column);
         update(local_rows, local_cols);
 
-        MPI_Barrier(cart_comm);
-
-        // if (step % 10 == 0) print_grid(rank, dims, cart_comm, local_rows, local_cols, step);
+        // if (step % 10 == 0) {
+        //     MPI_Barrier(cart_comm);
+        //     print_grid(rank, dims, cart_comm, local_rows, local_cols, step);
+        // }
     }
    
+    MPI_Barrier(cart_comm);
+    print_grid(rank, dims, cart_comm, local_rows, local_cols, STEPS+1);
+
     if (rank == 0) {
         end = MPI_Wtime();
         printf("[PARALLEL] Run with %d processes. Grid size: %d x %d. Took: %.4f seconds\n", size, N, N, end - start);

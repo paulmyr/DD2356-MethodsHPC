@@ -72,6 +72,9 @@ int main(int argc, char** argv) {
         update();
         // if (step % 10 == 0) write_output(step);
     }
+
+    write_output(STEPS+1);
+
     double end = MPI_Wtime();
     printf("[SERIAL] Grid size: %d x %d. Took: %.4f seconds\n", N, N, end - start);
     

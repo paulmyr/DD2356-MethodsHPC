@@ -10,10 +10,14 @@ args = parser.parse_args()
 
 files = sorted(glob.glob(f"outputs/{args.mode}/gol_output_{args.mode}_*.txt"))
 
+# Move the last output (ends with 101) to end of the list
+files.append(files.pop(files.index(f"outputs/{args.mode}/gol_output_{args.mode}_101.txt")))
+
 for file in files:
     data = np.loadtxt(file)
     plt.imshow(data, cmap='binary', origin='lower')
     plt.title(f"Game of Life - {file}")
     plt.pause(0.5)
+
 
 plt.show()
