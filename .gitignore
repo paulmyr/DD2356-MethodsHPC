@@ -77,3 +77,4 @@ dkms.conf
 *.lprof
 **/build/
 **/*.mov
+**/*.vscode
