@@ -230,11 +230,11 @@ int main(int argc, char** argv) {
         perform_halo_exchange(cart_comm, local_size);
         compute_step(local_size, chunk_coords[0], dims[0]);
 
-        if (step % 500 == 0) {
-            // Wait here before printing, since instead of just "local" grids we print global grid
-            MPI_Barrier(cart_comm);
-            print_grid(N, rank, dims, cart_comm, local_size, step, no_hallo_subarray_type);
-        }
+        // if (step % 500 == 0) {
+        //     // Wait here before printing, since instead of just "local" grids we print global grid
+        //     MPI_Barrier(cart_comm);
+        //     print_grid(N, rank, dims, cart_comm, local_size, step, no_hallo_subarray_type);
+        // }
     }    
 
     // Wait for final computation to ensure that the final state is as expected
@@ -242,7 +242,7 @@ int main(int argc, char** argv) {
     // Printing the final grid to ensure final state is the same.
     // We are doing this because we are not calling Barrier at the end of every iteration above. 
     // So this just makes sure that approach is fine
-    print_grid(N, rank, dims, cart_comm, local_size, STEPS+1, no_hallo_subarray_type);
+    // print_grid(N, rank, dims, cart_comm, local_size, STEPS+1, no_hallo_subarray_type);
 
     if (rank == 0) {
         end_time = MPI_Wtime();
