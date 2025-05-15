@@ -78,12 +78,15 @@ def plot_weak_scaling():
 def plot_diff_node_counts():
     ax.plot(node_counts, node_counts_runtime, marker='o', linestyle='-', linewidth=2,
             color='steelblue', label="MPI Runtime")
+    
+    ax.axhline(strong_serial_runtime, color='gray', linestyle='--', linewidth=1.5,
+            label=f'Serial Runtime ({strong_serial_runtime:.1f}s)')
 
     ax.set_title("Runtime for Different Node Counts (32 Processes, Distributed Equally)")
     ax.set_xlabel("Number of Nodes")
     ax.set_ylabel("Runtime (seconds)")
 
-    ax.set_yticks(range(100, 250, 50))
+    ax.set_yticks(range(100, 300, 50))
     ax.set_xticks(node_counts)
     ax.get_xaxis().set_major_formatter(ScalarFormatter())
     ax.grid(True, which='major', linestyle=':', linewidth=0.8, alpha=0.6)
