@@ -6,7 +6,7 @@
 #SBATCH -A edu25.DD2356
 
 # The name of the script
-#SBATCH -J dd2356_a4_ex3_problem1
+#SBATCH -J dd2356_a4_ex3_problem1_simple
 
 # The partition
 #SBATCH -p shared
@@ -18,19 +18,19 @@
 #SBATCH --ntasks=32                 
 
 # Number of nodes
-#SBATCH --nodes 1
+#SBATCH --nodes 4
 
 # Number of MPI processes per node
-#SBATCH --ntasks-per-node 32
+#SBATCH --ntasks-per-node 8
 
 # CPUs per task
 #SBATCH --cpus-per-task 1
 
 # Error file
-#SBATCH -e elog_dd2356_a4_ex3_problem1
+#SBATCH -e elog_dd2356_a4_ex3_problem1_simple
 
 # Output File
-#SBATCH --output a4_ex3_problem1.txt
+#SBATCH --output a4_ex3_problem1_simple.txt
 
 # Run the executable named myexe
 # and write the output into my output file
