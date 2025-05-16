@@ -187,9 +187,10 @@ void perform_halo_exchange(int local_rows, int local_cols, MPI_Comm cart_comm, M
 /**
  * Prints the grid in the correct order. Should not be used when timing, only for debugging purposes and to verify that
  *  the output is correct. All processes send their data to the process with rank 0, which then prints the 
- * grid in the correct order
+ * grid in the correct order.
+ * The printing happens only if print_to_file is 1. Otherwise, only the result is gathered at the root process
  */
-void print_grid(int process_rank, int dims[2], MPI_Comm cart_comm, int local_rows, int local_cols, int step) {
+void print_grid(int process_rank, int dims[2], MPI_Comm cart_comm, int local_rows, int local_cols, int step, int print_to_file) {
     if (process_rank == 0) {
         int *total_grid = malloc(N * N * sizeof(int));
         int total_processes = dims[0] * dims[1];
@@ -222,17 +223,19 @@ void print_grid(int process_rank, int dims[2], MPI_Comm cart_comm, int local_row
 
         MPI_Waitall(total_processes - 1, requests, MPI_STATUSES_IGNORE);
 
-        // Print the global grid now to file
-        char filename[50];
-        sprintf(filename, "outputs/parallel/gol_output_parallel_%d.txt", step);
-        FILE *f = fopen(filename, "w");
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                fprintf(f, "%d ", total_grid[get_index(i, j, N)]);
+        if (print_to_file == 1) {
+            // Print the global grid now to file
+            char filename[50];
+            sprintf(filename, "outputs/parallel/gol_output_parallel_%d.txt", step);
+            FILE *f = fopen(filename, "w");
+            for (int i = 0; i < N; i++) {
+                for (int j = 0; j < N; j++) {
+                    fprintf(f, "%d ", total_grid[get_index(i, j, N)]);
+                }
+                fprintf(f, "\n");
             }
-            fprintf(f, "\n");
+            fclose(f);
         }
-        fclose(f);
         free(requests);
         free(total_grid);
     } else {
@@ -357,12 +360,13 @@ int main(int argc, char** argv) {
 
         // if (step % 10 == 0) {
         //     MPI_Barrier(cart_comm);
-        //     print_grid(rank, dims, cart_comm, local_rows, local_cols, step);
+        //     print_grid(rank, dims, cart_comm, local_rows, local_cols, step, 1);
         // }
     }
    
     MPI_Barrier(cart_comm);
-    // print_grid(rank, dims, cart_comm, local_rows, local_cols, STEPS+1);
+    // Don't print to file, just gather the results at the root
+    print_grid(rank, dims, cart_comm, local_rows, local_cols, STEPS+1, 0);
 
     if (rank == 0) {
         end = MPI_Wtime();
