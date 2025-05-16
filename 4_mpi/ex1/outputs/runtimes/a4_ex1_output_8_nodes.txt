@@ -1,10 +1,10 @@
 ################# RUNNING ACROSS 8 NODES, 4 TASKS PER NODE, 32 TASKS TOTAL #################
 Run 1
-[PARALLEL] Run with 32 processes (6400000 size, 5000 steps). Took: 148.754764 seconds
+[PARALLEL] Run with 32 processes (6400000 size, 5000 steps). Took: 156.396884 seconds
 ----------------------------
 Run 2
-[PARALLEL] Run with 32 processes (6400000 size, 5000 steps). Took: 153.757550 seconds
+[PARALLEL] Run with 32 processes (6400000 size, 5000 steps). Took: 156.796337 seconds
 ----------------------------
 Run 3
-[PARALLEL] Run with 32 processes (6400000 size, 5000 steps). Took: 153.955999 seconds
+[PARALLEL] Run with 32 processes (6400000 size, 5000 steps). Took: 155.221772 seconds
 ----------------------------

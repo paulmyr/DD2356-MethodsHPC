@@ -135,7 +135,7 @@ void perform_halo_exchange(MPI_Comm cart_comm, int local_size) {
                 cart_comm, MPI_STATUS_IGNORE);
 }
 
-void print_grid(int N, int process_id, int dims[1], MPI_Comm cart_comm, int local_size, int step, MPI_Datatype no_hallo_subarray_type) {
+void print_grid(int N, int process_id, int dims[1], MPI_Comm cart_comm, int local_size, int step, MPI_Datatype no_hallo_subarray_type, int print_to_file) {
     double *full_grid = NULL;
     if (process_id == 0) {
         full_grid = malloc(N * sizeof(double));
@@ -162,14 +162,16 @@ void print_grid(int N, int process_id, int dims[1], MPI_Comm cart_comm, int loca
             memcpy(&final_grid[curr_chunk * local_size], &full_grid[curr_id * local_size], local_size * sizeof(double));
         }
 
-        // Print the global grid now to file
-        char filename[50];
-        sprintf(filename, "outputs/parallel/wave_output_parallel_%d.txt", step);
-        FILE *f = fopen(filename, "w");
-        for (int i = 0; i < N; i++) {
-            fprintf(f, "%f\n", final_grid[i]);
+        if (print_to_file == 1) {
+            // Print the global grid now to file
+            char filename[50];
+            sprintf(filename, "outputs/parallel/wave_output_parallel_%d.txt", step);
+            FILE *f = fopen(filename, "w");
+            for (int i = 0; i < N; i++) {
+                fprintf(f, "%f\n", final_grid[i]);
+            }
+            fclose(f);
         }
-        fclose(f);
 
         // We always free fill_grid because process with id 0 always initializes it as well!
         free(full_grid);
@@ -233,7 +235,7 @@ int main(int argc, char** argv) {
         // if (step % 500 == 0) {
         //     // Wait here before printing, since instead of just "local" grids we print global grid
         //     MPI_Barrier(cart_comm);
-        //     print_grid(N, rank, dims, cart_comm, local_size, step, no_hallo_subarray_type);
+        //     print_grid(N, rank, dims, cart_comm, local_size, step, no_hallo_subarray_type, 1);
         // }
     }    
 
@@ -242,7 +244,8 @@ int main(int argc, char** argv) {
     // Printing the final grid to ensure final state is the same.
     // We are doing this because we are not calling Barrier at the end of every iteration above. 
     // So this just makes sure that approach is fine
-    // print_grid(N, rank, dims, cart_comm, local_size, STEPS+1, no_hallo_subarray_type);
+    // Don't print to file, just gather the results at the root
+    print_grid(N, rank, dims, cart_comm, local_size, STEPS+1, no_hallo_subarray_type, 0);
 
     if (rank == 0) {
         end_time = MPI_Wtime();

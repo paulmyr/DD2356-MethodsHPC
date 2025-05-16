@@ -5,16 +5,16 @@ from matplotlib.ticker import ScalarFormatter
 # GENERAL PURPOSE ARRAYS
 processes = np.array([1, 2, 4, 8, 16, 32, 64])
 
-# STRONG SCALING OUTPUT (grid_size: 64k)
-strong_parallel_runtimes = np.array([243.0345606, 314.540523, 159.402732, 157.657124, 149.51748966667, 156.826076, 159.0870116667])
+# STRONG SCALING OUTPUT (grid_size: 6.4mil)
+strong_parallel_runtimes = np.array([206.444177, 318.124553, 144.3341293, 159.665902, 157.655496, 160.07411533, 159.912872])
 strong_serial_runtime = 211.29658366667
 
 # WEAK SCALING OUTPUT 
-weak_parallel_runtimes = np.array([3.160681, 159.68600033333, 159.81163366667, 85.39034433333, 120.285542667, 155.900423, 159.061618])
+weak_parallel_runtimes = np.array([3.246998, 159.559421, 107.02601166, 99.09132867, 128.22297466, 154.52977467, 160.066075333])
 
 # NODE COUNT OUTPUT
-node_counts = np.array([1, 2, 4, 8, 16])
-node_counts_runtime = np.array([156.826076, 142.91806666667, 151.1013356667, 152.156104333, 159.990621]) 
+node_counts = np.array([1, 2, 4, 8])
+node_counts_runtime = np.array([160.07411533, 157.285153, 149.94199833333, 156.138331]) 
 
 plt.rcParams.update({
     "font.family": "serif",
@@ -105,7 +105,7 @@ def plot_diff_node_counts():
 # Strong Scaling
 # plot_serial_parallel_comparison(title="Strong Scaling", show_serial=False)
 # Weak Scaling
-# plot_weak_scaling()
+plot_weak_scaling()
 # Different Nodes Plot
-plot_diff_node_counts()
+# plot_diff_node_counts()
 
