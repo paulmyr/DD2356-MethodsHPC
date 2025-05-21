@@ -185,8 +185,6 @@
 \maketitle
 \extrafootertext{\textsuperscript{\textdagger}Authors made equal contribution to the project}
 \thispagestyle{firstpagestyle}
-
-\listoftodos
 \vspace{1em}
 
 % content begin
@@ -341,7 +339,7 @@ Note that for large matrices (depending on initialisation) this will lead to ove
 
 We measured the performance in two different settings.
 Figure \ref{fig:ex2_weak_scaling} depicts a so called weak scaling plot.
-It describes the speedup over an increasing number of processors in regards to an increasing problem size.
+It describes the runtime of an increasing number of processors in regards to an increasing problem size, so that the work per processor stays consistent.
 
 \begin{figure}[H]
   \centering
@@ -349,6 +347,14 @@ It describes the speedup over an increasing number of processors in regards to a
   \caption{Weak scaling starting at 4 processors and N=1250}
   \label{fig:ex2_weak_scaling}
 \end{figure}
+
+We still see a strong increase in runtime.
+As we discover in \ref{sec:ex3_ex2}, we see that the \verb|MPI_Scatter| overhead dominates the runtime if the problem.
+For an increasing size of processors, this also means an increase runtime.
+
+The scecond plot (\ref{fig:ex2_strong_scaling}) describes the string scaling. Here we keep the problem size fixed (Array of $10^8$ elements) distributed over $1..1024$ processors.
+The most clear result, is that we cannot see any strong improvement for this problem size when scaling over 256 processors.
+Also for small number of processors, the runtime first increases. This could be due to network congestion or the fact that introducing communication overhead outweighing the parallisation benefits.
 
 \begin{figure}[H]
   \centering
@@ -373,13 +379,85 @@ In Figure \ref{fig:ex3_ex1_scorep} we present the results of running the \verb|s
 
 In total, there were around 480k MPI calls (the result of the \verb|visits| column), with a total of 9.5k seconds being spent in the MPI calls. There is some time spent in inter-network node communication as well (which we interpret as the result of the \verb|COM| row), but it is dwarfed by the large amount of time spent in MPI. We believe that this could be because of the blocking nature of \verb|Sendrecv| and could be improved by using non-blocking \verb|ISend| and \verb|IRecv| as a starting point, which would then allow us to perform even more optimizations (communication-computation overlap, among other things).
 
+\subsection{Score-P with Exercise 2}
+\label{sec:ex3_ex2}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{img/ex3/ex2_scorep.png}
+  \caption{ScoreP on Exercise 2 MPI Implementation}
+  \label{fig:ex3_ex1_scorep}
+\end{figure}
+
+We can see that when running the code from exercise 2 on 4 nodes with 128 processors each, 99.5\% of the time is spent in MPI calls.
+In total, 3,580 MPI calls were made which took over 8000s.
+To us this indicates clearly, that the level of parallelism is too high.
+
+\subsection{Vampir with Exercise 2}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{img/ex3/ex3_license}
+  \caption{Vampir License Issue}
+  \label{fig:ex3_license}
+\end{figure}
+
+Due to the fact that Vampir only allows to process runs with up to 16 processes (see \ref{fig:ex3_license}), it is not possible for us to analyse the biggest run of Exercise two, which we performed up to 1024 processors...
+However, when running the programm with 16 processors on a grid size of $40000^2$, we see can observe the following:
+
+\verb|MPI_Scatter| is without question the biggest time sink of the computation. This indicates that the computation is heavily memory bound.
+We can also see, that the initialisation consumes more time than the actual computation.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.9\textwidth]{img/ex3/ex3_vampir}
+  \caption{Vampir profiling of row sum computation.}
+  \label{fig:ex3_vampir}
+\end{figure}
+
+To lower the runtime of this program, the best approach would be perform the initialisation in a distributed fashion.
+This significantly reduces the communication efforts, and also spreads the computational efforts on all the processors.
+
+On the plus side, we don't detect any real load imbalances; however, this is mostly due to the fact that there is not a lot of load to begin with.
+The computation at it's worst takes less than 5\% of the total runtime of any worker process.
+
 \section{HPC Libraries -Matrix-Vector Multiplication using BLAS}
+\subsection{Parallisation strategie and runtime}
+The distribution strategy used in this exercise was similar as in exercise 2.
+We sliced the array into equal sized chunks of consecutive rows, as well as distributed the vector to all processors.
+Then each processor computed the Matrix-Vector Multiplication using BLAS, which was then gathered again on the main thread.
+Because \verb|BLAS| is already highly optimised to run in parallel using shared memory, we actually saw a decrease in performance when distrbuting over the same node (instead of using the more cpus per task).
+However, we were able to decrease the overall runtime by splitting the problem size over multiple nodes.
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.9\textwidth]{img/ex4_strong_scaling}
   \caption{row summation using parallel implementation.}
   \label{fig:ex4_strong_scaling}
+\end{figure}
+
+Figure \ref{fig:ex4_strong_scaling} depicts the runtime over the number of nodes used.
+It is a strong scaling plot, meaning the problem size remains identical at a matrix size of $40000^2$ elements.
+
+\subsection{Verify correctness}
+To verify correctness we visualise the output from the parallel run and the sequential run.
+Figure \ref{fig:verification_graphs_ex4} shows that they are indeed the same.
+
+\begin{figure}
+     \centering
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{img/ex4_sequential}
+         \caption{visualisation sequential result}
+         \label{fig:ex4_strong_scaling}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{img/ex4_parallel}
+         \caption{visualisation parallel result}
+         \label{fig:ex4_parallel}
+     \end{subfigure}
+     \caption{Verification graphs}
+     \label{fig:verification_graphs_ex4}
 \end{figure}
 
 \section{Bonus: 2D Game of Life with MPI and Non-Blocking Communication}

@@ -5,7 +5,7 @@ data = np.loadtxt("blas_output.txt")
 plt.plot(data, marker='o', label='Matrix-Vector Product')
 plt.xlabel("Index")
 plt.ylabel("Value")
-plt.title("BLAS Matrix-Vector Multiplication Output")
+plt.title("Parallel BLAS Matrix-Vector Multiplication Output")
 plt.legend()
 plt.show()
 
