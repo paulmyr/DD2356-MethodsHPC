@@ -79,6 +79,7 @@ void perform_halo_exchange(MPI_Comm cart_comm, int local_size, int left, int rig
 // Function to update the magnetic field H
 void update_H_interior(int local_size) {
     // Update all elements that don't need halo exchange
+    #pragma omp parallel for
     for (int i = 1; i < local_size; i++) {
         local_H[i] = local_H[i] + (DT / DX) * (local_E[i+1] - local_E[i]);
     }
@@ -86,6 +87,7 @@ void update_H_interior(int local_size) {
 
 // Function to update the electric field E
 void update_E_interior(int local_size) {
+    #pragma omp parallel for
     for (int i = 2; i < local_size + 1; i++) {
         local_E[i] = local_E[i] + (DT / DX) * (local_H[i] - local_H[i-1]);
     }
@@ -141,7 +143,7 @@ void print_grid(int NX, int process_id, int dims[1], MPI_Comm cart_comm, int loc
         if (print_to_file == 1) {
             // Print the global grid now to file
             char filename[50];
-            sprintf(filename, "outputs/parallel/wave_output_parallel_%d.txt", step);
+            sprintf(filename, "outputs/parallel/fdtd_parallel_%d.txt", step);
             FILE *f = fopen(filename, "w");
             for (int i = 0; i < NX; i++) {
                 fprintf(f, "%f\n", final_grid[i]);
@@ -250,7 +252,7 @@ int main(int argc, char** argv) {
     
     MPI_Barrier(cart_comm);
 
-    print_grid(NX, rank, dims, cart_comm, local_size, NSTEPS+1, 0);
+    print_grid(NX, rank, dims, cart_comm, local_size, NSTEPS+1, 1);
     
     if (rank == 0) {
         end_time = MPI_Wtime();

@@ -3,6 +3,7 @@
 #include <math.h>
 #include <string.h>
 #include <mpi.h>
+#include <omp.h>
 
 #define NSTEPS 1000    // Number of time steps
 #define DX 1.0         // Spatial step size
@@ -77,11 +78,13 @@ void update_H(int local_size, int chunk_resp, int dims) {
     // All but the last chunk handle things in the same way.
     // For the last chunk, the absorbing boundary condition needs to be adhered to.
     if (chunk_resp == dims - 1) {
+        #pragma omp parallel for
         for (int i = 1; i < local_size; i++) {
             local_H[i] = local_H[i] + (DT / DX) * (local_E[i+1] - local_E[i]);
         }
         local_H[local_size] = local_H[local_size-1];
     } else {
+        #pragma omp parallel for
         for (int i = 1; i < local_size + 1; i++) {
             local_H[i] = local_H[i] + (DT / DX) * (local_E[i+1] - local_E[i]);
         }
@@ -93,11 +96,13 @@ void update_E(int local_size, int chunk_resp) {
     // All but the first chunk handle things in the same way.
     // For the first chunk, the absorbing boundary condition needs to be adhered to.
     if (chunk_resp == 0) {
+        #pragma omp parallel for
         for (int i = 2; i < local_size + 1; i++) {
             local_E[i] = local_E[i] + (DT / DX) * (local_H[i] - local_H[i-1]);
         }
         local_E[1] = local_E[2];
     } else {
+        #pragma omp parallel for
         for (int i = 1; i < local_size + 1; i++) {
             local_E[i] = local_E[i] + (DT / DX) * (local_H[i] - local_H[i-1]);
         }
