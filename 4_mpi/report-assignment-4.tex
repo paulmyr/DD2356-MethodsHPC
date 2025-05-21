@@ -339,7 +339,23 @@ These we can then reduce globally using \verb|MPI_Reduce(...)|:
 \lstinputlisting[language=c, firstline=110, lastline=113]{ex2/parallel_row_sum.c}
 Note that for large matrices (depending on initialisation) this will lead to overflows!
 
-\todo[inline]{ex2 scaling tests...}
+We measured the performance in two different settings.
+Figure \ref{fig:ex2_weak_scaling} depicts a so called weak scaling plot.
+It describes the speedup over an increasing number of processors in regards to an increasing problem size.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{img/ex2_weak_scaling}
+  \caption{Weak scaling starting at 4 processors and N=1250}
+  \label{fig:ex2_weak_scaling}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{img/ex2_strong_scaling}
+  \caption{Strong scaling}
+  \label{fig:ex2_strong_scaling}
+\end{figure}
 
 \section{Profiling MPI applications with Score-P and Vampir}
 
@@ -358,6 +374,13 @@ In Figure \ref{fig:ex3_ex1_scorep} we present the results of running the \verb|s
 In total, there were around 480k MPI calls (the result of the \verb|visits| column), with a total of 9.5k seconds being spent in the MPI calls. There is some time spent in inter-network node communication as well (which we interpret as the result of the \verb|COM| row), but it is dwarfed by the large amount of time spent in MPI. We believe that this could be because of the blocking nature of \verb|Sendrecv| and could be improved by using non-blocking \verb|ISend| and \verb|IRecv| as a starting point, which would then allow us to perform even more optimizations (communication-computation overlap, among other things).
 
 \section{HPC Libraries -Matrix-Vector Multiplication using BLAS}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{img/ex4_strong_scaling}
+  \caption{row summation using parallel implementation.}
+  \label{fig:ex4_strong_scaling}
+\end{figure}
 
 \section{Bonus: 2D Game of Life with MPI and Non-Blocking Communication}
 \subsection{MPI Implementation}
