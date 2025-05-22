@@ -239,7 +239,7 @@ int main(int argc, char** argv) {
     
     if (rank == 0) {
         end_time = MPI_Wtime();
-        printf("[PARALLEL] Run with %d processes (%d size, %d steps). Took: %.6f seconds\n", size, NX, NSTEPS, end_time - start_time);
+        printf("[PARALLEL] Run with %d processes and %d threads each (%d size, %d steps). Took: %.6f seconds\n", size, omp_get_max_threads(), NX, NSTEPS, end_time - start_time);
     }
 
 

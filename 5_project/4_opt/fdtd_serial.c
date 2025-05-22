@@ -40,6 +40,16 @@ void update_E(double *E, double *H, int NX) {
     E[0] = E[1];
 }
 
+void print_to_file(double *E, int NX, int step) {
+    char filename[50];
+    sprintf(filename, "outputs/serial/fdtd_serial_%d.txt", step);
+    FILE *f = fopen(filename, "w");
+    for (int i = 0; i < NX; i++) {
+        fprintf(f, "%f\n", E[i]);
+    }
+    fclose(f);
+}
+
 int main(int argc, char** argv) {
     MPI_Init(&argc, &argv);
     int NX;
@@ -72,14 +82,17 @@ int main(int argc, char** argv) {
         update_E(E, H, NX);
     }
     
+
+    print_to_file(E, NX, NSTEPS+1);
     double end_time = MPI_Wtime();
 
+
     // Output final snapshot of the electric field for verification
-    printf("Final electric field snapshot (first 20 values):\n");
-    for (int i = 0; i < NX; i++) {
-        printf("%f\n", E[i]);
-    }
-    printf("\n");
+    // printf("Final electric field snapshot (first 20 values):\n");
+    // for (int i = 0; i < NX; i++) {
+    //     printf("%f\n", E[i]);
+    // }
+    // printf("\n");
     
     printf("[SERIAL] Time Taken (%d grid, %d steps): %f\n", NX, NSTEPS, end_time - start_time);
 
