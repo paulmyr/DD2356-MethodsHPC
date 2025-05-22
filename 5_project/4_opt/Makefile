@@ -1,6 +1,6 @@
 compile:
 	cc -o fdtd_serial.out fdtd_serial.c 
-	cc -o fdtd_opt.out fdtd_opt.c
+	cc -o -fopenmp fdtd_opt.out fdtd_opt.c
 
 compile_local:
 	mpicc -o fdtd_serial.out fdtd_serial.c 
