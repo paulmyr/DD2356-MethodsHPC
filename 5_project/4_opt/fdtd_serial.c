@@ -40,14 +40,18 @@ void update_E(double *E, double *H, int NX) {
     E[0] = E[1];
 }
 
-void print_to_file(double *E, int NX, int step) {
-    char filename[50];
-    sprintf(filename, "outputs/serial/fdtd_serial_%d.txt", step);
-    FILE *f = fopen(filename, "w");
+void print_to_file(double *E, double *H, int NX, int step) {
+    // Print the global grid now to file
+    char filename_E[50], filename_H[50];
+    sprintf(filename_E, "outputs/serial/fdtd_serial_E_%d.txt", step);
+    sprintf(filename_H, "outputs/serial/fdtd_serial_H_%d.txt", step);
+    FILE *f_E = fopen(filename_E, "w"), *f_H = fopen(filename_H, "w");
     for (int i = 0; i < NX; i++) {
-        fprintf(f, "%f\n", E[i]);
+        fprintf(f_E, "%f\n", E[i]);
+        fprintf(f_H, "%f\n", H[i]);
     }
-    fclose(f);
+    fclose(f_E);
+    fclose(f_H);
 }
 
 int main(int argc, char** argv) {
@@ -80,10 +84,14 @@ int main(int argc, char** argv) {
     for (int t = 0; t < NSTEPS; t++) {
         update_H(E, H, NX);
         update_E(E, H, NX);
+
+        // if (t % 100 == 0) {
+        //     print_to_file(E, H, NX, t);
+        // }
     }
     
 
-    print_to_file(E, NX, NSTEPS+1);
+    // print_to_file(E, H, NX, NSTEPS+1);
     double end_time = MPI_Wtime();
 
 
