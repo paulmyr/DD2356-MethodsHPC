@@ -3,7 +3,6 @@
 #include <math.h>
 #include <string.h>
 #include <mpi.h>
-#include <omp.h>
 
 #define NSTEPS 1000    // Number of time steps
 #define DX 1.0         // Spatial step size
@@ -78,13 +77,11 @@ void update_H(int local_size, int chunk_resp, int dims) {
     // All but the last chunk handle things in the same way.
     // For the last chunk, the absorbing boundary condition needs to be adhered to.
     if (chunk_resp == dims - 1) {
-        #pragma omp parallel for
         for (int i = 1; i < local_size; i++) {
             local_H[i] = local_H[i] + (DT / DX) * (local_E[i+1] - local_E[i]);
         }
         local_H[local_size] = local_H[local_size-1];
     } else {
-        #pragma omp parallel for
         for (int i = 1; i < local_size + 1; i++) {
             local_H[i] = local_H[i] + (DT / DX) * (local_E[i+1] - local_E[i]);
         }
@@ -96,13 +93,11 @@ void update_E(int local_size, int chunk_resp) {
     // All but the first chunk handle things in the same way.
     // For the first chunk, the absorbing boundary condition needs to be adhered to.
     if (chunk_resp == 0) {
-        #pragma omp parallel for
         for (int i = 2; i < local_size + 1; i++) {
             local_E[i] = local_E[i] + (DT / DX) * (local_H[i] - local_H[i-1]);
         }
         local_E[1] = local_E[2];
     } else {
-        #pragma omp parallel for
         for (int i = 1; i < local_size + 1; i++) {
             local_E[i] = local_E[i] + (DT / DX) * (local_H[i] - local_H[i-1]);
         }
@@ -111,18 +106,21 @@ void update_E(int local_size, int chunk_resp) {
 
 
 void print_grid(int NX, int process_id, int dims[1], MPI_Comm cart_comm, int local_size, int step, int print_to_file) {
-    double *full_grid = NULL;
+    double *full_grid_E = NULL, *full_grid_H = NULL;
     if (process_id == 0) {
-        full_grid = malloc(NX * sizeof(double));
+        full_grid_E = malloc(NX * sizeof(double));
+        full_grid_H = malloc(NX * sizeof(double));
     }
 
-    MPI_Gather(local_E + 1, local_size, MPI_DOUBLE, full_grid, local_size, MPI_DOUBLE, 0, cart_comm);
+    // Gather the E and H grids at the rank 0 process
+    MPI_Gather(local_E + 1, local_size, MPI_DOUBLE, full_grid_E, local_size, MPI_DOUBLE, 0, cart_comm);
+    MPI_Gather(local_H + 1, local_size, MPI_DOUBLE, full_grid_H, local_size, MPI_DOUBLE, 0, cart_comm);
 
     if (process_id == 0) {
         // In full_grid, we have an ordering with the help of ranks. However, it could be the case that there
         // isn't a perfect corelation between the rank of the process and the id of the chunk that it was assigned.
         // For this, we manually re-order here. 
-        double *final_grid = malloc(NX * sizeof(double));
+        double *final_grid_E = malloc(NX * sizeof(double)), *final_grid_H = malloc(NX * sizeof(double));
         for (int curr_id = 0; curr_id < dims[0]; curr_id++) {
             // Get the number of the chunk that the current process is responsible for
             int curr_coord[1];
@@ -134,18 +132,22 @@ void print_grid(int NX, int process_id, int dims[1], MPI_Comm cart_comm, int loc
             //              index of the contents of this process
             // Source     : The elements in full_grid were ordered by the ranks of the processes, so the id of the process
             //              times the number of elements in each chunk is where we'd find the starting point of what to copy                
-            memcpy(&final_grid[curr_chunk * local_size], &full_grid[curr_id * local_size], local_size * sizeof(double));
+            memcpy(&final_grid_E[curr_chunk * local_size], &full_grid_E[curr_id * local_size], local_size * sizeof(double));
+            memcpy(&final_grid_H[curr_chunk * local_size], &full_grid_H[curr_id * local_size], local_size * sizeof(double));
         }
 
         if (print_to_file == 1) {
             // Print the global grid now to file
-            char filename[50];
-            sprintf(filename, "outputs/parallel/wave_output_parallel_%d.txt", step);
-            FILE *f = fopen(filename, "w");
+            char filename_E[50], filename_H[50];
+            sprintf(filename_E, "outputs/parallel/fdtd_parallel_E_%d.txt", step);
+            sprintf(filename_H, "outputs/parallel/fdtd_parallel_H_%d.txt", step);
+            FILE *f_E = fopen(filename_E, "w"), *f_H = fopen(filename_H, "w");
             for (int i = 0; i < NX; i++) {
-                fprintf(f, "%f\n", final_grid[i]);
+                fprintf(f_E, "%f\n", final_grid_E[i]);
+                fprintf(f_H, "%f\n", final_grid_H[i]);
             }
-            fclose(f);
+            fclose(f_E);
+            fclose(f_H);
         } else {
             // Output final snapshot of the electric field for verification
             // printf("Final electric field snapshot (first 20 values):\n");
@@ -156,8 +158,10 @@ void print_grid(int NX, int process_id, int dims[1], MPI_Comm cart_comm, int loc
         }
 
         // We always free fill_grid because process with id 0 always initializes it as well!
-        free(full_grid);
-        free(final_grid);
+        free(full_grid_E);
+        free(final_grid_E);
+        free(full_grid_H);
+        free(final_grid_H);
     }
 }
 
@@ -231,15 +235,21 @@ int main(int argc, char** argv) {
         perform_halo_exchange(cart_comm, local_size, left, right, HALO_EXCHANGE_H);
         // Compute E
         update_E(local_size, chunk_coords[0]);
+
+        // Diagnostic Print every 100 steps to verify correctness 
+        if (t % 100 == 0) {
+            MPI_Barrier(cart_comm);
+            print_grid(NX, rank, dims, cart_comm, local_size, t, 1);
+        }
     }
     
     MPI_Barrier(cart_comm);
 
-    print_grid(NX, rank, dims, cart_comm, local_size, NSTEPS+1, 0);
+    print_grid(NX, rank, dims, cart_comm, local_size, NSTEPS+1, 1);
     
     if (rank == 0) {
         end_time = MPI_Wtime();
-        printf("[PARALLEL] Run with %d processes and %d threads each (%d size, %d steps). Took: %.6f seconds\n", size, omp_get_max_threads(), NX, NSTEPS, end_time - start_time);
+        printf("[PARALLEL] Run with %d processes (%d size, %d steps). Took: %.6f seconds\n", size, NX, NSTEPS, end_time - start_time);
     }
 
 
