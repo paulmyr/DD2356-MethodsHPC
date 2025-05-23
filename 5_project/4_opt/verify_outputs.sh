@@ -63,5 +63,5 @@ compare_files () {
     fi
 }
 
-compare_files "$parallel_async_dir"
-# compare_files "$parallel_async_omp_dir"
+# compare_files "outputs/parallel_async"
+compare_files "outputs/parallel_async_omp"
