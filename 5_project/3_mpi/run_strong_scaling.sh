@@ -32,13 +32,9 @@
 # Run the executable named myexe
 # and write the output into my output file
 # for processes in 1 2 4 8 16 32 64
-
-num_threads=1
-export OMP_NUM_THREADS=$num_threads
-
 for processes in 1 2 4 8 16 32 64
 do
-    echo "########## RUNNING WITH $processes PROCESSES ($num_threads Thread) ##########"
+    echo "########## RUNNING WITH $processes PROCESSES ##########"
     for count in {1..3}
     do
         echo "Run $count"

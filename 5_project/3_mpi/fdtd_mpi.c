@@ -237,15 +237,15 @@ int main(int argc, char** argv) {
         update_E(local_size, chunk_coords[0]);
 
         // Diagnostic Print every 100 steps to verify correctness 
-        if (t % 100 == 0) {
-            MPI_Barrier(cart_comm);
-            print_grid(NX, rank, dims, cart_comm, local_size, t, 1);
-        }
+        // if (t % 100 == 0) {
+        //     MPI_Barrier(cart_comm);
+        //     print_grid(NX, rank, dims, cart_comm, local_size, t, 1);
+        // }
     }
     
     MPI_Barrier(cart_comm);
 
-    print_grid(NX, rank, dims, cart_comm, local_size, NSTEPS+1, 1);
+    print_grid(NX, rank, dims, cart_comm, local_size, NSTEPS+1, 0);
     
     if (rank == 0) {
         end_time = MPI_Wtime();

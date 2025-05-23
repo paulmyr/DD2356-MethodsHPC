@@ -85,13 +85,13 @@ int main(int argc, char** argv) {
         update_H(E, H, NX);
         update_E(E, H, NX);
 
-        if (t % 100 == 0) {
-            print_to_file(E, H, NX, t);
-        }
+        // if (t % 100 == 0) {
+        //     print_to_file(E, H, NX, t);
+        // }
     }
     
 
-    print_to_file(E, H, NX, NSTEPS+1);
+    // print_to_file(E, H, NX, NSTEPS+1);
     double end_time = MPI_Wtime();
 
 

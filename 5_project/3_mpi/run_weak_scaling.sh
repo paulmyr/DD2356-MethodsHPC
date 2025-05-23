@@ -29,10 +29,6 @@
 # Output File
 #SBATCH --output project_mpi_weak_scaling.txt
 
-
-num_threads=1
-export OMP_NUM_THREADS=$num_threads
-
 # This is the size of the subproblem PER PROCESS (remains fixed)
 subprocess_problem=100000
 echo "WEAK SCALING: SIZE PER PROBLEM IS $subprocess_problem"
@@ -41,7 +37,7 @@ echo "WEAK SCALING: SIZE PER PROBLEM IS $subprocess_problem"
 for processes in 1 2 4 8 16 32 64
 do
     grid_size=$((subprocess_problem * processes))
-    echo "########## RUNNING WITH $processes PROCESSES ($num_threads Thread) ##########"
+    echo "########## RUNNING WITH $processes PROCESSES ##########"
     for count in {1..3}
     do
         echo "Run $count"
