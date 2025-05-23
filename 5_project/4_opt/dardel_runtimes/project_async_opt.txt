@@ -1,0 +1,70 @@
+########## RUNNING WITH 1 PROCESSES ##########
+Run 1
+[PARALLEL] Run with 1 processes (6400000 size, 1000 steps). Took: 33.193093 seconds
+----------------------------
+Run 2
+[PARALLEL] Run with 1 processes (6400000 size, 1000 steps). Took: 33.584682 seconds
+----------------------------
+Run 3
+[PARALLEL] Run with 1 processes (6400000 size, 1000 steps). Took: 32.897391 seconds
+----------------------------
+########## RUNNING WITH 2 PROCESSES ##########
+Run 1
+[PARALLEL] Run with 2 processes (6400000 size, 1000 steps). Took: 32.932571 seconds
+----------------------------
+Run 2
+[PARALLEL] Run with 2 processes (6400000 size, 1000 steps). Took: 33.104590 seconds
+----------------------------
+Run 3
+[PARALLEL] Run with 2 processes (6400000 size, 1000 steps). Took: 32.868242 seconds
+----------------------------
+########## RUNNING WITH 4 PROCESSES ##########
+Run 1
+[PARALLEL] Run with 4 processes (6400000 size, 1000 steps). Took: 32.196433 seconds
+----------------------------
+Run 2
+[PARALLEL] Run with 4 processes (6400000 size, 1000 steps). Took: 32.196755 seconds
+----------------------------
+Run 3
+[PARALLEL] Run with 4 processes (6400000 size, 1000 steps). Took: 32.162884 seconds
+----------------------------
+########## RUNNING WITH 8 PROCESSES ##########
+Run 1
+[PARALLEL] Run with 8 processes (6400000 size, 1000 steps). Took: 18.718433 seconds
+----------------------------
+Run 2
+[PARALLEL] Run with 8 processes (6400000 size, 1000 steps). Took: 20.014369 seconds
+----------------------------
+Run 3
+[PARALLEL] Run with 8 processes (6400000 size, 1000 steps). Took: 24.154047 seconds
+----------------------------
+########## RUNNING WITH 16 PROCESSES ##########
+Run 1
+[PARALLEL] Run with 16 processes (6400000 size, 1000 steps). Took: 31.941998 seconds
+----------------------------
+Run 2
+[PARALLEL] Run with 16 processes (6400000 size, 1000 steps). Took: 31.039288 seconds
+----------------------------
+Run 3
+[PARALLEL] Run with 16 processes (6400000 size, 1000 steps). Took: 32.082699 seconds
+----------------------------
+########## RUNNING WITH 32 PROCESSES ##########
+Run 1
+[PARALLEL] Run with 32 processes (6400000 size, 1000 steps). Took: 32.303755 seconds
+----------------------------
+Run 2
+[PARALLEL] Run with 32 processes (6400000 size, 1000 steps). Took: 32.154515 seconds
+----------------------------
+Run 3
+[PARALLEL] Run with 32 processes (6400000 size, 1000 steps). Took: 32.215367 seconds
+----------------------------
+########## RUNNING WITH 64 PROCESSES ##########
+Run 1
+[PARALLEL] Run with 64 processes (6400000 size, 1000 steps). Took: 32.158465 seconds
+----------------------------
+Run 2
+[PARALLEL] Run with 64 processes (6400000 size, 1000 steps). Took: 32.147540 seconds
+----------------------------
+Run 3
+[PARALLEL] Run with 64 processes (6400000 size, 1000 steps). Took: 32.303304 seconds
+----------------------------

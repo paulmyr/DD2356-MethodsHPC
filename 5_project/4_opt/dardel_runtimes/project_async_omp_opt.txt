@@ -1,0 +1,51 @@
+################# RUNNING ACROSS UPTO 4 NODES WITH UPTO 16 PROCESSES, 8 THREADS PER PROCESS ##################
+########## RUNNING WITH 1 PROCESSES (8 Thread) ##########
+Run 1
+[PARALLEL] Run with 1 processes and 8 threads each (6400000 size, 1000 steps). Took: 8.097727 seconds
+----------------------------
+Run 2
+[PARALLEL] Run with 1 processes and 8 threads each (6400000 size, 1000 steps). Took: 8.091827 seconds
+----------------------------
+Run 3
+[PARALLEL] Run with 1 processes and 8 threads each (6400000 size, 1000 steps). Took: 8.090564 seconds
+----------------------------
+########## RUNNING WITH 2 PROCESSES (8 Thread) ##########
+Run 1
+[PARALLEL] Run with 2 processes and 8 threads each (6400000 size, 1000 steps). Took: 4.704039 seconds
+----------------------------
+Run 2
+[PARALLEL] Run with 2 processes and 8 threads each (6400000 size, 1000 steps). Took: 4.899853 seconds
+----------------------------
+Run 3
+[PARALLEL] Run with 2 processes and 8 threads each (6400000 size, 1000 steps). Took: 4.683437 seconds
+----------------------------
+########## RUNNING WITH 4 PROCESSES (8 Thread) ##########
+Run 1
+[PARALLEL] Run with 4 processes and 8 threads each (6400000 size, 1000 steps). Took: 2.247665 seconds
+----------------------------
+Run 2
+[PARALLEL] Run with 4 processes and 8 threads each (6400000 size, 1000 steps). Took: 2.262453 seconds
+----------------------------
+Run 3
+[PARALLEL] Run with 4 processes and 8 threads each (6400000 size, 1000 steps). Took: 2.249726 seconds
+----------------------------
+########## RUNNING WITH 8 PROCESSES (8 Thread) ##########
+Run 1
+[PARALLEL] Run with 8 processes and 8 threads each (6400000 size, 1000 steps). Took: 1.069484 seconds
+----------------------------
+Run 2
+[PARALLEL] Run with 8 processes and 8 threads each (6400000 size, 1000 steps). Took: 1.872519 seconds
+----------------------------
+Run 3
+[PARALLEL] Run with 8 processes and 8 threads each (6400000 size, 1000 steps). Took: 1.142267 seconds
+----------------------------
+########## RUNNING WITH 16 PROCESSES (8 Thread) ##########
+Run 1
+[PARALLEL] Run with 16 processes and 8 threads each (6400000 size, 1000 steps). Took: 2.234144 seconds
+----------------------------
+Run 2
+[PARALLEL] Run with 16 processes and 8 threads each (6400000 size, 1000 steps). Took: 1.842109 seconds
+----------------------------
+Run 3
+[PARALLEL] Run with 16 processes and 8 threads each (6400000 size, 1000 steps). Took: 1.858833 seconds
+----------------------------
