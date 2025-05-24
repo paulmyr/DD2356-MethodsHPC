@@ -26,7 +26,6 @@ base_mpi_runtimes = {
 # Using the same serial time from before -- as this is basically the same programme still
 serial_runtime = np.mean([32.308677, 32.251042, 32.508082])
 
-
 # Async + OMP Runtimes
 async_omp_runtimes = {
     1: [8.097727, 8.091827, 8.090564],
@@ -35,6 +34,26 @@ async_omp_runtimes = {
     8: [1.069484, 1.872519, 1.142267],
     16: [2.234144, 1.842109, 1.858833],
 }
+
+
+# Comparing Blocking MPI with Async-Only Optimization on Different grid sizes (8 processes)
+# Format: {[grid_Size]: [...runtimes...]}
+base_mpi_8_cores = {
+    640: [18.007885, 15.299872, 15.815890],
+    6_400: [16.276028, 15.316040, 14.483938],
+    64_000: [20.056265, 17.948398, 15.332732],
+    640_000: [17.965247, 14.495482, 16.430449],
+    6_400_000: [26.669066,  27.525375, 28.360020]
+}
+
+async_only_8_cores = {
+    640: [13.507895, 18.560163, 14.267887],
+    6_400: [16.243996, 16.884218, 13.355983],
+    64_000: [17.816487, 15.992410, 14.776814],
+    640_000: [16.485228, 16.682118, 12.646022],
+    6_400_000: [13.128752, 15.270195, 13.865518]
+}
+
 
 
 plt.rcParams.update({
@@ -176,11 +195,40 @@ def plot_everything():
     plt.tight_layout()
     plt.show()
 
+def compare_base_async_only_8_process():
+    mean_runtime_base_8, _, _, _ = get_stats_from_dict(base_mpi_8_cores, "Base MPI (8 Cores)")
+    mean_runtime_async_8, _, _, _ = get_stats_from_dict(async_only_8_cores, "Async Only (8 Cores)")
+
+    grid_sizes = list(base_mpi_8_cores.keys())
+
+    ax.plot(grid_sizes, mean_runtime_base_8, marker="^", linestyle="-", linewidth=2, color="red", label="Base MPI")
+    ax.plot(grid_sizes, mean_runtime_async_8, marker="x", linestyle="-", linewidth=2, color="purple", label="Async MPI")
+
+    ax.set_title(f"Base MPI vs Async MPI (8 Processes, 1 Node)")
+    ax.set_xlabel("Grid Size")
+    ax.set_ylabel("Runtime (seconds)")
+
+    ax.set_xticks(grid_sizes)
+    ax.get_xaxis().set_major_formatter(ScalarFormatter())
+    ax.grid(True, which='major', linestyle=':', linewidth=0.8, alpha=0.6)
+
+    # for x, y in zip(process_count, mean_runtime):
+    #     ax.annotate(f"{y:.1f}s", (x, y), textcoords="offset points",
+    #                 xytext=(0, 8), ha='center', fontsize=11)
+
+    ax.legend(frameon=True, loc='upper right', bbox_to_anchor=(1, 0.92))
+
+    plt.tight_layout()
+    plt.xscale("log")
+    plt.show()
+
 # Base MPI vs Async MPI
 # base_mpi_vs_async_mpi()
 # Base MPI vs Async + OMP MPI across 4 Nodes
 # base_mpi_vs_async_omp_mpi()
 # Plot of Base and both optimizations
-plot_everything()
+# plot_everything()
+# Comparison of Base and Async MPI on different grid sizes
+compare_base_async_only_8_process()
 
 

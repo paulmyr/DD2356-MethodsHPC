@@ -54,7 +54,7 @@ do
     for count in {1..3}
     do
         echo "Run $count"
-        srun -n $processes ../3_mpi/fdtd_mpi.out $grid_size
+        srun -n 8 ../3_mpi/fdtd_mpi.out $grid_size
         echo "----------------------------"
     done
 done

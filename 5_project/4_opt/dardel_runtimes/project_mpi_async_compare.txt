@@ -1,0 +1,102 @@
+###### RUNNING WITH ASYNC_OPT CODE ##########
+########## Grid_Size: 640 ##########
+Run 1
+[PARALLEL] Run with 8 processes (640 size, 1000 steps). Took: 13.507895 seconds
+----------------------------
+Run 2
+[PARALLEL] Run with 8 processes (640 size, 1000 steps). Took: 18.560163 seconds
+----------------------------
+Run 3
+[PARALLEL] Run with 8 processes (640 size, 1000 steps). Took: 14.267887 seconds
+----------------------------
+########## Grid_Size: 6400 ##########
+Run 1
+[PARALLEL] Run with 8 processes (6400 size, 1000 steps). Took: 16.243996 seconds
+----------------------------
+Run 2
+[PARALLEL] Run with 8 processes (6400 size, 1000 steps). Took: 16.884218 seconds
+----------------------------
+Run 3
+[PARALLEL] Run with 8 processes (6400 size, 1000 steps). Took: 13.355983 seconds
+----------------------------
+########## Grid_Size: 64000 ##########
+Run 1
+[PARALLEL] Run with 8 processes (64000 size, 1000 steps). Took: 17.816487 seconds
+----------------------------
+Run 2
+[PARALLEL] Run with 8 processes (64000 size, 1000 steps). Took: 15.992410 seconds
+----------------------------
+Run 3
+[PARALLEL] Run with 8 processes (64000 size, 1000 steps). Took: 14.776814 seconds
+----------------------------
+########## Grid_Size: 640000 ##########
+Run 1
+[PARALLEL] Run with 8 processes (640000 size, 1000 steps). Took: 16.485228 seconds
+----------------------------
+Run 2
+[PARALLEL] Run with 8 processes (640000 size, 1000 steps). Took: 16.682118 seconds
+----------------------------
+Run 3
+[PARALLEL] Run with 8 processes (640000 size, 1000 steps). Took: 12.646022 seconds
+----------------------------
+########## Grid_Size: 6400000 ##########
+Run 1
+[PARALLEL] Run with 8 processes (6400000 size, 1000 steps). Took: 13.128752 seconds
+----------------------------
+Run 2
+[PARALLEL] Run with 8 processes (6400000 size, 1000 steps). Took: 15.270195 seconds
+----------------------------
+Run 3
+[PARALLEL] Run with 8 processes (6400000 size, 1000 steps). Took: 13.865518 seconds
+----------------------------
+###### RUNNING WITH BLOCKING MPI CODE ##########
+########## Grid_Size: 640 ##########
+Run 1
+[PARALLEL] Run with 8 processes (640 size, 1000 steps). Took: 18.007885 seconds
+----------------------------
+Run 2
+[PARALLEL] Run with 8 processes (640 size, 1000 steps). Took: 15.299872 seconds
+----------------------------
+Run 3
+[PARALLEL] Run with 8 processes (640 size, 1000 steps). Took: 15.815890 seconds
+----------------------------
+########## Grid_Size: 6400 ##########
+Run 1
+[PARALLEL] Run with 8 processes (6400 size, 1000 steps). Took: 16.276028 seconds
+----------------------------
+Run 2
+[PARALLEL] Run with 8 processes (6400 size, 1000 steps). Took: 15.316040 seconds
+----------------------------
+Run 3
+[PARALLEL] Run with 8 processes (6400 size, 1000 steps). Took: 14.483938 seconds
+----------------------------
+########## Grid_Size: 64000 ##########
+Run 1
+[PARALLEL] Run with 8 processes (64000 size, 1000 steps). Took: 20.056265 seconds
+----------------------------
+Run 2
+[PARALLEL] Run with 8 processes (64000 size, 1000 steps). Took: 17.948398 seconds
+----------------------------
+Run 3
+[PARALLEL] Run with 8 processes (64000 size, 1000 steps). Took: 15.332732 seconds
+----------------------------
+########## Grid_Size: 640000 ##########
+Run 1
+[PARALLEL] Run with 8 processes (640000 size, 1000 steps). Took: 17.965247 seconds
+----------------------------
+Run 2
+[PARALLEL] Run with 8 processes (640000 size, 1000 steps). Took: 14.495482 seconds
+----------------------------
+Run 3
+[PARALLEL] Run with 8 processes (640000 size, 1000 steps). Took: 16.430449 seconds
+----------------------------
+########## Grid_Size: 6400000 ##########
+Run 1
+[PARALLEL] Run with 8 processes (6400000 size, 1000 steps). Took: 26.669066 seconds
+----------------------------
+Run 2
+[PARALLEL] Run with 8 processes (6400000 size, 1000 steps). Took: 27.525375 seconds
+----------------------------
+Run 3
+[PARALLEL] Run with 8 processes (6400000 size, 1000 steps). Took: 28.360020 seconds
+----------------------------
