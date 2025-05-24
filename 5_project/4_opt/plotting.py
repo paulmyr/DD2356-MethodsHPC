@@ -205,7 +205,7 @@ def compare_base_async_only_8_process():
     ax.plot(grid_sizes, mean_runtime_async_8, marker="x", linestyle="-", linewidth=2, color="purple", label="Async MPI")
 
     ax.set_title(f"Base MPI vs Async MPI (8 Processes, 1 Node)")
-    ax.set_xlabel("Grid Size")
+    ax.set_xlabel("Grid Size (Log Scale)")
     ax.set_ylabel("Runtime (seconds)")
 
     ax.set_xticks(grid_sizes)
@@ -222,11 +222,11 @@ def compare_base_async_only_8_process():
     plt.xscale("log")
     plt.show()
 
-# Base MPI vs Async MPI
+# # Base MPI vs Async MPI
 # base_mpi_vs_async_mpi()
-# Base MPI vs Async + OMP MPI across 4 Nodes
+# # Base MPI vs Async + OMP MPI across 4 Nodes
 # base_mpi_vs_async_omp_mpi()
-# Plot of Base and both optimizations
+# # Plot of Base and both optimizations
 # plot_everything()
 # Comparison of Base and Async MPI on different grid sizes
 compare_base_async_only_8_process()

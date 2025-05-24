@@ -101,7 +101,7 @@ def plot_weak_scaling():
     ax.plot(process_count, mean_runtime, marker='o', linestyle='-', linewidth=2,
             color='steelblue', label='MPI Runtime')
 
-    ax.set_title(f"Weak Scaling (6.4mil elements, 1k iterations)")
+    ax.set_title(f"Weak Scaling Plot (100k/per process, 1k iters)")
     ax.set_xlabel("Number of Processes")
     ax.set_ylabel("Runtime (seconds)")
 
@@ -121,9 +121,9 @@ def plot_weak_scaling():
 
 
 # Strong Scaling
-# plot_serial_parallel_comparison(title="Strong Scaling (On 1 Node)", show_serial=True)
+# plot_serial_parallel_comparison(title="Strong Scaling Plot", show_serial=True)
 # Weak Scaling
-# plot_weak_scaling()
+plot_weak_scaling()
 
 # 640 6400 64000 640000 6400000
 
