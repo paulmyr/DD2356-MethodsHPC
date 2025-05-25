@@ -56,12 +56,11 @@ compare_files () {
     # Print summary result
     if $all_match; then
         echo  "SUCCESS: Serial and Parallel Match for directory $1! :) "
-        exit 0
     else
         echo "FAIL: Some timestamps differ :("
         exit 1
     fi
 }
 
-# compare_files "outputs/parallel_async"
+compare_files "outputs/parallel_async"
 compare_files "outputs/parallel_async_omp"
