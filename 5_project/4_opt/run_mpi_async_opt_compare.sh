@@ -18,7 +18,7 @@
 #SBATCH --nodes 1
 
 # Number of MPI processes per node
-#SBATCH --ntasks-per-node 8
+#SBATCH --ntasks-per-node 128
 
 # CPUs per task
 #SBATCH --cpus-per-task 1

@@ -32,6 +32,8 @@
 # Run the executable named myexe
 # and write the output into my output file
 # for processes in 1 2 4 8 16 32 64
+echo "###### RUNNING WITH ASYNC_OPT CODE ##########"
+
 for processes in 1 2 4 8 16 32 64
 do
     echo "########## RUNNING WITH $processes PROCESSES ##########"
@@ -39,6 +41,19 @@ do
     do
         echo "Run $count"
         srun -n $processes ./fdtd_async_opt.out 6400000
+        echo "----------------------------"
+    done
+done
+
+echo "###### RUNNING WITH BLOCKING MPI CODE ##########"
+
+for processes in 1 2 4 8 16 32 64
+do
+    echo "########## RUNNING WITH $processes PROCESSES ##########"
+    for count in {1..3}
+    do
+        echo "Run $count"
+        srun -n $processes ../3_mpi/fdtd_mpi.out 6400000
         echo "----------------------------"
     done
 done
