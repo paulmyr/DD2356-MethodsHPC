@@ -21,7 +21,7 @@ do
     for count in {1..3}
     do
         echo "Run $count"
-        srun -n 1 omp.out 6400000
+        srun -n 1 ./fdtd_omp.out 6400000
         echo "----------------------------"
     done
 done
@@ -30,6 +30,6 @@ done
 for count in {1..3}
 do
     echo "SERIAL RUN $count"
-    srun -n 1 serial.out 6400000
+    srun -n 1 ./fdtd_serial.out 6400000
     echo "----------------------------"
 done
