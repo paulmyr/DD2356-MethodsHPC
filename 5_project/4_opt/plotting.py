@@ -228,7 +228,7 @@ def compare_base_async_only_8_process():
 # base_mpi_vs_async_omp_mpi()
 # # Plot of Base and both optimizations
 # plot_everything()
-# # Comparison of Base and Async MPI on different grid sizes
-# compare_base_async_only_8_process()
+# Comparison of Base and Async MPI on different grid sizes
+compare_base_async_only_8_process()
 
 
