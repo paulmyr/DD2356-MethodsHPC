@@ -154,7 +154,7 @@
 %  \footnotesize\texttt{MN: }\\[-1ex]
   \scriptsize\texttt{pmayer@kth.se}
   \and
-  \small Lennard Herud \textsuperscript{\textdagger}\\[-0.75ex]
+  \small Lennart Herud \textsuperscript{\textdagger}\\[-0.75ex]
 %  \footnotesize\texttt{MN: }\\[-1ex]
   \scriptsize\texttt{herud@kth.se}
 }
@@ -199,7 +199,14 @@ The code for our project can be found at this location: \url{https://github.com/
 \newpage
 
 \section{Serial Implementation and Correctness}
-\todo{Do we even need this? What do we write here?}
+The serial implementation provides our optimization baseline. 
+\subsubsection{Correctness}
+We check the implementation correctness of our optimizations against the baseline implementation by visual inspection of the intermediate and final values of the e-field.
+To implement this, the e-field values are printed into separate files and matched against each other.
+Additionally the peak position at the final time step is validated against the peak position of the serial implementation. 
+
+For both verification methods our results comply with the given code, yielding identical results and showing symmetrical peaks.
+\todo{If plots of the final e-field wave are shown, it can be added, that those look like a single Dirac-Impulse instead of two pulses due to scaling, which is shown and proven in the repo. Otherwise this can be removed}
 
 \section{Parallelism through OpenMP}
 
