@@ -2,10 +2,10 @@
 \usepackage[utf8]{inputenc}
 \usepackage[a4paper,
             bindingoffset=0.2in,
-            left=1in,
-            right=1in,
-            top=1in,
-            bottom=1in,
+            left=0.5in,
+            right=0.5in,
+            top=0.5in,
+            bottom=0.5in,
             footskip=.25in]{geometry}
 
 %###############################################################################
@@ -193,7 +193,7 @@
 %
 
 \section*{Prefix}
-The code for our project can be found at this location: \url{}. 
+The code for our project can be found at this location: \url{https://github.com/paulmyr/DD2356-MethodsHPC/tree/master/5_project}. 
 
 \tableofcontents
 \newpage
@@ -206,6 +206,56 @@ The code for our project can be found at this location: \url{}.
 \section{OpenMP GPU Hand-off}
 
 \section{Parallelism through MPI}
+\subsection{Implementation Description}
+The code for this section is present in the \verb|3_mpi| directory. To parallelize the serial code with the use of MPI, we first initialize the global \verb|E| and \verb|H| grids with the process with rank 0. This is followed by a scattering of this global grid to all processes in the method present \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/5_project/3_mpi/fdtd_mpi.c#L25}{here} in the \verb|fdtd_mpi.c| file. This scattering occurs over a 1D cartesian communicator, which is first created with the help tof \verb|MPI_Cart_create|. 
+
+After this, the following three steps are performed at each step of the update-loop:
+\begin{itemize}
+\item \underline{Halo-Exchange for E}: Each process sends the first value of the chunk assigned to it to its left neighbour and receives a value in return from its right neighbour. This is done through the blocking \verb|Sendrecv| method to make the exchange easier to reason about. 
+\item \underline{Compute H}: The update for the \verb|H| array are performed. These would have required the most up-to-date values for \verb|E|, which is why the halo exchange for \verb|E| occurred in the previous step. We take special care of the boundary condition for \verb|H| when the process performing the update is responsible for the last chunk of \verb|H|.
+\item \underline{Halo-Exchange for H}: Each process sends the last value of its updated \verb|H| chunk to its right neighbour and receives a value from its legt neighbour. This is done in an analogous way to the halo-exchange for \verb|E|. 
+\item \underline{Compute E}: We finally update the contents of \verb|E|, using the updated values from the \verb|H| ghost cells received in the previous step. This is done in an analogous manner to the updates to \verb|H|, with care taken of the boundary condition in case the process is updating the last chunk of E. 
+\end{itemize}
+
+Note that here, all halo-cell exchanges are performed through \underline{blocking, synchronous} communication. Finally, once the computation loop is complete, we add a barrier to ensure that all processes agree to completing all steps of the computation before proceeding. After this barrier, we gather the results of the local \verb|E| and \verb|H| arrays from each process in to a global \verb|E| and \verb|H| grid (respectively) at the rank 0 process in \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/5_project/3_mpi/fdtd_mpi.c#L108}{this} function. This can then be printed to file for diagnostic purposes if needed. The full-code for our implmenetation briefly described above can be found in the \verb|fdtd_mpi.c| file \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/5_project/3_mpi/fdtd_mpi.c}{here}.
+
+\subsection{Strong and Weak Scaling + Communication Overhead}
+
+\begin{figure}
+     \centering
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{../images/3_mpi/strong_scaling.png}
+         \caption{Strong Scaling (6.4 mil, 1k iters)}
+         \label{fig:3_mpi_strong_scaling}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{../images/3_mpi/weak_scaling.png}
+         \caption{Weak Scaling (100k/process, 1k iters)}
+         \label{fig:3_mpi_weak_scaling}
+     \end{subfigure}
+     \caption{Strong and Weak Scaling (MPI) }
+     \label{fig:3_mpi_strong_weak}
+\end{figure}
+
+The strong and weak scaling plot for the implementation can be found in Figure \ref{fig:3_mpi_strong_weak}. The configurations used to generate these runtimes can be found in the \verb|run_strong_scaling.sh| and \verb|run_weak_scaling.sh| files. The outputs plotted are the average runtimes over 3 runs. The raw runtimes can be found in the \verb|dardel_runtimes| directory of the repository. 
+
+From Figure \ref{fig:3_mpi_strong_scaling}, we see worse runtimes for 1 or 2 processes, which could be attributed to the freater MPI overhead compared to the benefits of the limited parallelism through 1 or 2 processes. As the number of processes increase, the runtimes are marginally better -- achieving their lowest at 4 processes and then increasing till they get slightly worse at 64 processes. This trend indicates that the benefits of parallelism start to diminish as the number of processes increase, likely because of greater MPI overhead (halo-exchange, barrier at the end of the compute-loop, etc). Thus, a balance is struck at 4 processes between MPI overhead and parallelism which is optimal. However, there isn't a big variation in the runtimes at $\geq$ 4 processes. Thus, it could be the case that a different run could give better runtimes at 8 processes instead of 4. However, the sharp decline in runtime from 2 to 4 processes shows the promise of MPI parallelism if we use 4-8 processes. 
+
+Figure \ref{fig:3_mpi_weak_scaling} shows that after a sharp increase in runtime going from 1 to 2 processes, the runtime seems to be in the stable 29-33 second range for all process counts. The ideal scenario for a weak-scaling test would be to have runtimes remain stable as the problem size increases -- as this would indicate that larger problems can be solved with the help of larger resources. Except for the jump on going from 1 to 2 processes (because of the MPI overhead with regards to blocking halo-exchanges, etc), we see this ideal trend we hoped for in the weak-scaling test. 
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{../images/4_opt/scorep_64_mpi.png}
+  \caption{ScoreP on MPI (6.4 Million Elements, 1k Iters, 64 Processes, 1 Node)}
+  \label{fig:3_mpi_scorep_64}
+\end{figure}
+
+In addition to these tests, we profiled this MPI implementation with ScoreP to get an idea of communication overhead involved with halo-exchanges, using 6.4 million elements and 1k iterations with 64 processes on 1 Node. The results of this can be seen in Figure \ref{fig:3_mpi_scorep_64}. 
+
+We notice a considerably large amount of time being spent in the \verb|MPI| portion of code at a staggering $98.4\%$ of the total time and an incredibly high \verb|time/visit|. The MPI calls done in the compute-loop we are interested in are the blocking \verb|Sendrecv| communication calls for halo-exchanges. Thus, this indicates that because of its blocking nature, each \verb|Sendrecv| call is costing a significant amount of time, bumping up the communication overhead and thus the runtime (total time and time per visit) for the MPI section. In comparison, the \verb|USR| section has a similar number of visits but a drastically lower time spent per visit. This might also explain why we did not see a significant improvement in runtime compared to the serial version as the number of processes increase -- any benefit gained from parallelism was likely countered by the overhead of blocking communication between more processes. Thus, performing halo exchanges in a non-blocking manner could lead to some improvements, which is what guided our optimization strategy in the next section.
 
 \section{Optimizing MPI Parallelism}
 
