@@ -1,0 +1,51 @@
+------------- SERIAL RUNS --------------------
+######## Grid Size: 640 ############
+SERIAL RUN 1
+[SERIAL] Time Taken (640 grid, 1000 steps): 0.003045
+----------------------------
+SERIAL RUN 2
+[SERIAL] Time Taken (640 grid, 1000 steps): 0.003095
+----------------------------
+SERIAL RUN 3
+[SERIAL] Time Taken (640 grid, 1000 steps): 0.003043
+----------------------------
+######## Grid Size: 6400 ############
+SERIAL RUN 1
+[SERIAL] Time Taken (6400 grid, 1000 steps): 0.030393
+----------------------------
+SERIAL RUN 2
+[SERIAL] Time Taken (6400 grid, 1000 steps): 0.030523
+----------------------------
+SERIAL RUN 3
+[SERIAL] Time Taken (6400 grid, 1000 steps): 0.030454
+----------------------------
+######## Grid Size: 64000 ############
+SERIAL RUN 1
+[SERIAL] Time Taken (64000 grid, 1000 steps): 0.305961
+----------------------------
+SERIAL RUN 2
+[SERIAL] Time Taken (64000 grid, 1000 steps): 0.304280
+----------------------------
+SERIAL RUN 3
+[SERIAL] Time Taken (64000 grid, 1000 steps): 0.347505
+----------------------------
+######## Grid Size: 640000 ############
+SERIAL RUN 1
+[SERIAL] Time Taken (640000 grid, 1000 steps): 3.115291
+----------------------------
+SERIAL RUN 2
+[SERIAL] Time Taken (640000 grid, 1000 steps): 3.080597
+----------------------------
+SERIAL RUN 3
+[SERIAL] Time Taken (640000 grid, 1000 steps): 3.075924
+----------------------------
+######## Grid Size: 6400000 ############
+SERIAL RUN 1
+[SERIAL] Time Taken (6400000 grid, 1000 steps): 32.266016
+----------------------------
+SERIAL RUN 2
+[SERIAL] Time Taken (6400000 grid, 1000 steps): 32.375750
+----------------------------
+SERIAL RUN 3
+[SERIAL] Time Taken (6400000 grid, 1000 steps): 32.089423
+----------------------------
