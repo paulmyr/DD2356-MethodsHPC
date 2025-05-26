@@ -28,7 +28,6 @@ gpu_runtimes = {
     6_400_000: [21.204373, 20.643135, 20.640450]  
 }
 
-# blocking mpi implementation runtime (4 processes since that was the best time we got)
 # TODO: CHANGE THIS, THIS IS FOR ONLY 8 PROCESSES ATM AS A STAND-IN
 mpi_runtime = {
     640: [19.440205, 12.955923, 14.383932],
@@ -47,13 +46,13 @@ async_mpi_runtime = {
     6_400_000: [15.195069, 23.422439, 17.351784]
 }
 
-# Runtime of async MPI (8 processes) + OpenMP (8 threads) across 4 nodes
+# Runtime of async MPI (16 processes) + OpenMP (16 threads) across 4 nodes
 async_omp_mpi_runtime = {
-    640: [0.051290, 0.045759, 0.053154],
-    6400: [0.054061, 0.052951, 0.058736],
-    64_000: [0.067034, 0.074884, 0.080780],
-    640_000: [0.199318, 0.194912, 0.206909],
-    6_400_000: [1.521817, 1.506256, 1.497127]
+    640: [0.092310, 0.049394, 0.063659],
+    6400: [0.052928, 0.056507, 0.062249],
+    64_000: [0.072029, 0.064318, 0.060017],
+    640_000: [0.110865, 0.113847, 0.102050],
+    6_400_000: [0.477182, 0.499364, 0.497117]
 }
 
 
@@ -100,7 +99,7 @@ def plot_stuff():
     ax.plot(grid_sizes, serial, marker='o', linestyle='-', linewidth=2, label='Serial')
     ax.plot(grid_sizes, openmp, marker='o', linestyle='-', linewidth=2, label='OpenMP (128 Threads)')
     ax.plot(grid_sizes, gpu, marker='o', linestyle='-', linewidth=2, label='OpenMP GPU Hand-off')
-    ax.plot(grid_sizes, mpi, marker='o', linestyle='-', linewidth=2, label='MPI (4 Processes)')
+    ax.plot(grid_sizes, mpi, marker='o', linestyle='-', linewidth=2, label='MPI (8 Processes)')
     ax.plot(grid_sizes, async_mpi, marker='o', linestyle='-', linewidth=2, label='Async MPI (Opt 1)')
     ax.plot(grid_sizes, async_omp_mpi, marker='o', linestyle='-', linewidth=2, label='Async MPI + OMP (Opt 2)')
 

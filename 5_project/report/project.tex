@@ -206,8 +206,11 @@ The code for our project can be found at this location: \url{https://github.com/
 \section{OpenMP GPU Hand-off}
 
 \section{Parallelism through MPI}
+\label{sec:3_mpi}
+The code for this section is present in the \verb|3_mpi| directory. The \verb|dardel_runtimes| subdirectory contains the runtimes plotted in the graphs below, which were averages across 3 runs. Additionally, the \verb|outputs/| directory contains the snapshots of \verb|E| and \verb|H| at different time-steps for the serial and parallel implementation(s), which were used to verify correctness using the \verb|verify_outputs.sh| script.
+
 \subsection{Implementation Description}
-The code for this section is present in the \verb|3_mpi| directory. To parallelize the serial code with the use of MPI, we first initialize the global \verb|E| and \verb|H| grids with the process with rank 0. This is followed by a scattering of this global grid to all processes in the method present \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/5_project/3_mpi/fdtd_mpi.c#L25}{here} in the \verb|fdtd_mpi.c| file. This scattering occurs over a 1D cartesian communicator, which is first created with the help tof \verb|MPI_Cart_create|. 
+To parallelize the serial code with the use of MPI, we first initialize the global \verb|E| and \verb|H| grids with the process with rank 0. This is followed by a scattering of this global grid to all processes in the method present \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/5_project/3_mpi/fdtd_mpi.c#L25}{here} in the \verb|fdtd_mpi.c| file. This scattering occurs over a 1D cartesian communicator, which is first created with the help tof \verb|MPI_Cart_create|. 
 
 After this, the following three steps are performed at each step of the update-loop:
 \begin{itemize}
@@ -220,8 +223,9 @@ After this, the following three steps are performed at each step of the update-l
 Note that here, all halo-cell exchanges are performed through \underline{blocking, synchronous} communication. Finally, once the computation loop is complete, we add a barrier to ensure that all processes agree to completing all steps of the computation before proceeding. After this barrier, we gather the results of the local \verb|E| and \verb|H| arrays from each process in to a global \verb|E| and \verb|H| grid (respectively) at the rank 0 process in \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/5_project/3_mpi/fdtd_mpi.c#L108}{this} function. This can then be printed to file for diagnostic purposes if needed. The full-code for our implmenetation briefly described above can be found in the \verb|fdtd_mpi.c| file \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/5_project/3_mpi/fdtd_mpi.c}{here}.
 
 \subsection{Strong and Weak Scaling + Communication Overhead}
+\label{sec:3_mpi_analysis}
 
-\begin{figure}
+\begin{figure}[H]
      \centering
      \begin{subfigure}[b]{0.45\textwidth}
          \centering
@@ -240,7 +244,7 @@ Note that here, all halo-cell exchanges are performed through \underline{blockin
      \label{fig:3_mpi_strong_weak}
 \end{figure}
 
-The strong and weak scaling plot for the implementation can be found in Figure \ref{fig:3_mpi_strong_weak}. The configurations used to generate these runtimes can be found in the \verb|run_strong_scaling.sh| and \verb|run_weak_scaling.sh| files. The outputs plotted are the average runtimes over 3 runs. The raw runtimes can be found in the \verb|dardel_runtimes| directory of the repository. 
+The strong and weak scaling plot for the implementation can be found in Figure \ref{fig:3_mpi_strong_weak}. The configurations used to generate these runtimes can be found in the \verb|run_strong_scaling.sh| and \verb|run_weak_scaling.sh| files.
 
 From Figure \ref{fig:3_mpi_strong_scaling}, we see worse runtimes for 1 or 2 processes, which could be attributed to the freater MPI overhead compared to the benefits of the limited parallelism through 1 or 2 processes. As the number of processes increase, the runtimes are marginally better -- achieving their lowest at 4 processes and then increasing till they get slightly worse at 64 processes. This trend indicates that the benefits of parallelism start to diminish as the number of processes increase, likely because of greater MPI overhead (halo-exchange, barrier at the end of the compute-loop, etc). Thus, a balance is struck at 4 processes between MPI overhead and parallelism which is optimal. However, there isn't a big variation in the runtimes at $\geq$ 4 processes. Thus, it could be the case that a different run could give better runtimes at 8 processes instead of 4. However, the sharp decline in runtime from 2 to 4 processes shows the promise of MPI parallelism if we use 4-8 processes. 
 
@@ -258,10 +262,64 @@ In addition to these tests, we profiled this MPI implementation with ScoreP to g
 We notice a considerably large amount of time being spent in the \verb|MPI| portion of code at a staggering $98.4\%$ of the total time and an incredibly high \verb|time/visit|. The MPI calls done in the compute-loop we are interested in are the blocking \verb|Sendrecv| communication calls for halo-exchanges. Thus, this indicates that because of its blocking nature, each \verb|Sendrecv| call is costing a significant amount of time, bumping up the communication overhead and thus the runtime (total time and time per visit) for the MPI section. In comparison, the \verb|USR| section has a similar number of visits but a drastically lower time spent per visit. This might also explain why we did not see a significant improvement in runtime compared to the serial version as the number of processes increase -- any benefit gained from parallelism was likely countered by the overhead of blocking communication between more processes. Thus, performing halo exchanges in a non-blocking manner could lead to some improvements, which is what guided our optimization strategy in the next section.
 
 \section{Optimizing MPI Parallelism}
-
-\subsection{Some ScoreP Profiling}
+For optimization of the parallel implementations, we focus on the parallel MPI implementation in Section \ref{sec:3_mpi}. The OpenMP implementations were incredibly fast compared to the serial counterparts already, and we felt we could improve MPI a lot more. The files referred to in this section can be found under the \verb|4_opt| directory of the repository. The \verb|dardel_runtimes/| and the \verb|outputs/| directory serve the same purpose as in Section \ref{sec:3_mpi}.
 
 \subsection{Attempt 1: Communication-Computation Overlap w/ Non-Blocking Halo Exchange}
+From the ScoreP analysis of the MPI code in Section \ref{sec:3_mpi_analysis}, we concluded that the blocking \verb|Sendrecv| halo-exchanges are likely contributing to the lackluster performance. To rectify this issue, we decided to implement halo-exchanges through non-blocking mechanisms: with the help of \verb|Irecv| and \verb|Isend|. This allowed us to overlap communiation (through halo-exchanges) with computation: since the \textit{interior} portion of each chunk can be computed without the need of data from halo-exchanges.
+
+Thus, we initiate  \verb|Irecv| and \verb|Isend| requests for a halo-exchange, then compute the updated values for the interior of each chunk. After this computation, we \textit{wait} on these 2 halo-exchange requests to complete, after which we compute the boundary cell(s). We repeat this method for updating both the \verb|E| and the \verb|H| grids. The code for this can be found in the \verb|fdtd_async_opt.c|. We will refer to this as the \underline{Async/Non-Blocking Optimization (Opt 1)} of the MPI code from Section \ref{sec:3_mpi}, while the code from Section \ref{sec:3_mpi} will be referred to as the \underline{Base MPI} implementation.
+
+Figure \ref{fig:4_opt1} shows the performance of this optimization compared to the blocking/base MPI implementation from Section \ref{sec:3_mpi}. We vary the number of processes keeping the problem size constant (6.4 million elements, 1k iterations). The script for obtaining these runtimes can be found in the \verb|run_async_opt.sh| file \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/5_project/4_opt/run_async_opt.sh}{here}. From Figure \ref{fig:4_opt1}, we can see that till 8 processes, the async MPI imeplementation performs visibly better than the synchronous version. We believe that the reason for this is the communication-computation overlap to update the interior of the grids makes more efficient use of the idle time that was otherwise wasted in the synchronous halo-exchange.
+
+However, the performance from 16 processes onwards is quite similar, where any differences between the two runs could likely be attributed to being within a margin of error from each other. Thus, this shows that with an increase in the number of processes, the cost of synchronizing the MPI communication between different/adjacent workers adds up -- negating the potential benefits of the asynchronous exchange. Additonally, as the number of processes increase but the problem size remains the same, we have more processes responsible for smaller chunks of the global arrays. This means that the \textit{computation} part of the computation-communication overlap is smaller, and thus the processes are more likely to end up waiting for a longer time at the \verb|MPI_Waitall| call after the interior-computation is finished. This would give us similar behaviour to the sync MPI implementation, which is what we observed.
+
+
+\begin{figure}[H]
+     \centering
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{../images/4_opt/opt1.png}
+         \caption{Varying Processes (Same Input)}
+         \label{fig:4_opt1}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{../images/4_opt/opt_compare_8.png}
+         \caption{Varying Input (8 Processes)}
+         \label{fig:4_opt_compare_8}
+     \end{subfigure}
+     \caption{Sync (Base) MPI vs Async MPI}
+     \label{fig:4_opt_async_runtimes}
+\end{figure}
+
+Based on the results from Figure \ref{fig:4_opt1}, we concluded that 8 processes seems to offer the best balance between async MPI communication and parallelism, and wanted to explore this further. This was done in Figure \ref{fig:4_opt_compare_8}, where we analyzed the runtimes across different grid sizes for the 2 implementations, both using 8 processes. The SLURM script for this can be found in the \verb|run_mpi_async_opt_compare.sh| file \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/5_project/4_opt/run_mpi_async_opt_compare.sh}{here}. For smaller grid sizes, the two implementations seem to perform similarly, with the Base MPI even having a slight edge likely because of the simpler structure of the code and fewer calls to the MPI library making the async communication an unnecessary excess. Another reason might be the smaller \textit{computation} portion because of smaller grid-sizes, as explained earlier.
+
+
+However, as the grid sizes increase, we start seeing the noticable benefit of using async over sync communication for halo-exchanges. As the grid sizes increase, so does the "computation" part of the overlap -- meaning there is a non-trivial amount of wait-time which allows for the \verb|MPI_Waitall| to finish quickly and bring forth the anticipated advantage.
+\textit{Note: While the runtimes plotted in Figure \ref{fig:4_opt_compare_8} are averages across 3 runs, we did observe considerable differences between these runs for both the Base MPI and the Async MPI implementations. We believed this might be because of unexpected allocation of processes to CPUs on the Numa nodes by SLURM (making for variable communication time), and thus requested more processes on the same node to get better allocation. Despite this, we did observe some non-trivial variation between runs on the same invocation. However, the trend we observed seemed to largely follow the one presented here.}
+
+
+We also profiled using ScoreP the Base MPI and the Async MPI imeplementation using 8 processes (6.4 million elements, 1k iterations). Figure \ref{fig:4_opt_scorep_sync} and Figure \ref{fig:4_opt_scorep_async} show the result of the analysis for the Sync and Async implementations with this configuration, respectively.  
+\begin{figure}[H]
+     \centering
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{../images/4_opt/scorep_8_mpi.png}
+         \caption{Synchronous (Base) MPI ScoreP}
+         \label{fig:4_opt_scorep_sync}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{../images/4_opt/scorep_8_async.png}
+         \caption{Async (Optimized) MPI ScoreP}
+         \label{fig:4_opt_scorep_async}
+     \end{subfigure}
+     \caption{Sync (Base) MPI vs Async MPI ScoreP}
+\end{figure}
+
+Despite a greater percentage of time being spent in the MPI section for the Async implementation and a higher number of visits to MPI, we notice that the time per call for MPI is significantly lower compared to that for the Sync Implementation. We believe that this is because of the fewer amount of waiting time required near blocking calls (such as \verb|MPI_Waitall|), since the relatively larger computation portion gives enough time for the halo-exchanges to have finished by the time we reach the blocking portion of the code. This is also evident in the total time (for \verb|ALL|) spent in the simulation -- where we see a nearly 30 second decrease in the Async version compared to the Sync version. While the actual running times are likely much higher for both implementations here because of hte ScoreP profiling intervention, a 30 second difference is considerably large, which would likely translate to a noticeable difference \textit{without} ScoreP as well -- as was observed in the plots in Figure \ref{fig:4_opt_async_runtimes}.
 
 \subsection{Attempt 2: OpenMP Parallelism w/ Non-Blocking Halo Exchange}
 

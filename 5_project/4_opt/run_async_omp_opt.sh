@@ -21,7 +21,7 @@
 #SBATCH --ntasks-per-node 4
 
 # CPUs per task
-#SBATCH --cpus-per-task 8
+#SBATCH --cpus-per-task 16
 
 # Error file
 #SBATCH -e elog_project_async_omp_opt
@@ -33,10 +33,10 @@
 # and write the output into my output file
 # for processes in 1 2 4 8 16 32 64
 
-num_threads=8
+num_threads=16
 export OMP_NUM_THREADS=$num_threads
 
-echo "################# RUNNING ACROSS UPTO 4 NODES WITH UPTO 16 PROCESSES, 8 THREADS PER PROCESS ##################"
+echo "################# RUNNING ACROSS UPTO 4 NODES WITH UPTO 16 PROCESSES, 16 THREADS PER PROCESS ##################"
 
 for processes in 1 2 4 8 16
 do

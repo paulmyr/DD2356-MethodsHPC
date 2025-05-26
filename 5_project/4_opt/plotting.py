@@ -28,11 +28,11 @@ serial_runtime = np.mean([32.308677, 32.251042, 32.508082])
 
 # Async + OMP Runtimes
 async_omp_runtimes = {
-    1: [8.097727, 8.091827, 8.090564],
-    2: [4.704039, 4.899853, 4.683437],
-    4: [2.247665, 2.262453, 2.249726],
-    8: [1.069484, 1.872519, 1.142267],
-    16: [2.234144, 1.842109, 1.858833],
+    1: [9.573017, 9.550793, 9.520266],
+    2: [4.343386, 4.309312, 4.330842],
+    4: [1.295006, 1.270836, 1.284595],
+    8: [0.723189, 0.728476, 0.733101],
+    16: [0.437616, 0.436713, 0.435032],
 }
 
 
@@ -141,7 +141,7 @@ def base_mpi_vs_async_omp_mpi():
     # TODO: Maybe add plot lines for std deviation/error? 
     ax.plot(process_count, base_mpi_runtimes, marker='o', linestyle='-', linewidth=2,
             color='steelblue', label='Base MPI Runtime')
-    ax.plot(process_count, mean_runtime, marker="x", linestyle="-", linewidth=2, color="purple", label="Async MPI + OMP (8 Threads/process)")
+    ax.plot(process_count, mean_runtime, marker="x", linestyle="-", linewidth=2, color="purple", label="Async MPI + OMP (16 Threads/process)")
 
     ax.set_title(f"Async MPI + OMP Opt. on up-to 4 Nodes")
     ax.set_xlabel("Number of Processes")
@@ -224,11 +224,11 @@ def compare_base_async_only_8_process():
 
 # # Base MPI vs Async MPI
 # base_mpi_vs_async_mpi()
-# # Base MPI vs Async + OMP MPI across 4 Nodes
+# Base MPI vs Async + OMP MPI across 4 Nodes
 # base_mpi_vs_async_omp_mpi()
 # # Plot of Base and both optimizations
-# plot_everything()
+plot_everything()
 # Comparison of Base and Async MPI on different grid sizes
-compare_base_async_only_8_process()
+# compare_base_async_only_8_process()
 
 
