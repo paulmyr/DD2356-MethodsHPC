@@ -27,8 +27,8 @@ void initialize_fields(double *E, double *H) {
 // Function to update the magnetic field H
 void update_H(double *E, double *H) {
   // Update H from 0 to NX-2 (using forward differences)
-#pragma omp target teams distribute parallel for map(to : H[0 : NX])           \
-    map(tofrom : E[0 : NX])
+#pragma omp target teams distribute parallel for map(to : E[0 : NX])           \
+    map(tofrom : H[0 : NX])
   for (int i = 0; i < NX - 1; i++) {
     H[i] = H[i] + (DT / DX) * (E[i + 1] - E[i]);
   }
