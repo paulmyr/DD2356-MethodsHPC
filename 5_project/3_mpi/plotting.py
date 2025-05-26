@@ -125,5 +125,3 @@ def plot_weak_scaling():
 # Weak Scaling
 plot_weak_scaling()
 
-# 640 6400 64000 640000 6400000
-
