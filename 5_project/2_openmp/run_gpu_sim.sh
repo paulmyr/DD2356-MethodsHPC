@@ -35,17 +35,3 @@ do
         echo "----------------------------"
     done
 done
-
-# Serial Runs
-echo "------------- SERIAL RUNS --------------------"
-for grid_size in 640 6400 64000 640000 6400000
-do
-    echo "######## Grid Size: $grid_size ############"
-    for count in {1..3}
-    do
-        echo "SERIAL RUN $count"
-        srun -n 1 ./fdtd_serial.out $grid_size
-        echo "----------------------------"
-    done
-done
-
