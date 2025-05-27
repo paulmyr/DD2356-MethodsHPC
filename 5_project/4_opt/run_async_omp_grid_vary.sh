@@ -36,15 +36,15 @@
 num_threads=16
 export OMP_NUM_THREADS=$num_threads
 
-# Running with 8 processes because that seemed to give the best runtime in our tests
-echo "################# RUNNING ACROSS UPTO 4 NODES WITH 8 processes, 16 THREADS PER PROCESS ##################"
+# Running with 16 processes because that seemed to give the best runtime in our tests
+echo "################# RUNNING ACROSS UPTO 4 NODES WITH 16 processes, 16 THREADS PER PROCESS ##################"
 for grid_size in 640 6400 64000 640000 6400000
 do
     echo "######## Grid Size: $grid_size ############"
     for count in {1..3}
     do
         echo "Run $count"
-        srun -n 8 ./fdtd_async_omp_opt.out $grid_size
+        srun -n 16 ./fdtd_async_omp_opt.out $grid_size
         echo "----------------------------"
     done
 done

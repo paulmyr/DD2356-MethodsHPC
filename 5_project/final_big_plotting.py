@@ -122,4 +122,31 @@ def plot_stuff():
     plt.yscale("log")
     plt.show()
 
-plot_stuff()
+def plot_serial_runtime():
+    serial, _, _, _ = get_stats_from_dict(serial_runtimes, "SERIAL IMPL")
+
+    grid_sizes = list(serial_runtimes.keys())
+
+    ax.plot(grid_sizes, serial, marker='o', linestyle='-', linewidth=2, label='Serial')
+
+    ax.set_title(f"Runtimes of Serial Implementation for Different Grid Sizes")
+    ax.set_xlabel("Grid Sizes (Logarithmic)")
+    ax.set_ylabel("Runtime in Seconds (Logarithmic)")
+
+    ax.set_xticks(grid_sizes)
+    ax.get_xaxis().set_major_formatter(ScalarFormatter())
+    ax.grid(True, which='major', linestyle=':', linewidth=0.8, alpha=0.6)
+
+    # for x, y in zip(process_count, mean_runtime):
+    #     ax.annotate(f"{y:.1f}s", (x, y), textcoords="offset points",
+    #                 xytext=(0, 8), ha='center', fontsize=11)
+
+    ax.legend(loc='upper left', fontsize=12, frameon=False, bbox_to_anchor=(1.05, 1))
+
+    plt.tight_layout()
+    plt.xscale("log")
+    plt.yscale("log")
+    plt.show()   
+
+# plot_stuff()
+plot_serial_runtime()
