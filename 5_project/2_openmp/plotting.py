@@ -15,7 +15,7 @@ strong_parallel_runtimes = {
     128: [0.464932, 0.455544, 0.456503],
     256: [0.475227, 0.473653, 0.475763]
 }
-serial_runtime = np.mean([32.327800, 32.317861, 32.186377])
+serial_runtime = np.mean([32.266016, 32.375750, 32.089423])
 
 
 
@@ -33,7 +33,6 @@ weak_parallel_runtimes = {
 }
 
 # OpenMP GPU Handoff
-# TODO: Add runtimes for varying grid sizes
 gpu_grid_runtimes = {
     640: [0.702867, 0.346366, 0.345958],
     6400: [0.371401, 0.372639, 0.376987],
@@ -48,6 +47,15 @@ serial_grid_runtimes = {
     64_000: [0.305961, 0.304280, 0.347505],
     640_000: [3.115291, 3.080597, 3.075924],
     6_400_000: [32.266016, 32.375750, 32.089423]
+}
+
+# OMP Runtimes with 128 threads
+omp_grid_runtimes = {
+    640: [0.032708, 0.040456, 0.037860],
+    6400: [0.039851, 0.040001, 0.037752],
+    64_000: [0.043264, 0.049828, 0.043330],
+    640_000: [0.124054, 0.122537, 0.122379],
+    6_400_000: [0.852577, 0.850906, 0.848543]
 }
 
 
@@ -78,6 +86,7 @@ def get_stats_from_dict(data_dict, data_dict_name, entity="processes"):
         std_dev.append(curr_std)
         min_time.append(curr_min)
         max_time.append(curr_max)
+        print("\n---------------------\n")
     
     return mean_runtime, std_dev, min_time, max_time
 
@@ -96,10 +105,11 @@ def plot_serial_parallel_comparison(title, show_serial=True):
         std_dev.append(curr_std)
         min_time.append(curr_min)
         max_time.append(curr_max)
+        print("\n---------------------\n")
 
     # TODO: Maybe add plot lines for std deviation/error? 
     ax.plot(process_count, mean_runtime, marker='o', linestyle='-', linewidth=2,
-            color='steelblue', label='MPI Runtime')
+            color='steelblue', label='OMP Runtime')
 
     if show_serial:
         ax.axhline(serial_runtime, color='gray', linestyle='--', linewidth=1.5,
@@ -137,6 +147,7 @@ def plot_weak_scaling():
         std_dev.append(curr_std)
         min_time.append(curr_min)
         max_time.append(curr_max)
+        print("\n---------------------\n")
 
     # TODO: Maybe add plot lines for std deviation/error? 
     ax.plot(process_count, mean_runtime, marker='o', linestyle='-', linewidth=2,
@@ -162,8 +173,8 @@ def plot_weak_scaling():
     plt.show()
 
 def compare_gpu_serial():
-    mean_runtime_gpu, _, _, _ = get_stats_from_dict(gpu_grid_runtimes, "Base MPI (8 Cores)", entity="elements")
-    mean_runtime_serial, _, _, _ = get_stats_from_dict(serial_grid_runtimes, "Async Only (8 Cores)", entity="elements")
+    mean_runtime_gpu, _, _, _ = get_stats_from_dict(gpu_grid_runtimes, "GPU Runtime", entity="elements")
+    mean_runtime_serial, _, _, _ = get_stats_from_dict(serial_grid_runtimes, "Serial Runtime", entity="elements")
 
     grid_sizes = list(gpu_grid_runtimes.keys())
 
@@ -189,10 +200,13 @@ def compare_gpu_serial():
     plt.show()
 
 # # Strong Scaling Plot (With Serial Comparison)
-# plot_serial_parallel_comparison(title="Strong Scaling Plot", show_serial=True)
+plot_serial_parallel_comparison(title="Strong Scaling Plot", show_serial=True)
 
 # # Weak Scaling Plot
 # plot_weak_scaling()
 
 # Grid Size Comparison for GPU
-compare_gpu_serial()
+# compare_gpu_serial()
+
+# get_stats_from_dict(omp_grid_runtimes, "OpenMP (128 Threads)", "threads")
+get_stats_from_dict(gpu_grid_runtimes, "GPU Runtime", entity="elements")

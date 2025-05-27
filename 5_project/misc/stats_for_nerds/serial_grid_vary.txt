@@ -1,0 +1,46 @@
+###### STATS FOR SERIAL IMPL RUNTIMES ######
+#### For 640 processes ####
+All Times: [0.003045, 0.003095, 0.003043]
+Mean Runtime: 0.003061
+Std Dev: 2.4055491403558306e-05
+Min Observation: 0.003043
+Max Observation: 0.003095
+
+------------------
+
+#### For 6400 processes ####
+All Times: [0.030393, 0.030523, 0.030454]
+Mean Runtime: 0.030456666666666663
+Std Dev: 5.310576449145891e-05
+Min Observation: 0.030393
+Max Observation: 0.030523
+
+------------------
+
+#### For 64000 processes ####
+All Times: [0.305961, 0.30428, 0.347505]
+Mean Runtime: 0.3192486666666667
+Std Dev: 0.019992027083037107
+Min Observation: 0.30428
+Max Observation: 0.347505
+
+------------------
+
+#### For 640000 processes ####
+All Times: [3.115291, 3.080597, 3.075924]
+Mean Runtime: 3.0906040000000004
+Std Dev: 0.017560281110126513
+Min Observation: 3.075924
+Max Observation: 3.115291
+
+------------------
+
+#### For 6400000 processes ####
+All Times: [32.266016, 32.37575, 32.089423]
+Mean Runtime: 32.24372966666666
+Std Dev: 0.11794998437850235
+Min Observation: 32.089423
+Max Observation: 32.37575
+
+------------------
+

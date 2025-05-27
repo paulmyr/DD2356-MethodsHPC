@@ -1,0 +1,46 @@
+###### STATS FOR Async MPI (16 process) + OpenMP Runtime (16 threads) RUNTIMES ######
+#### For 640 elements ####
+All Times: [0.09231, 0.049394, 0.063659]
+Mean Runtime: 0.06845433333333333
+Std Dev: 0.017845488324939603
+Min Observation: 0.049394
+Max Observation: 0.09231
+
+------------------
+
+#### For 6400 elements ####
+All Times: [0.052928, 0.056507, 0.062249]
+Mean Runtime: 0.057228
+Std Dev: 0.0038392830059791098
+Min Observation: 0.052928
+Max Observation: 0.062249
+
+------------------
+
+#### For 64000 elements ####
+All Times: [0.072029, 0.064318, 0.060017]
+Mean Runtime: 0.06545466666666666
+Std Dev: 0.004969308760336344
+Min Observation: 0.060017
+Max Observation: 0.072029
+
+------------------
+
+#### For 640000 elements ####
+All Times: [0.110865, 0.113847, 0.10205]
+Mean Runtime: 0.10892066666666667
+Std Dev: 0.0050085011951902575
+Min Observation: 0.10205
+Max Observation: 0.113847
+
+------------------
+
+#### For 6400000 elements ####
+All Times: [0.477182, 0.499364, 0.497117]
+Mean Runtime: 0.49122099999999996
+Std Dev: 0.00996936617844885
+Min Observation: 0.477182
+Max Observation: 0.499364
+
+------------------
+

@@ -1,0 +1,46 @@
+###### STATS FOR OpenMP (128 Threads) RUNTIMES ######
+#### For 640 threads ####
+All Times: [0.032708, 0.040456, 0.03786]
+Mean Runtime: 0.037008000000000006
+Std Dev: 0.0032199693580322562
+Min Observation: 0.032708
+Max Observation: 0.040456
+
+---------------------
+
+#### For 6400 threads ####
+All Times: [0.039851, 0.040001, 0.037752]
+Mean Runtime: 0.03920133333333334
+Std Dev: 0.0010266613636226672
+Min Observation: 0.037752
+Max Observation: 0.040001
+
+---------------------
+
+#### For 64000 threads ####
+All Times: [0.043264, 0.049828, 0.04333]
+Mean Runtime: 0.045473999999999994
+Std Dev: 0.0030788608282934773
+Min Observation: 0.043264
+Max Observation: 0.049828
+
+---------------------
+
+#### For 640000 threads ####
+All Times: [0.124054, 0.122537, 0.122379]
+Mean Runtime: 0.12299
+Std Dev: 0.000755121623757833
+Min Observation: 0.122379
+Max Observation: 0.124054
+
+---------------------
+
+#### For 6400000 threads ####
+All Times: [0.852577, 0.850906, 0.848543]
+Mean Runtime: 0.8506753333333333
+Std Dev: 0.0016549308814032687
+Min Observation: 0.848543
+Max Observation: 0.852577
+
+---------------------
+

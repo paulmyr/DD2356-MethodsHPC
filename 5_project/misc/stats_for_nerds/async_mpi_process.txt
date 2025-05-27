@@ -1,0 +1,128 @@
+###### STATS FOR Sync MPI RUNTIMES ######
+#### For 1 processes ####
+All Times: [39.623333, 39.043362, 38.190578]
+Mean Runtime: 38.95242433333333
+Std Dev: 0.5884436913986665
+Min Observation: 38.190578
+Max Observation: 39.623333
+
+-------------
+
+#### For 2 processes ####
+All Times: [46.848599, 46.924505, 47.15657]
+Mean Runtime: 46.976558000000004
+Std Dev: 0.131005522318718
+Min Observation: 46.848599
+Max Observation: 47.15657
+
+-------------
+
+#### For 4 processes ####
+All Times: [32.26552, 32.296422, 32.26158]
+Mean Runtime: 32.27450733333333
+Std Dev: 0.015579267448188532
+Min Observation: 32.26158
+Max Observation: 32.296422
+
+-------------
+
+#### For 8 processes ####
+All Times: [32.051071, 32.208476, 31.030969]
+Mean Runtime: 31.76350533333333
+Std Dev: 0.5219522284949923
+Min Observation: 31.030969
+Max Observation: 32.208476
+
+-------------
+
+#### For 16 processes ####
+All Times: [31.99944, 32.186232, 31.63987]
+Mean Runtime: 31.94184733333333
+Std Dev: 0.22673853547104728
+Min Observation: 31.63987
+Max Observation: 32.186232
+
+-------------
+
+#### For 32 processes ####
+All Times: [32.122833, 32.077514, 32.261366]
+Mean Runtime: 32.15390433333334
+Std Dev: 0.07820682106795859
+Min Observation: 32.077514
+Max Observation: 32.261366
+
+-------------
+
+#### For 64 processes ####
+All Times: [32.360444, 32.286459, 32.287953]
+Mean Runtime: 32.31161866666667
+Std Dev: 0.03453011140375242
+Min Observation: 32.286459
+Max Observation: 32.360444
+
+-------------
+
+###### STATS FOR Async MPI RUNTIMES ######
+#### For 1 processes ####
+All Times: [33.31462, 33.274368, 33.134775]
+Mean Runtime: 33.24125433333333
+Std Dev: 0.07706465768575335
+Min Observation: 33.134775
+Max Observation: 33.31462
+
+-------------
+
+#### For 2 processes ####
+All Times: [32.657642, 32.946989, 32.688454]
+Mean Runtime: 32.76436166666667
+Std Dev: 0.1297482228428927
+Min Observation: 32.657642
+Max Observation: 32.946989
+
+-------------
+
+#### For 4 processes ####
+All Times: [32.161904, 32.177045, 32.185109]
+Mean Runtime: 32.174686
+Std Dev: 0.009619136031888763
+Min Observation: 32.161904
+Max Observation: 32.185109
+
+-------------
+
+#### For 8 processes ####
+All Times: [22.457152, 22.628679, 27.692717]
+Mean Runtime: 24.259516
+Std Dev: 2.4286494474272446
+Min Observation: 22.457152
+Max Observation: 27.692717
+
+-------------
+
+#### For 16 processes ####
+All Times: [32.197147, 32.28318, 32.234864]
+Mean Runtime: 32.238397
+Std Dev: 0.035211559077477375
+Min Observation: 32.197147
+Max Observation: 32.28318
+
+-------------
+
+#### For 32 processes ####
+All Times: [32.027466, 32.313937, 32.367093]
+Mean Runtime: 32.23616533333333
+Std Dev: 0.1491597552611155
+Min Observation: 32.027466
+Max Observation: 32.367093
+
+-------------
+
+#### For 64 processes ####
+All Times: [32.407803, 32.237467, 32.339952]
+Mean Runtime: 32.32840733333334
+Std Dev: 0.07001689186823983
+Min Observation: 32.237467
+Max Observation: 32.407803
+
+-------------
+

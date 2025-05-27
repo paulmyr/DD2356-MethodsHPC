@@ -382,6 +382,23 @@ Finally, the MPI-only implementations seem to perform very poorly for small-mode
 
 Thus, from this experiment, we believe that the best approach would be to use the \underline{serial} implementation for \underline{small input sizes}, then transition to the \underline{OpenMP only} approach for \underline{moderate input sizes}, and finally to switch the to the \underline{Async MPI + OpenMP} approach for \underline{large input sizes}. 
 
+\section{Appendix}
+\subsection{Std Dev, Min, Max Runtimes}
+For brevity, we did not include the std dev, min, max of the runtimes obtained in the main report itself. The most important ones, however, be found in text-format in the repository, under the \verb|misc/stats_for_nerds| directory. Below we include some of the relevant files with these stats that might be of interest.
+\begin{itemize}
+\item \verb|serial_grid_vary.txt|: Serial runtimes for different grid sizes. Plotted in Figure \ref{fig:1_serial_runtime}.
+\item \verb|omp_grid_vary.txt|: OpenMP Runtimes for different grid sizes (with 128 threads). Plotted in Figure \ref{fig:conclusion}.
+\item \verb|omp_strong_scaling.txt|: OpenMP Runtimes for Strong Scaling test.
+\item \verb|omp_weak_scaling.txt|: OpenMP Runtimes for Weak Scaling test.
+\item \verb|gpu_grid_vary.txt|: GPU Runtimes for Different grid sizes.
+\item \verb|mpi_strong_scaling.txt|: Runtimes for Strong-Scaling test of the base (sync) MPI implementation. Plotted in Figure \ref{fig:3_mpi_strong_scaling}
+\item \verb|mpi_weak_scaling.txt|: Runtimes for Weak-Scaling test of the base (sync) MPI implementation. Plotted in Figure \ref{fig:3_mpi_weak_scaling}
+\item \verb|sync_async_mpi_grid_vary.txt|: Runtimes for Base MPI (Sync) and Async (Opt 1) MPI implementation for different grid sizes using 8 processes. Plotted in Figure \ref{fig:4_opt_compare_8} and Figure \ref{fig:conclusion}.
+\item \verb|async_mpi_process.txt|: Runtimes for Async MPI (Opt 1) implementation for same input size (6.4 million elements, 1k iteration), along with the Sync MPI runtimes in the same run. Plotted in Figure \ref{fig:4_opt1} and Figure \ref{fig:4_opt_all}.
+\item \verb|async_omp_process.txt|: Runtimes for Async MPI + OpenMP (Opt 2) implementation for same input size. Plotted in Figure \ref{fig:4_opt_all}
+\item \verb|async_omp_grid_vary.txt|: Runtimes for different grid sizes for Async MPI + OpenMP (Opt) implementation. Plotted in Figure \ref{fig:conclusion}
+\end{itemize}
+
 % content end
 %###############################################################################
 

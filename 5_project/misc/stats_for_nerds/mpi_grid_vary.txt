@@ -1,0 +1,46 @@
+###### STATS FOR Sync MPI (8 Processes) RUNTIMES ######
+#### For 640 elements ####
+All Times: [19.440205, 12.955923, 14.383932]
+Mean Runtime: 15.593353333333333
+Std Dev: 2.7819062091813147
+Min Observation: 12.955923
+Max Observation: 19.440205
+
+-------------
+
+#### For 6400 elements ####
+All Times: [28.300037, 18.435593, 32.151603]
+Mean Runtime: 26.295744333333335
+Std Dev: 5.776107362821744
+Min Observation: 18.435593
+Max Observation: 32.151603
+
+-------------
+
+#### For 64000 elements ####
+All Times: [20.864851, 29.85681, 31.74492]
+Mean Runtime: 27.48886033333333
+Std Dev: 4.746884211711251
+Min Observation: 20.864851
+Max Observation: 31.74492
+
+-------------
+
+#### For 640000 elements ####
+All Times: [31.670828, 32.02236, 20.465776]
+Mean Runtime: 28.052988
+Std Dev: 5.366888181958206
+Min Observation: 20.465776
+Max Observation: 32.02236
+
+-------------
+
+#### For 6400000 elements ####
+All Times: [32.082041, 29.77505, 31.380977]
+Mean Runtime: 31.079356
+Std Dev: 0.9656718867368967
+Min Observation: 29.77505
+Max Observation: 32.082041
+
+-------------
+

@@ -77,12 +77,13 @@ def get_stats_from_dict(data_dict, data_dict_name):
     for process in sorted(process_count):
         curr_runtimes = data_dict[process]
         curr_mean, curr_std, curr_min, curr_max = np.average(curr_runtimes), np.std(curr_runtimes), min(curr_runtimes), max(curr_runtimes)
-        print(f"#### For {process} processes ####")
+        print(f"#### For {process} elements ####")
         print(f"All Times: {curr_runtimes}\nMean Runtime: {curr_mean}\nStd Dev: {curr_std}\nMin Observation: {curr_min}\nMax Observation: {curr_max}")
         mean_runtime.append(curr_mean)
         std_dev.append(curr_std)
         min_time.append(curr_min)
         max_time.append(curr_max)
+        print("\n------------------\n")
     
     return mean_runtime, std_dev, min_time, max_time
 
@@ -149,4 +150,5 @@ def plot_serial_runtime():
     plt.show()   
 
 # plot_stuff()
-plot_serial_runtime()
+# plot_serial_runtime()
+get_stats_from_dict(async_omp_mpi_runtime, "Async MPI (16 process) + OpenMP Runtime (16 threads)")

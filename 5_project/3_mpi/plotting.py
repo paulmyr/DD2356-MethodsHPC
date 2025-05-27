@@ -14,7 +14,7 @@ strong_parallel_runtimes = {
     32: [32.318019, 32.293924, 31.945332],
     64: [32.317748, 32.369135, 32.381524]
 }
-serial_runtime = np.mean([32.254506, 32.225373, 32.356388])
+serial_runtime = np.mean([32.266016, 32.375750, 32.089423])
 
 # WEAK SCALING OUTPUT
 # 100000 elements per process
@@ -56,6 +56,7 @@ def plot_serial_parallel_comparison(title, show_serial=True):
         std_dev.append(curr_std)
         min_time.append(curr_min)
         max_time.append(curr_max)
+        print("\n-------------\n")
 
     # TODO: Maybe add plot lines for std deviation/error? 
     ax.plot(process_count, mean_runtime, marker='o', linestyle='-', linewidth=2,
@@ -96,6 +97,7 @@ def plot_weak_scaling():
         std_dev.append(curr_std)
         min_time.append(curr_min)
         max_time.append(curr_max)
+        print("\n-----------------\n")
 
     # TODO: Maybe add plot lines for std deviation/error? 
     ax.plot(process_count, mean_runtime, marker='o', linestyle='-', linewidth=2,
@@ -121,7 +123,7 @@ def plot_weak_scaling():
 
 
 # Strong Scaling
-# plot_serial_parallel_comparison(title="Strong Scaling Plot", show_serial=True)
+plot_serial_parallel_comparison(title="Strong Scaling Plot", show_serial=True)
 # Weak Scaling
-plot_weak_scaling()
+# plot_weak_scaling()
 

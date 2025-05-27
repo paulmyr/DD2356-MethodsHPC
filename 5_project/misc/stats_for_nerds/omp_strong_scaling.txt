@@ -1,0 +1,82 @@
+###### STATS FOR STRONG-SCALING RUNTIMES ######
+#### For 1 threads ####
+All Times: [44.945557, 44.879691, 44.90381]
+Mean Runtime: 44.909686
+Std Dev: 0.027208797854125517
+Min Observation: 44.879691
+Max Observation: 44.945557
+
+---------------------
+
+#### For 2 threads ####
+All Times: [22.672265, 22.753485, 22.737768]
+Mean Runtime: 22.721172666666664
+Std Dev: 0.0351731518475232
+Min Observation: 22.672265
+Max Observation: 22.753485
+
+---------------------
+
+#### For 4 threads ####
+All Times: [11.51603, 11.49627, 11.496318]
+Mean Runtime: 11.502872666666669
+Std Dev: 0.009303660259393718
+Min Observation: 11.49627
+Max Observation: 11.51603
+
+---------------------
+
+#### For 8 threads ####
+All Times: [5.667573, 5.685608, 5.672346]
+Mean Runtime: 5.675175666666667
+Std Dev: 0.007629791012137248
+Min Observation: 5.667573
+Max Observation: 5.685608
+
+---------------------
+
+#### For 16 threads ####
+All Times: [2.860172, 2.855245, 2.86361]
+Mean Runtime: 2.8596756666666665
+Std Dev: 0.003432983768612285
+Min Observation: 2.855245
+Max Observation: 2.86361
+
+---------------------
+
+#### For 32 threads ####
+All Times: [1.444306, 1.445751, 1.451835]
+Mean Runtime: 1.4472973333333332
+Std Dev: 0.003262393838204598
+Min Observation: 1.444306
+Max Observation: 1.451835
+
+---------------------
+
+#### For 64 threads ####
+All Times: [0.758845, 0.750487, 0.752842]
+Mean Runtime: 0.754058
+Std Dev: 0.00351880974194399
+Min Observation: 0.750487
+Max Observation: 0.758845
+
+---------------------
+
+#### For 128 threads ####
+All Times: [0.464932, 0.455544, 0.456503]
+Mean Runtime: 0.458993
+Std Dev: 0.004217717471176408
+Min Observation: 0.455544
+Max Observation: 0.464932
+
+---------------------
+
+#### For 256 threads ####
+All Times: [0.475227, 0.473653, 0.475763]
+Mean Runtime: 0.47488099999999994
+Std Dev: 0.0008954745483075841
+Min Observation: 0.473653
+Max Observation: 0.475763
+
+---------------------
+

@@ -1,0 +1,46 @@
+###### STATS FOR GPU Runtime RUNTIMES ######
+#### For 640 elements ####
+All Times: [0.702867, 0.346366, 0.345958]
+Mean Runtime: 0.4650636666666667
+Std Dev: 0.16815243208536185
+Min Observation: 0.345958
+Max Observation: 0.702867
+
+---------------------
+
+#### For 6400 elements ####
+All Times: [0.371401, 0.372639, 0.376987]
+Mean Runtime: 0.3736756666666667
+Std Dev: 0.0023953924289954985
+Min Observation: 0.371401
+Max Observation: 0.376987
+
+---------------------
+
+#### For 64000 elements ####
+All Times: [0.641372, 0.647557, 0.641322]
+Mean Runtime: 0.643417
+Std Dev: 0.002927493239388744
+Min Observation: 0.641322
+Max Observation: 0.647557
+
+---------------------
+
+#### For 640000 elements ####
+All Times: [2.544907, 2.541085, 2.554037]
+Mean Runtime: 2.546676333333333
+Std Dev: 0.005433628703628023
+Min Observation: 2.541085
+Max Observation: 2.554037
+
+---------------------
+
+#### For 6400000 elements ####
+All Times: [21.204373, 20.643135, 20.64045]
+Mean Runtime: 20.829319333333334
+Std Dev: 0.2652052563158494
+Min Observation: 20.64045
+Max Observation: 21.204373
+
+---------------------
+

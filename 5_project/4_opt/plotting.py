@@ -85,22 +85,29 @@ def get_base_mpi_means():
     #     min_time.append(curr_min)
     #     max_time.append(curr_max)    
 
-def get_stats_from_dict(data_dict, data_dict_name):
-    process_count = list(data_dict.keys())
+def get_stats_from_dict(data_dict, data_dict_name, entity="processes"):
+    entities = list(data_dict.keys())
     mean_runtime, std_dev, min_time, max_time = [], [], [], []
     print(f"###### STATS FOR {data_dict_name} RUNTIMES ######")
 
-    for process in sorted(process_count):
-        curr_runtimes = data_dict[process]
+    for curr_entity in sorted(entities):
+        curr_runtimes = data_dict[curr_entity]
         curr_mean, curr_std, curr_min, curr_max = np.average(curr_runtimes), np.std(curr_runtimes), min(curr_runtimes), max(curr_runtimes)
-        print(f"#### For {process} processes ####")
+        print(f"#### For {curr_entity} {entity} ####")
         print(f"All Times: {curr_runtimes}\nMean Runtime: {curr_mean}\nStd Dev: {curr_std}\nMin Observation: {curr_min}\nMax Observation: {curr_max}")
         mean_runtime.append(curr_mean)
         std_dev.append(curr_std)
         min_time.append(curr_min)
         max_time.append(curr_max)
+        print("\n-------------\n")
     
     return mean_runtime, std_dev, min_time, max_time
+
+# get_stats_from_dict(base_mpi_8_cores, "Sync MPI (8 Processes)", "elements")
+# get_stats_from_dict(base_mpi_runtimes, "Sync MPI", "processes")
+# get_stats_from_dict(async_only_runtimes, "Async MPI", "processes")
+# get_stats_from_dict(async_only_8_cores, "Async MPI (8 Processes)", "elements")
+get_stats_from_dict(async_omp_runtimes, "Async MPI + OpenMP (16 threads/process)", "processes")
 
 def base_mpi_vs_async_mpi():
     base_mpi_means = get_base_mpi_means()
@@ -227,7 +234,7 @@ def compare_base_async_only_8_process():
 # Base MPI vs Async + OMP MPI across 4 Nodes
 # base_mpi_vs_async_omp_mpi()
 # # Plot of Base and both optimizations
-plot_everything()
+# plot_everything()
 # Comparison of Base and Async MPI on different grid sizes
 # compare_base_async_only_8_process()
 
