@@ -203,7 +203,7 @@ The code for our project can be found at this location: \url{https://github.com/
 \section{Serial Implementation and Correctness}
 The serial implementation provides our optimization baseline. 
 \subsection{Serial Runtimes}
-We varied the grid size on dardel on 1 node and examined the runtimes of the provided serial implementation. Figure \ref{fig:1_serial_runtime} shows the runtimes obtained. The runtimes increase exponentially (linearly on a logarithmic scale) with an exponential increase in the input size. The \textit{input size} throughout this report refers to the number of elements in the \verb|E| and \verb|H| lists. 
+We varied the grid size on dardel on 1 node and examined the runtimes of the provided serial implementation. Figure \ref{fig:1_serial_runtime} shows the runtimes obtained. The runtimes increase exponentially (linearly on a logarithmic scale) with an exponential increase in the input size. The \textit{input size} throughout this report refers to the number of elements in the \verb|E| and \verb|H| lists. The Slurm script required to generate this plot along with the runtimes can be found in the \verb|1_baseline| directory of the repository.
 
 \begin{figure}[H]
   \centering
