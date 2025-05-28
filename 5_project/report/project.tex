@@ -223,8 +223,8 @@ For both verification methods our results comply with the given code, yielding i
 Due to the scaling these e-fields look like a single Dirac-impulse instead of two pulses. 
 The numerical results in Table \ref{tab:5_numerical_verification} show that there are indeed two independent and symmetrical peaks, which are identical with the estimated peaks of the serial implementation.
 
-Additionally we checked for different \verb|NX| sizes. Figure \ref{fig:5_serial_verification} shows that for large enough \verb|NX| (>>400) the simulation result of the given reference simulation is stable and yielding two symmetrical peaks, while for small NX (<=400) this tends to shift to pointsymmetrical peaks, which we assume is due to the absorbing boundary conditions interfering.
-To adjust for this, we chose sufficiently large \verb|NX| to ensure correctness and large enough array sizes to generate computational load for our implementations.
+Additionally we checked for different \verb|NX| sizes. Figure \ref{fig:5_serial_verification} shows that for large enough grid sizes (\verb|NX|) (>>400) the simulation result of the given reference simulation is stable and yielding two symmetrical peaks, while for small grid sizes ($NX <=400$) this tends to shift to pointsymmetrical peaks, which we assume is due to the absorbing boundary conditions interfering.
+To adjust for this, we chose sufficiently large grid sizes ($NX >> 400$) to ensure correctness and large enough array sizes to generate computational load for our implementations.
 
 \section{Parallelism through OpenMP}
 
@@ -426,7 +426,7 @@ The final e-field of all implementations is displayed in the following plot.
 \end{figure}
 
 Numerical results for the peaks of the final e-fields are shown in the table below and yielding the identical values and indices (x-Axis) as the estimated peak of the serial implementation.
-NX is set to 6.4 * 10e6.
+NX is set to 6.4e6.
 \begin{table}[H]
   \centering
   \caption{Runtime values and indices for different implementations}
@@ -467,11 +467,11 @@ NX is set to 6.4 * 10e6.
   \end{tabular}
 \end{table}
 
-Final e-field results of serial reference for varying NX sizes.
+Final e-field results of serial reference for different grid sizes (NX).
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.9\textwidth]{../images/5_test/display_field_subplots.png}
-  \caption{Serial simulation for varying NX}
+  \caption{Serial simulation for different grid sizes (NX)}
   \label{fig:5_serial_verification}
 \end{figure}
 
