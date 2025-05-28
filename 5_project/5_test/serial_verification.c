@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-#define NX 400         // Total number of spatial points
+#define NX 640000         // Total number of spatial points
 #define NSTEPS 1000    // Number of time steps
 #define DX 1.0         // Spatial step size
 #define DT 0.5         // Time step size (should satisfy the CFL condition)
@@ -53,17 +53,18 @@ int main() {
     initialize_fields(E, H);
 
     FILE *measurement_file;
-    measurement_file = fopen("5_project/5_test/serial_measurements.txt","w");
+    measurement_file = fopen("5_project/5_test/640000.txt","w");
     // Main FDTD loop
     for (int t = 0; t < NSTEPS; t++) {
         
         // VERIFICATION START
         // Verification at various time steps
-        if (t % (NSTEPS/NVERIFICATION) == 0) {
-        fprintf(measurement_file, "Field at NX = %d \n", t);
-        for (int i = 0; i < NX; i++) {
-            fprintf(measurement_file, "%f ", E[i]);        
-            }
+        if (t == NSTEPS-1) {
+            fprintf(measurement_file, "Field at NX = %d \n", t+1);
+            // one offset due to start at 0
+            for (int i = 0; i < NX; i++) {
+                fprintf(measurement_file, "%f ", E[i]);
+                }
         }
         fprintf(measurement_file, "\n");
         // VERIFICATION END

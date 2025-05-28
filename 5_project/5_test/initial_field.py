@@ -2,7 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import multiprocessing
 
-# Constants
 DX = 1.0  
 DT = 1.0
 PI = 3.141592653589793

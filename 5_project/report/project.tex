@@ -219,8 +219,12 @@ We check the implementation correctness of our optimizations against the baselin
 To implement this, the e-field values are printed into separate files and matched against each other.
 Additionally the peak position at the final time step is validated against the peak position of the serial implementation. 
 
-For both verification methods our results comply with the given code, yielding identical results and showing symmetrical peaks.
-\todo{If plots of the final e-field wave are shown, it can be added, that those look like a single Dirac-Impulse instead of two pulses due to scaling, which is shown and proven in the repo. Otherwise this can be removed}
+For both verification methods our results comply with the given code, yielding identical results. Figure \ref{fig:5_verification} shows the final e-field for all implementations. 
+Due to the scaling these e-fields look like a single Dirac-impulse instead of two pulses. 
+The numerical results in Table \ref{tab:5_numerical_verification} show that there are indeed two independent and symmetrical peaks, which are identical with the estimated peaks of the serial implementation.
+
+Additionally we checked for different \verb|NX| sizes. Figure \ref{fig:5_serial_verification} shows that for large enough \verb|NX| (>>400) the simulation result of the given reference simulation is stable and yielding two symmetrical peaks, while for small NX (<=400) this tends to shift to pointsymmetrical peaks, which we assume is due to the absorbing boundary conditions interfering.
+To adjust for this, we chose sufficiently large \verb|NX| to ensure correctness and large enough array sizes to generate computational load for our implementations.
 
 \section{Parallelism through OpenMP}
 
@@ -410,6 +414,65 @@ For brevity, we did not include the std dev, min, max of the runtimes obtained i
 \item \verb|async_omp_process.txt|: Runtimes for Async MPI + OpenMP (Opt 2) implementation for same input size. Plotted in Figure \ref{fig:4_opt_all}
 \item \verb|async_omp_grid_vary.txt|: Runtimes for different grid sizes for Async MPI + OpenMP (Opt) implementation. Plotted in Figure \ref{fig:conclusion}
 \end{itemize}
+
+\subsection{Verification results}
+
+The final e-field of all implementations is displayed in the following plot.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{../images/5_test/verification_plot.png}
+  \caption{Serial Implementation Runtime}
+  \label{fig:5_verification}
+\end{figure}
+
+Numerical results for the peaks of the final e-fields are shown in the table below and yielding the identical values and indices (x-Axis) as the estimated peak of the serial implementation.
+\begin{table}[H]
+  \centering
+  \caption{Runtime values and indices for different implementations}
+  \label{tab:5_numerical_verification}
+  
+  \begin{tabular}{|l|c|c|}
+    \multicolumn{3}{c}{\textbf{OpenMP Implementation}} \\
+    \hline
+    Implementation & Value & Indices \\
+    \hline
+    Serial   & 0.499674 & [3199500, 3200500] \\
+    Parallel & 0.499674 & [3199500, 3200500] \\
+    OMP      & 0.499674 & [3199500, 3200500] \\
+    \hline
+  \end{tabular}
+  \vspace{1em}
+
+  \begin{tabular}{|l|c|c|}
+    \multicolumn{3}{c}{\textbf{MPI Implementation}} \\
+    \hline
+    Implementation & Value & Indices \\
+    \hline
+    Serial   & 0.499674 & [3199500, 3200500] \\
+    Parallel & 0.499674 & [3199500, 3200500] \\
+    \hline
+  \end{tabular}
+  \vspace{1em}
+
+  \begin{tabular}{|l|c|c|}
+    \multicolumn{3}{c}{\textbf{Optimization Implementation}} \\
+    \hline
+    Implementation & Value & Indices \\
+    \hline
+    Serial   & 0.499674 & [3199500, 3200500] \\
+    Parallel & 0.499674 & [3199500, 3200500] \\
+    OMP      & 0.499674 & [3199500, 3200500] \\
+    \hline
+  \end{tabular}
+\end{table}
+
+Final e-field results of serial reference for varying NX sizes.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{../images/5_test/display_field_subplots.png}
+  \caption{Serial simulation for varying NX}
+  \label{fig:5_serial_verification}
+\end{figure}
 
 % content end
 %###############################################################################
