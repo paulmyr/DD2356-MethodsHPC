@@ -426,6 +426,7 @@ The final e-field of all implementations is displayed in the following plot.
 \end{figure}
 
 Numerical results for the peaks of the final e-fields are shown in the table below and yielding the identical values and indices (x-Axis) as the estimated peak of the serial implementation.
+NX is set to 6.4 * 10e6.
 \begin{table}[H]
   \centering
   \caption{Runtime values and indices for different implementations}
@@ -437,7 +438,7 @@ Numerical results for the peaks of the final e-fields are shown in the table bel
     Implementation & Value & Indices \\
     \hline
     Serial   & 0.499674 & [3199500, 3200500] \\
-    Parallel & 0.499674 & [3199500, 3200500] \\
+    GPU      & 0.499674 & [3199500, 3200500] \\
     OMP      & 0.499674 & [3199500, 3200500] \\
     \hline
   \end{tabular}
@@ -459,9 +460,9 @@ Numerical results for the peaks of the final e-fields are shown in the table bel
     \hline
     Implementation & Value & Indices \\
     \hline
-    Serial   & 0.499674 & [3199500, 3200500] \\
-    Parallel & 0.499674 & [3199500, 3200500] \\
-    OMP      & 0.499674 & [3199500, 3200500] \\
+    Serial                    & 0.499674 & [3199500, 3200500] \\
+    Parallel Async            & 0.499674 & [3199500, 3200500] \\
+    Parallel Async w. OMP     & 0.499674 & [3199500, 3200500] \\
     \hline
   \end{tabular}
 \end{table}
