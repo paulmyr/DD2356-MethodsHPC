@@ -149,6 +149,64 @@ def plot_serial_runtime():
     plt.yscale("log")
     plt.show()   
 
+def bar_plot_everything():
+    serial, _, _, _ = get_stats_from_dict(serial_runtimes, "Serial")
+    openmp, _, _, _ = get_stats_from_dict(omp_runtimes, "OpenMP")
+    gpu, _, _, _ = get_stats_from_dict(gpu_runtimes, "GPU")
+    mpi, _, _, _ = get_stats_from_dict(mpi_runtime, "Sync MPI")
+    async_mpi, _, _, _ = get_stats_from_dict(async_mpi_runtime, "Async MPI")
+    async_omp_mpi, _, _, _ = get_stats_from_dict(async_omp_mpi_runtime, "Async MPI + Omp")
+
+    # Get the last 2 runtimes for the last 2 grid sizes
+    serial, openmp, gpu, mpi, async_mpi, async_omp_mpi = serial[-2:], openmp[-2:], gpu[-2:], mpi[-2:], async_mpi[-2:], async_omp_mpi[-2:]
+    grid_sizes = ["640k", "6.4 million"]
+    keys = ["Serial", "Sync MPI", "Aync MPI", "GPU", "OpenMP", "Async MPI + Omp"]
+    values = [serial, mpi, async_mpi, gpu,  openmp, async_omp_mpi]
+
+
+
+    # wtimes = {}
+    # for key, value in wtime_dict.items():
+    #     if key in key_list:
+    #         wtimes[key] = value[len(value)-last_n:]
+
+    # grid_sizes = required_sizes
+    # if not grid_sizes:
+    #     last_size = 2**12
+    #     grid_sizes = []
+
+    #     for _ in range(last_n):
+    #         grid_sizes.append(last_size)
+    #         last_size = last_size // 2
+    #     grid_sizes = sorted(grid_sizes)
+    num_bars = len(values[0])
+
+    x_pos = np.arange(len(keys))
+
+    bar_width = 0.2
+
+    _, ax = plt.subplots()
+
+    for i in range(num_bars):
+        bars = ax.bar(x_pos + i * bar_width, [v[i] for v in values], bar_width, label=f"{grid_sizes[i]}")
+
+        for bar in bars:
+            height = bar.get_height()  # Get the height of the bar (value)
+            ax.text(bar.get_x() + bar.get_width() / 2, height, f"{str(round(height,1))}s", ha='center', va='bottom', fontsize=10)
+
+    ax.set_xticks(x_pos + (num_bars - 1) * bar_width / 2)
+    ax.set_xticklabels(keys)
+
+    ax.set_xlabel("Implementation")
+    ax.set_ylabel("Runtime (seconds)")
+    ax.set_title("Runtime for Largest Grid Sizes")
+
+    ax.legend()
+
+    plt.tight_layout()
+    plt.show()
+
 # plot_stuff()
 # plot_serial_runtime()
-get_stats_from_dict(async_omp_mpi_runtime, "Async MPI (16 process) + OpenMP Runtime (16 threads)")
+# get_stats_from_dict(async_omp_mpi_runtime, "Async MPI (16 process) + OpenMP Runtime (16 threads)")
+bar_plot_everything()

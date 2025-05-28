@@ -360,13 +360,25 @@ Given this code, we investigated the impact of spreading the computation on up-t
 Figure \ref{fig:4_opt_all} shows the comparison between the Async MPI + OpenMP implementation with the other two MPI implementations discussed earlier. The problem size is kept constant here (6.4 million elements, 1k iterations). We can see that unlike the Async-only MPI implementation (Optimization 1), the performance of the Async MPI + OpenMP implementation (Optimization 2) continues to improve as we go from 8 processes to 16 processes. One explanation for this could be that the use of OpenMP threads in the compute portion of the communication-compute overlap drastically accelerates the overall runtime of \textit{each step} in the overall simulation. Thus, despite the compute part becoming faster (because of the use of OpenMP) and consequently there being less of an \textit{overlap} between the compute and the communication, Optimization 2 makes each step of the compute more efficient, thus consistently reducing the runtime.
 
 \section{Conclusion}
-In the previous sections, we discussed the runtimes of the different implementations and optimizations of the 1D FDTD simulation. Here, we present a final graph with the runtimes of each of the implementations discussed plotted against the serial runtime as we increase the grid size. For implementations that can have different configurations (such as: different number of threads in OpenMP), we have plotted the runtimes of the best configuration observed while examining the section. 
+In the previous sections, we discussed the runtimes of the different implementations and optimizations of the 1D FDTD simulation. Here, we present a final graph with the runtimes of each of the implementations discussed plotted against the serial runtime as we increase the grid size. For implementations that can have different configurations (such as: different number of threads in OpenMP), we have plotted the runtimes of the best configuration observed while examining the section. Figure \ref{fig:conclusion_line_plot} shows a line-plot for runtimes of different implementations on varying grid-sizes, and Figure \ref{fig:conclusion_bar_graph} displays this runtime in a bar-graph format to truly highlight the performance gains.
 
 \begin{figure}[H]
-  \centering
-  \includegraphics[width=0.9\textwidth]{../images/final_everything_plot.png}
-  \caption{Concluding Results}
-   \label{fig:conclusion}
+     \centering
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{../images/final_everything_plot.png}
+         \caption{Runtime for Different Grid Sizes}
+         \label{fig:conclusion_line_plot}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{../images/final_everything_bar.png}
+         \caption{Bar Plot for Largest Grid Sizes}
+         \label{fig:conclusion_bar_graph}
+     \end{subfigure}
+     \caption{Concluding Results}
+     \label{fig:conclusion}
 \end{figure}
 
 \todo{Do we really need to explain any of this? Keeping this here so we can remove later.}
