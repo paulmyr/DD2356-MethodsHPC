@@ -80,6 +80,7 @@
 
 \usepackage{wasysym}
 
+\usepackage{multicol}
 \usepackage{titling}
 \usepackage{titlesec}
 \usepackage[nocheck]{fancyhdr}
@@ -230,57 +231,7 @@ The code for our project can be found at this location: \url{https://github.com/
 \listoftodos
 \newpage
 
-\section{Serial Implementation and Correctness}
-The serial implementation provides our optimization baseline. 
-\subsection{Serial Runtimes}
-We varied the grid size on dardel on 1 node and examined the runtimes of the provided serial implementation. Figure \ref{fig:1_serial_runtime} shows the runtimes obtained. The runtimes increase exponentially (linearly on a logarithmic scale) with an exponential increase in the input size. The \textit{input size} throughout this report refers to the number of elements in the \verb|E| and \verb|H| lists. The Slurm script required to generate this plot along with the runtimes can be found in the \verb|1_baseline| directory of the repository.
 
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.9\textwidth]{../images/1_serial/serial_runtime.png}
-  \caption{Serial Implementation Runtime}
-  \label{fig:1_serial_runtime}
-\end{figure}
-
-The results in Figure \ref{fig:1_serial_runtime} are within our expecetations, as we would expect the amount of work to be done (without any parallel intervention) to increase in proportion with the increase in the input size.  
-
-\subsection{Correctness}
-We check the implementation correctness of our optimizations against the baseline implementation by visual inspection of the intermediate and final values of the e-field.
-To implement this, the e-field values are printed into separate files and matched against each other.
-Additionally the peak position at the final time step is validated against the peak position of the serial implementation. 
-
-For both verification methods our results comply with the given code, yielding identical results. Figure \ref{fig:5_verification} shows the final e-field for all implementations. 
-Due to the scaling these e-fields look like a single Dirac-impulse instead of two pulses. 
-The numerical results in Table \ref{tab:5_numerical_verification} show that there are indeed two independent and symmetrical peaks, which are identical with the estimated peaks of the serial implementation.
-
-Additionally we checked for different \verb|NX| sizes. Figure \ref{fig:5_serial_verification} shows that for large enough grid sizes ($NX >> 400$)\todo{Is greater greater the right formulation here?} the simulation result of the given reference simulation is stable and yielding two symmetrical peaks, while for small grid sizes ($NX <= 400$) this tends to shift to pointsymmetrical peaks, which we assume is due to the absorbing boundary conditions interfering.
-To adjust for this, we chose sufficiently large grid sizes ($NX >> 400$) to ensure correctness and large enough array sizes to generate computational load for our implementations.
-
-\section{Parallelism through OpenMP}
-The code for this section is present in the \verb|2_openmp| directory.
-The \verb|dardel_runtimes| subdirectory contains the runtimes plotted in the graphs below, which were averages across 3 runs.
-Additionally, the \verb|outputs/| directory contains the snapshots of \verb|E| and \verb|H| at different time-steps for the serial and parallel implementation(s), which were used to verify correctness using the \verb|verify_outputs.sh| script.
-
-\subsection{Implementation description}
-We started the optimisation process using shared memory parallelisation.
-The main loop of the computation exists of two update methods, each of them performs a simple \verb|for-loop|.
-We noticed that all iterations of the loop are embarassingly parallel.
-The easiest parallisation strategie is to split up the iterations on multiple workers.
-Since we assume a shared memory architecture, communication is needed, in the sense that workers have to exchange information.
-
-OpenMP provides a very simple but effective directive for exactly this situation: \verb|#pragma omp parallel for|.\\
-When checking on dardel, which scheduling is used as a default, we found that the default is\\
-\verb|#pragma omp parallel for shedule(static, 0)|, meaning that the scheduling used is a static scheduler with unspecified chunk size.
-We tried different scheduling approaches, different chunk sizes or initialising only a single parallel region once; however, we were not able to outperform this first, most simplest approach.
-In the OMP documentation\footnote{\url{https://www.openmp.org/spec-html/5.0/openmpsu41.html\#x64-1290002.9.2}} we find:
-
-\begin{quote}
-When kind is static, iterations are divided into chunks of size chunk\_size, and the chunks are assigned to the threads in the team in a round-robin fashion in the order of the thread number. Each chunk contains chunk\_size iterations, except for the chunk that contains the sequentially last iteration, which may have fewer iterations.
-When no chunk\_size is specified, the iteration space is divided into chunks that are approximately equal in size, and at most one chunk is distributed to each thread. The size of the chunks is unspecified in this case.
-\end{quote}
-This means, that the chunk size is approximatly $NX / NThreads$.
-
-\subsection{Strong and Weak Scaling}
 \begin{figure}
      \centering
      \begin{subfigure}[b]{0.45\textwidth}
@@ -300,15 +251,69 @@ This means, that the chunk size is approximatly $NX / NThreads$.
      \label{fig:2_omp_strong_weak}
 \end{figure}
 
+\begin{multicols}{2}
+\section{Serial Implementation and Correctness}
+The serial implementation provides our optimization baseline. 
+
+\subsection{Serial Runtimes}
+We varied the grid size on dardel on 1 node and examined the runtimes of the provided serial implementation. Figure \ref{fig:1_serial_runtime} shows the runtimes obtained. The runtimes increase exponentially (linearly on a logarithmic scale) with an exponential increase in the input size. The \textit{input size} throughout this report refers to the number of elements in the \verb|E| and \verb|H| lists. The Slurm script required to generate this plot along with the runtimes can be found in the \verb|1_baseline| directory of the repository.
+
+
+The results in Figure \ref{fig:1_serial_runtime} are within our expecetations, as we would expect the amount of work to be done (without any parallel intervention) to increase in proportion with the increase in the input size.  
+
+\subsection{Correctness}
+We check the implementation correctness of our optimizations against the baseline implementation by visual inspection of the intermediate and final values of the e-field.
+To implement this, the e-field values are printed into separate files and matched against each other.
+Additionally the peak position at the final time step is validated against the peak position of the serial implementation. 
+
+For both verification methods our results comply with the given code, yielding identical results. Figure \ref{fig:5_verification} shows the final e-field for all implementations. 
+Due to the scaling these e-fields look like a single Dirac-impulse instead of two pulses. 
+The numerical results in Table \ref{tab:5_numerical_verification} show that there are indeed two independent and symmetrical peaks, which are identical with the estimated peaks of the serial implementation.
+
+Additionally we checked for different \verb|NX| sizes. Figure \ref{fig:5_serial_verification} shows that for large enough grid sizes ($NX >> 400$)\todo{Is greater greater the right formulation here?} the simulation result of the given reference simulation is stable and yielding two symmetrical peaks, while for small grid sizes ($NX <= 400$) this tends to shift to pointsymmetrical peaks, which we assume is due to the absorbing boundary conditions interfering.
+To adjust for this, we chose sufficiently large grid sizes ($NX >> 400$) to ensure correctness and large enough array sizes to generate computational load for our implementations.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.45\textwidth]{../images/1_serial/serial_runtime.png}
+  \caption{Serial Implementation Runtime}
+  \label{fig:1_serial_runtime}
+\end{figure}
+
+\section{Parallelism through OpenMP}
+\label{sec:omp}
+
+The code for this section is present in the \verb|2_openmp| directory.
+The \verb|dardel_runtimes| subdirectory contains the runtimes plotted in the graphs below, which were averages across 3 runs.
+Additionally, the \verb|outputs/| directory contains the snapshots of \verb|E| and \verb|H| at different time-steps for the serial and parallel implementation(s), which were used to verify correctness using the \verb|verify_outputs.sh| script.
+
+\subsection{Implementation description}
+\label{sec:omp:implementation}
+We started the optimisation process using shared memory parallelisation.
+The main loop of the computation exists of two update methods, each of them performs a simple \verb|for-loop|.
+We noticed that all iterations of the loop are embarassingly parallel.
+The easiest parallisation strategie is to split up the iterations on multiple workers.
+Since we assume a shared memory architecture, communication is needed, in the sense that workers have to exchange information.
+
+OpenMP provides a very simple but effective directive for exactly this situation: \verb|#pragma omp parallel for|.\\
+When checking on dardel, which scheduling is used as a default, we found that the default is\\
+\verb|#pragma omp parallel for shedule(static, 0)|, meaning that the scheduling used is a static scheduler with unspecified chunk size.
+We tried different scheduling approaches, different chunk sizes or initialising only a single parallel region once; however, we were not able to outperform this first, most simplest approach.
+In the OMP documentation\footnote{\url{https://www.openmp.org/spec-html/5.0/openmpsu41.html\#x64-1290002.9.2}} we find:
+
+\begin{quote}
+When kind is static, iterations are divided into chunks of size chunk\_size, and the chunks are assigned to the threads in the team in a round-robin fashion in the order of the thread number. Each chunk contains chunk\_size iterations, except for the chunk that contains the sequentially last iteration, which may have fewer iterations.
+When no chunk\_size is specified, the iteration space is divided into chunks that are approximately equal in size, and at most one chunk is distributed to each thread. The size of the chunks is unspecified in this case.
+\end{quote}
+This means, that the chunk size is approximatly $NX / NThreads$.
+\subsection{Strong and Weak Scaling}
+
 We performed two types of runtime tests: strong and weak scaling.
 Figure \ref{fig:2_omp_strong_weak} displays the runtimes we measured using the static scheduling.
 
-The strong scaling was performed by allocating one full node on dardel, meaning
-\begin{itemize}
-\item one node
-\item one process per node
-\item 256 cpus per process
-\end{itemize}
+The strong scaling was performed by allocating one full node on dardel, meaning one node, one process per node
+and 256 cpus per process.
+
 The only parameter changed was the \verb|OMP_NUM_THREADS| environment variable.
 Each configuration was run three times, we display the average runtime in the plot.
 The grid size for all measurements was performed with $NX = 6.4 * 10^6$, $NSTEPS = 1000$ and the \verb|OMP_NUM_THREADS| $\in [2^0, 2^1, ..., 2^8]$.
@@ -331,9 +336,9 @@ There is not much reason why smaller chunk sizes would outperform bigger ones, w
 In the worst case, for very small chunk sizes, it mostly interferes with cache access patterns.
 
 To correctly interpret the weak scheduling runtimes, it is important to understand the topology of a compute node on dardel.
-\begin{figure}
+\begin{figure}[H]
      \centering
-     \includegraphics[width=\textwidth]{../images/2_openmp/node_topology.png}
+     \includegraphics[width=0.45\textwidth]{../images/2_openmp/node_topology.png}
      \caption{Dardel node topology. Image taken from 'Dardel sustainability at a glance'\cite{Barth2023}}
      \label{fig:dardel_topo}
 \end{figure}
@@ -355,13 +360,41 @@ This is also expected, because the physical core limit has been reached, and now
 Under the assumption that each of the previous 128 threads has a high cpu load, making use of virtual cores has a small effect on the performane.
 
 \section{OpenMP GPU Hand-off}
+\label{sec:gpu}
 The code for this section is present in the \verb|2_openmp| directory.
 The \verb|dardel_runtimes| subdirectory contains the runtimes plotted in the graphs below, which were averages across 3 runs.
 Additionally, the \verb|outputs/| directory contains the snapshots of \verb|E| and \verb|H| at different time-steps for the serial and parallel implementation(s), which were used to verify correctness using the \verb|verify_outputs.sh| script.
 
 \subsection{Implementation Description}
+\label{sec:gpu:implementation}
+The approach is the same as described in section \ref{sec:omp:implementation}.
+However, this time we use the directive that tells omp to hand off the computation to the GPU.
+The complete directive can be found in listing \ref{lst:gpu-handoff} in the appendix.\\
+\verb|#pragma omp target teams distribute| signals omp to use the gpu, whereas \\
+\verb|map(to : E[0 : NX]) map(tofrom : H[0 : NX])| specifies which data needs to be copied to the GPU and which data has to be copied from the GPU back to RAM. In this for loop we update the \verb|H| array, therefore it is sufficient to copy \verb|E| to the GPU and not copy it back to memory --- for \verb|H| we copy to and from the GPU.
+
 \subsection{Runtimes}
+\begin{figure}[H]
+     \centering
+     \includegraphics[width=0.45\textwidth]{../images/2_openmp/gpu_comparison.png}
+     \caption{GPU runtime scaling over different grid sizes.}
+     \label{fig:2_gpu_scaling}
+\end{figure}
+We performed all runtime tests on the GPU partition of dardel.
+We allocated a single node, single process per node, single cpu per process as well as one GPU.
+Figure \ref{fig:2_gpu_scaling} displays the runtime over different grid sizes, that we achieved the experiment setup described above.
+A trend is clearly visible, for small grid sizes the runtime differences are minimal, however for bigger grid sizes we start to see big improvement in runtime.
+It is important to note that the grid sizes for this problem are still realtively small.
+We restricted oursleves to not overly congest the system; however, we do expect the trend visible continue for larger, more mature grid sizes.
+
 \subsection{Discussion}
+We expect the GPU runtimes to be much more competitve to the other optimisation methods that we present in this report.
+However, for the grid sizes used in our experiments, the GPU hand-off performed not as efficiently.
+We contribute this to the fact that the problem sizes for our experiments where still to small, making the overhead of copying data from and to the GPU the main bottleneck of the computation.
+Also, increasing the number of loop iterations (increasing \verb|NSTEPS|) of the computation would probably aid the GPU computation a lot compared to the serial computation, since the copy operation is only performed once before and after the loop, effectivly reducing the relative overhead.
+
+There is still a lot of optimisation potential using the GPU, however, we did not focus on that more in this report, since this is not the main goal of this course.
+Future work (maybe in the context of the applied GPU programming course) could further investigate this potential.
 
 \section{Parallelism through MPI}
 \label{sec:3_mpi}
@@ -379,11 +412,9 @@ After this, the following three steps are performed at each step of the update-l
 \end{itemize}
 
 Note that here, all halo-cell exchanges are performed through \underline{blocking, synchronous} communication. Finally, once the computation loop is complete, we add a barrier to ensure that all processes agree to completing all steps of the computation before proceeding. After this barrier, we gather the results of the local \verb|E| and \verb|H| arrays from each process in to a global \verb|E| and \verb|H| grid (respectively) at the rank 0 process in \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/5_project/3_mpi/fdtd_mpi.c#L108}{this} function. This can then be printed to file for diagnostic purposes if needed. The full-code for our implmenetation briefly described above can be found in the \verb|fdtd_mpi.c| file \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/5_project/3_mpi/fdtd_mpi.c}{here}.
+\end{multicols}
 
-\subsection{Strong and Weak Scaling + Communication Overhead}
-\label{sec:3_mpi_analysis}
-
-\begin{figure}[H]
+\begin{figure}
      \centering
      \begin{subfigure}[b]{0.45\textwidth}
          \centering
@@ -402,6 +433,10 @@ Note that here, all halo-cell exchanges are performed through \underline{blockin
      \label{fig:3_mpi_strong_weak}
 \end{figure}
 
+\begin{multicols}{2}
+\subsection{Strong and Weak Scaling + Communication Overhead}
+\label{sec:3_mpi_analysis}
+
 The strong and weak scaling plot for the implementation can be found in Figure \ref{fig:3_mpi_strong_weak}. The configurations used to generate these runtimes can be found in the \verb|run_strong_scaling.sh| and \verb|run_weak_scaling.sh| files.
 
 From Figure \ref{fig:3_mpi_strong_scaling}, we see worse runtimes for 1 or 2 processes, which could be attributed to the greater MPI overhead compared to the benefits of the limited parallelism through 1 or 2 processes. As the number of processes increase, the runtimes are marginally better -- achieving their lowest at 4 processes and then increasing till they get slightly worse at 64 processes. This trend indicates that the benefits of parallelism start to diminish as the number of processes increase, likely because of greater MPI overhead (halo-exchange, barrier at the end of the compute-loop, etc) and an over-budrening of resources on 1 Dardel node once we have more than 16 processes involved in a communication. Thus, a balance is struck at 4 processes between MPI overhead and parallelism which is optimal. However, there isn't a big variation in the runtimes at $\geq$ 4 processes, especially from 4 to 8 processes. Thus, it could be the case that a different run could give better runtimes at 8 processes instead of 4. However, the sharp decline in runtime from 2 to 4 processes shows the promise of MPI parallelism if we use 4-8 processes. 
@@ -410,7 +445,7 @@ Figure \ref{fig:3_mpi_weak_scaling} shows that after a sharp increase in runtime
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.9\textwidth]{../images/4_opt/scorep_64_mpi.png}
+  \includegraphics[width=0.45\textwidth]{../images/4_opt/scorep_64_mpi.png}
   \caption{ScoreP on MPI (6.4 Million Elements, 1k Iters, 64 Processes, 1 Node)}
   \label{fig:3_mpi_scorep_64}
 \end{figure}
@@ -424,17 +459,9 @@ For optimization of the parallel implementations, we focus on the parallel MPI i
 
 \subsection{Attempt 1: Communication-Computation Overlap w/ Non-Blocking Halo Exchange}
 \label{sec:async_mpi}
-From the ScoreP analysis of the MPI code in Section \ref{sec:3_mpi_analysis}, we concluded that the blocking \verb|Sendrecv| halo-exchanges are likely contributing to the lackluster performance. To rectify this issue, we decided to implement halo-exchanges through non-blocking mechanisms: with the help of \verb|Irecv| and \verb|Isend|. This allowed us to overlap communiation (through halo-exchanges) with computation: since the \textit{interior} portion of each chunk can be computed without the need of data from halo-exchanges.
+\end{multicols}
 
-Thus, we initiate  \verb|Irecv| and \verb|Isend| requests for a halo-exchange, then compute the updated values for the interior of each chunk. After this computation, we \textit{wait} on these 2 halo-exchange requests to complete, after which we compute the boundary cell(s). We repeat this method for updating both the \verb|E| and the \verb|H| grids. The code for this can be found in the \verb|fdtd_async_opt.c|. We will refer to this as the \underline{Async/Non-Blocking Optimization (Opt 1)} of the MPI code from Section \ref{sec:3_mpi}, while the code from Section \ref{sec:3_mpi} will be referred to as the \underline{Base MPI} implementation.
-
-Figure \ref{fig:4_opt1} shows the performance of this optimization compared to the blocking/base MPI implementation from Section \ref{sec:3_mpi}. We vary the number of processes keeping the problem size constant (6.4 million elements, 1k iterations). The script for obtaining these runtimes can be found in the \verb|run_async_opt.sh| file \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/5_project/4_opt/run_async_opt.sh}{here}. From Figure \ref{fig:4_opt1}, we can see that till 8 processes, the async MPI imeplementation performs visibly better than the synchronous version. We believe that the reason for this is the communication-computation overlap to update the interior of the grids makes more efficient use of the idle time that was otherwise wasted in the synchronous halo-exchange.
-
-\todo{Verify that this reasoning (especially about Dardel/NUMA) makes sense sense}
-However, the performance from 16 processes onwards is quite similar, where any differences between the two runs could likely be attributed to being within a margin of error from each other. Thus, this shows that with an increase in the number of processes, the cost of synchronizing the MPI communication between different/adjacent workers adds up -- negating the potential benefits of the asynchronous exchange. Additonally, as the number of processes increase but the problem size remains the same, we have more processes responsible for smaller chunks of the global arrays. This means that the \textit{computation} part of the computation-communication overlap is smaller, and thus the processes are more likely to end up waiting for a longer time at the \verb|MPI_Waitall| call after the interior-computation is finished. Finally, going from 8 to 16 processes on a single Dardel node (which has 8 NUMA nodes) could over-burden the resources on a single Dardel node and could thus be a contributing factor to the communication overhead. All these reasons would give us similar behaviour to the sync MPI implementation after a certain threshold, which is what we observed.
-
-
-\begin{figure}[H]
+\begin{figure}[t]
      \centering
      \begin{subfigure}[b]{0.45\textwidth}
          \centering
@@ -453,15 +480,7 @@ However, the performance from 16 processes onwards is quite similar, where any d
      \label{fig:4_opt_async_runtimes}
 \end{figure}
 
-Based on the results from Figure \ref{fig:4_opt1}, we concluded that 8 processes seems to offer the best balance between async MPI communication and parallelism, and wanted to explore this further. This was done in Figure \ref{fig:4_opt_compare_8}, where we analyzed the runtimes across different grid sizes for the 2 implementations, both using 8 processes. The SLURM script for this can be found in the \verb|run_mpi_async_opt_compare.sh| file \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/5_project/4_opt/run_mpi_async_opt_compare.sh}{here}. For smaller grid sizes, the two implementations seem to perform similarly, with the Base MPI even having a slight edge likely because of the simpler structure of the code and fewer calls to the MPI library making the async communication an unnecessary excess. Another reason might be the smaller \textit{computation} portion because of smaller grid-sizes, as explained earlier.
-
-
-However, as the grid sizes increase, we start seeing the noticable benefit of using async over sync communication for halo-exchanges. As the grid sizes increase, so does the "computation" part of the overlap, meaning that more time is spent efficiently performing interior-updates before hitting the eventual blocking \verb|MPI_Waitall| call. This call then finishes quickly and brings forth the anticipated advantage.
-\textit{Note: While the runtimes plotted in Figure \ref{fig:4_opt_compare_8} are averages across 3 runs, we did observe considerable differences between these runs for both the Base MPI and the Async MPI implementations. We believed this might be because of unexpected allocation of processes to CPUs on the Numa nodes by SLURM (making for variable communication time), and thus requested more processes on the same node to get better allocation. Despite this, we did observe some non-trivial variation between runs on the same invocation. However, the trend we observed seemed to largely follow the one presented here.}
-
-
-We also profiled using ScoreP the Base MPI and the Async MPI imeplementation using 8 processes (6.4 million elements, 1k iterations). Figure \ref{fig:4_opt_scorep_sync} and Figure \ref{fig:4_opt_scorep_async} show the result of the analysis for the Sync and Async implementations with this configuration, respectively.  
-\begin{figure}[H]
+\begin{figure}[b]
      \centering
      \begin{subfigure}[b]{0.45\textwidth}
          \centering
@@ -479,20 +498,37 @@ We also profiled using ScoreP the Base MPI and the Async MPI imeplementation usi
      \caption{Sync (Base) MPI vs Async MPI ScoreP}
 \end{figure}
 
+\begin{multicols}{2}
+From the ScoreP analysis of the MPI code in Section \ref{sec:3_mpi_analysis}, we concluded that the blocking \verb|Sendrecv| halo-exchanges are likely contributing to the lackluster performance. To rectify this issue, we decided to implement halo-exchanges through non-blocking mechanisms: with the help of \verb|Irecv| and \verb|Isend|. This allowed us to overlap communiation (through halo-exchanges) with computation: since the \textit{interior} portion of each chunk can be computed without the need of data from halo-exchanges.
+
+Thus, we initiate  \verb|Irecv| and \verb|Isend| requests for a halo-exchange, then compute the updated values for the interior of each chunk. After this computation, we \textit{wait} on these 2 halo-exchange requests to complete, after which we compute the boundary cell(s). We repeat this method for updating both the \verb|E| and the \verb|H| grids. The code for this can be found in the \verb|fdtd_async_opt.c|. We will refer to this as the \underline{Async/Non-Blocking Optimization (Opt 1)} of the MPI code from Section \ref{sec:3_mpi}, while the code from Section \ref{sec:3_mpi} will be referred to as the \underline{Base MPI} implementation.
+
+Figure \ref{fig:4_opt1} shows the performance of this optimization compared to the blocking/base MPI implementation from Section \ref{sec:3_mpi}. We vary the number of processes keeping the problem size constant (6.4 million elements, 1k iterations). The script for obtaining these runtimes can be found in the \verb|run_async_opt.sh| file \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/5_project/4_opt/run_async_opt.sh}{here}. From Figure \ref{fig:4_opt1}, we can see that till 8 processes, the async MPI imeplementation performs visibly better than the synchronous version. We believe that the reason for this is the communication-computation overlap to update the interior of the grids makes more efficient use of the idle time that was otherwise wasted in the synchronous halo-exchange.
+
+\todo{Verify that this reasoning (especially about Dardel/NUMA) makes sense sense}
+However, the performance from 16 processes onwards is quite similar, where any differences between the two runs could likely be attributed to being within a margin of error from each other. Thus, this shows that with an increase in the number of processes, the cost of synchronizing the MPI communication between different/adjacent workers adds up -- negating the potential benefits of the asynchronous exchange. Additonally, as the number of processes increase but the problem size remains the same, we have more processes responsible for smaller chunks of the global arrays. This means that the \textit{computation} part of the computation-communication overlap is smaller, and thus the processes are more likely to end up waiting for a longer time at the \verb|MPI_Waitall| call after the interior-computation is finished. Finally, going from 8 to 16 processes on a single Dardel node (which has 8 NUMA nodes) could over-burden the resources on a single Dardel node and could thus be a contributing factor to the communication overhead. All these reasons would give us similar behaviour to the sync MPI implementation after a certain threshold, which is what we observed.
+
+Based on the results from Figure \ref{fig:4_opt1}, we concluded that 8 processes seems to offer the best balance between async MPI communication and parallelism, and wanted to explore this further. This was done in Figure \ref{fig:4_opt_compare_8}, where we analyzed the runtimes across different grid sizes for the 2 implementations, both using 8 processes. The SLURM script for this can be found in the \verb|run_mpi_async_opt_compare.sh| file \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/5_project/4_opt/run_mpi_async_opt_compare.sh}{here}. For smaller grid sizes, the two implementations seem to perform similarly, with the Base MPI even having a slight edge likely because of the simpler structure of the code and fewer calls to the MPI library making the async communication an unnecessary excess. Another reason might be the smaller \textit{computation} portion because of smaller grid-sizes, as explained earlier.
+
+However, as the grid sizes increase, we start seeing the noticable benefit of using async over sync communication for halo-exchanges. As the grid sizes increase, so does the "computation" part of the overlap, meaning that more time is spent efficiently performing interior-updates before hitting the eventual blocking \verb|MPI_Waitall| call. This call then finishes quickly and brings forth the anticipated advantage.
+\textit{Note: While the runtimes plotted in Figure \ref{fig:4_opt_compare_8} are averages across 3 runs, we did observe considerable differences between these runs for both the Base MPI and the Async MPI implementations. We believed this might be because of unexpected allocation of processes to CPUs on the Numa nodes by SLURM (making for variable communication time), and thus requested more processes on the same node to get better allocation. Despite this, we did observe some non-trivial variation between runs on the same invocation. However, the trend we observed seemed to largely follow the one presented here.}
+
+We also profiled using ScoreP the Base MPI and the Async MPI imeplementation using 8 processes (6.4 million elements, 1k iterations). Figure \ref{fig:4_opt_scorep_sync} and Figure \ref{fig:4_opt_scorep_async} show the result of the analysis for the Sync and Async implementations with this configuration, respectively.  
+
 Despite a greater percentage of time being spent in the MPI section for the Async implementation and a higher number of visits to MPI, we notice that the time per call for MPI is significantly lower compared to that for the Sync Implementation. We believe that this is because of the fewer amount of waiting time required near blocking calls (such as \verb|MPI_Waitall|), since the relatively larger computation portion gives enough time for the halo-exchanges to have finished by the time we reach the blocking portion of the code. This is also evident in the total time (for \verb|ALL|) spent in the simulation -- where we see a nearly 30 second decrease in the Async version compared to the Sync version. While the actual running times are likely much higher for both implementations here because of hte ScoreP profiling intervention, a 30 second difference is considerably large, which would likely translate to a noticeable difference \textit{without} ScoreP as well -- as was observed in the plots in Figure \ref{fig:4_opt_async_runtimes}.
 
 \subsection{Attempt 2: OpenMP Parallelism w/ Non-Blocking Halo Exchange}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.45\textwidth]{../images/4_opt/opt_all.png}
+  \caption{Async MPI + OMP Performance}
+   \label{fig:4_opt_all}
+\end{figure}
+
 We investigated if we could obtain noticeable runtime improvements over what was seen in Section \ref{sec:async_mpi}, and were able to do so by incorporating OpenMP into the \verb|E| and \verb|H| updates. The code for this can be found in the \verb|fdtd_async_omp_opt.c| \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/5_project/4_opt/fdtd_async_omp_opt.c}{here}. The main changes here involved the use OpenMP parallelism in the compute-intensive loop-based updates into the \textit{interior} of the chunk that each process is assigned. \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/5_project/4_opt/fdtd_async_omp_opt.c#L61}{This} snippet illustrates this for the \verb|H|-interior updates. 
 
 \todo{Possibly some explanation on why we're using the architecture that we do?}
 Given this code, we investigated the impact of spreading the computation on up-to 4 Dardel Nodes , where we spawn up-to 4 processes (meaning we tested on upto 16 processes in total) on each Node and have 16 threads per process. The Slurm file used to obtain the runtimes with this configuration can be found \href{https://github.com/paulmyr/DD2356-MethodsHPC/blob/master/5_project/4_opt/run_async_omp_opt.sh}{here}. 
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.9\textwidth]{../images/4_opt/opt_all.png}
-  \caption{Async MPI + OMP Performance}
-   \label{fig:4_opt_all}
-\end{figure}
 
 \todo{Verify that the explanation makes sense wrt processes spawned per Dardel node}
 Figure \ref{fig:4_opt_all} shows the comparison between the Async MPI + OpenMP implementation with the other two MPI implementations discussed earlier. The problem size is kept constant here (6.4 million elements, 1k iterations). We can see that unlike the Async-only MPI implementation (Optimization 1), the performance of the Async MPI + OpenMP implementation (Optimization 2) continues to improve as we go from 8 processes to 16 processes. One explanation for this could be that the use of OpenMP threads in the compute portion of the communication-compute overlap drastically accelerates the overall runtime of \textit{each step} in the overall simulation. Thus, despite the compute part becoming faster (because of the use of OpenMP) and consequently there being less of an \textit{overlap} between the compute and the communication, Optimization 2 makes each step of the compute more efficient, thus consistently reducing the runtime. In addition, we spawn a maximum of 4 nodes per process, which could be preventing an over-burdening of resources on each of the Dardel nodes and lead to more efficient (and quicker) MPI communication.
@@ -500,7 +536,21 @@ Figure \ref{fig:4_opt_all} shows the comparison between the Async MPI + OpenMP i
 \section{Conclusion}
 In the previous sections, we discussed the runtimes of the different implementations and optimizations of the 1D FDTD simulation. Here, we present a final graph with the runtimes of each of the implementations discussed plotted against the serial runtime as we increase the grid size. For implementations that can have different configurations (such as: different number of threads in OpenMP), we have plotted the runtimes of the best configuration observed while examining the section. Figure \ref{fig:conclusion_line_plot} shows a line-plot for runtimes of different implementations on varying grid-sizes, and Figure \ref{fig:conclusion_bar_graph} displays this runtime in a bar-graph format to truly highlight the performance gains.
 
-\begin{figure}[H]
+\todo{Do we really need to explain any of this? Keeping this here so we can remove later.}
+One exception to this is the configuration chosen for the Base MPI implementation from Section \ref{sec:3_mpi}, where we chose 8 processes instead of 4 for this plot. As discussed earlier, we believe that the placement of the processes on a Dardel node by SLURM could play a non-trivial impact in determining the runtime of the blockimg MPI implementation (especially since there is no compute-overlap to \textit{hide} the cost of the communication). While 4 processes gave the lowest runtime in the strong-scaling test in Section \ref{sec:3_mpi}, it failed to give better runtimes than 8 processes when ran across different grid sizes in a separate run. As argued earlier, the runtimes for different 4 and 8 process counts in the Strong-Scaling test in \ref{sec:3_mpi} seemed to be within a margin of error from each other. Thus, we decided to go with 8 processes here, which gave lower runtimes on one of the runs (likely because of more favorable process-placements by Dardel on this run). 
+
+From Figure \ref{fig:conclusion}, the serial implementation outperforms all parallel strategies for the smallest grid sizes, demonstrating that the overhead required to setup the different parallelization techniques overwhelms the amount of compute required to perform such small simulations. However, the serial implementation begins to be outshone by parallelization techniques very quickly.
+
+The OpenMP implementations seem to perform the best out of all implementations, likely because of the sheer compute-acceleration offered by parallelizing the relatively simple and independend \verb|E| and \verb|H| updates in each simulation-iteration. Between these 2 approaches, the OpenMP only approach outperforms the MPI + OpenMP approach till a certain grid size. However, for the last 2 grid sizes, the Async MPI + OpenMP approach outperforms the raw OpenMP approach. This is likely because for bigger inputs, we begin to see the advantages of domain decomposition and better distribution of the input problem across different nodes and processes, reducing the load on a single node/process.
+
+After these two implementations, we see that the GPU hand-off technique seems to perform reasonably well. The initial cost of moving the data to and from the GPU seems to overburden the runtime for smaller grid sizes, but as the grid size increases, we begin to see the advantage of GPU parallelization over the serial implementation. A way to improve the GPU parallelization even more in the future might be to explore involving multiple GPUs in the computation, which would require decomposing and distributing the problem manually across these GPUs. This might worsen runtimes for smaller grids, but might lead to better runtimes for much larger grids. 
+
+Finally, the MPI-only implementations seem to perform very poorly for small-moderate grid sizes, likely because the overhead of the halo-exchange involved in the split-input domain does not offer any significant advantage over simpler implementations. This trend remains true for the Synchronous MPI implementation, which isn't able to take advantage of the communication-compute overlap. The Async-only MPI implementation, on the other hand, is able to overlap compute with communication for halo exchange and sees runtimes go down as the grid sizes increase (compared to serial and Sync MPI) as the compute is able to \textit{hide} the communication cost more effectively. \\
+
+Thus, from this experiment, we believe that the best approach would be to use the \underline{serial} implementation for \underline{small input sizes}, then transition to the \underline{OpenMP only} approach for \underline{moderate input sizes}, and finally to switch the to the \underline{Async MPI + OpenMP} approach for \underline{large input sizes}. 
+\end{multicols}
+
+\begin{figure}
      \centering
      \begin{subfigure}[b]{0.45\textwidth}
          \centering
@@ -519,18 +569,7 @@ In the previous sections, we discussed the runtimes of the different implementat
      \label{fig:conclusion}
 \end{figure}
 
-\todo{Do we really need to explain any of this? Keeping this here so we can remove later.}
-One exception to this is the configuration chosen for the Base MPI implementation from Section \ref{sec:3_mpi}, where we chose 8 processes instead of 4 for this plot. As discussed earlier, we believe that the placement of the processes on a Dardel node by SLURM could play a non-trivial impact in determining the runtime of the blockimg MPI implementation (especially since there is no compute-overlap to \textit{hide} the cost of the communication). While 4 processes gave the lowest runtime in the strong-scaling test in Section \ref{sec:3_mpi}, it failed to give better runtimes than 8 processes when ran across different grid sizes in a separate run. As argued earlier, the runtimes for different 4 and 8 process counts in the Strong-Scaling test in \ref{sec:3_mpi} seemed to be within a margin of error from each other. Thus, we decided to go with 8 processes here, which gave lower runtimes on one of the runs (likely because of more favorable process-placements by Dardel on this run). 
-
-From Figure \ref{fig:conclusion}, the serial implementation outperforms all parallel strategies for the smallest grid sizes, demonstrating that the overhead required to setup the different parallelization techniques overwhelms the amount of compute required to perform such small simulations. However, the serial implementation begins to be outshone by parallelization techniques very quickly.
-
-The OpenMP implementations seem to perform the best out of all implementations, likely because of the sheer compute-acceleration offered by parallelizing the relatively simple and independend \verb|E| and \verb|H| updates in each simulation-iteration. Between these 2 approaches, the OpenMP only approach outperforms the MPI + OpenMP approach till a certain grid size. However, for the last 2 grid sizes, the Async MPI + OpenMP approach outperforms the raw OpenMP approach. This is likely because for bigger inputs, we begin to see the advantages of domain decomposition and better distribution of the input problem across different nodes and processes, reducing the load on a single node/process.
-
-After these two implementations, we see that the GPU hand-off technique seems to perform reasonably well. The initial cost of moving the data to and from the GPU seems to overburden the runtime for smaller grid sizes, but as the grid size increases, we begin to see the advantage of GPU parallelization over the serial implementation. A way to improve the GPU parallelization even more in the future might be to explore involving multiple GPUs in the computation, which would require decomposing and distributing the problem manually across these GPUs. This might worsen runtimes for smaller grids, but might lead to better runtimes for much larger grids. 
-
-Finally, the MPI-only implementations seem to perform very poorly for small-moderate grid sizes, likely because the overhead of the halo-exchange involved in the split-input domain does not offer any significant advantage over simpler implementations. This trend remains true for the Synchronous MPI implementation, which isn't able to take advantage of the communication-compute overlap. The Async-only MPI implementation, on the other hand, is able to overlap compute with communication for halo exchange and sees runtimes go down as the grid sizes increase (compared to serial and Sync MPI) as the compute is able to \textit{hide} the communication cost more effectively. \\
-
-Thus, from this experiment, we believe that the best approach would be to use the \underline{serial} implementation for \underline{small input sizes}, then transition to the \underline{OpenMP only} approach for \underline{moderate input sizes}, and finally to switch the to the \underline{Async MPI + OpenMP} approach for \underline{large input sizes}. 
+\printbibliography
 
 \newpage
 \usection{Appendix}
@@ -551,6 +590,28 @@ For brevity, we did not include the std dev, min, max of the runtimes obtained i
 \item \verb|async_omp_process.txt|: Runtimes for Async MPI + OpenMP (Opt 2) implementation for same input size. Plotted in Figure \ref{fig:4_opt_all}
 \item \verb|async_omp_grid_vary.txt|: Runtimes for different grid sizes for Async MPI + OpenMP (Opt) implementation. Plotted in Figure \ref{fig:conclusion}
 \end{itemize}
+
+\usubsection{GPU handoff code listing}
+
+\begin{figure}[hbtp]
+  \centering
+  \begin{lstlisting}[language=c, frame=single]
+// Function to update the magnetic field H
+void update_H(double *E, double *H, int NX) {
+  // Update H from 0 to NX-2 (using forward differences)
+#pragma omp target teams distribute parallel for map(to : E[0 : NX])           \
+    map(tofrom : H[0 : NX])
+  for (int i = 0; i < NX - 1; i++) {
+    H[i] = H[i] + (DT / DX) * (E[i + 1] - E[i]);
+  }
+  // Simple absorbing boundary condition:
+  H[NX - 1] = H[NX - 2];
+}
+  \end{lstlisting}
+  \caption{OMP pragma used to hand off computation to GPU.}
+  \label{lst:gpu-handoff}
+\end{figure}
+
 
 \usubsection{Verification results}
 \label{sec:app:verification_results}
@@ -615,7 +676,4 @@ Final e-field results of serial reference for different grid sizes (NX).
 
 % content end
 %###############################################################################
-
-\printbibliography
-
 \end{document}
