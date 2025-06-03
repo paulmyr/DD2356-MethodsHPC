@@ -324,14 +324,13 @@ For thread counts $2^0, ..., 2^6$ see a near constant runtimes, which is close t
 
 \subsection{Discussion}
 The first important question we have to ask, is: 'why does the default scheduler outperform the other schedulers?'
-\todo{answer this question}
-Each loop iteration has an approximatly similar load.
+In our assesment, it mainly comes down to the fact that each loop iteration has an approximatly equal load.
 This leads us to belive that reducing any scheduling overhead by using a static scheduler is the main reason for the good performace.
 Different chunk sizes mostly do more harm than good.
 There is not much reason why smaller chunk sizes would outperform bigger ones, when computaional intensity does not vary for different loop iterations.
 In the worst case, for very small chunk sizes, it mostly interferes with cache access patterns.
 
-To correctly interpret those runtimes, it is important to understand the topology of a compute node on dardel.
+To correctly interpret the weak scheduling runtimes, it is important to understand the topology of a compute node on dardel.
 \begin{figure}
      \centering
      \includegraphics[width=\textwidth]{../images/2_openmp/node_topology.png}
