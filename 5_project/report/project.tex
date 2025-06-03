@@ -16,6 +16,16 @@
 %###############################################################################
 
 % packages begin
+\begin{filecontents*}{bibliographie.bib}
+@Misc{Barth2023,
+  author       = {Michaela Barth and Gert Svensson},
+  month        = aug,
+  note         = {[Online; accessed Jun 2, 2025]},
+  title        = {Dardel sustainability at a glance},
+  year         = {2023},
+  url          = {https://www.pdc.kth.se/polopoly_fs/1.1271258.1692656955!/Dardel_Sustainability.pdf},
+}
+\end{filecontents*}
 
 \usepackage[
   backend=biber,
@@ -74,6 +84,7 @@
 \usepackage{titlesec}
 \usepackage[nocheck]{fancyhdr}
 \usepackage{lastpage}
+\usepackage[absolute,overlay]{textpos}
 
 \usepackage{kantlipsum}
 \usepackage[colorinlistoftodos,prependcaption,textsize=tiny]{todonotes}
@@ -120,14 +131,15 @@
 
 % Fotter options for first page
 
-\fancypagestyle{firstpagestyle}{
-  \renewcommand{\thedate}{\textmd{}} % removes horizontal header line
-  \fancyhf{}
-  \fancyhf[lh]{\ttfamily M.Sc. Computer Science\\KTH Royal Institute of Technology}
-  \fancyhf[rh]{\ttfamily Period 4\\\today}
-  \fancyfoot[C]{\footnotesize Page \thepage\ of \pageref*{LastPage}}
-  \renewcommand{\headrule}{} % removes horizontal header line
-}
+%\fancypagestyle{firstpagestyle}{
+%  \renewcommand{\thedate}{\textmd{}} % removes horizontal header line
+%  \fancyhf{}
+%  \fancyhf[lh]{\ttfamily M.Sc. Computer Science\\KTH Royal Institute of Technology}
+%  \fancyhf[rh]{\ttfamily Period 4\\\today}
+%  \fancyfoot[C]{\footnotesize Page \thepage\ of \pageref*{LastPage}}
+%  \renewcommand{\headrule}{} % removes horizontal header line
+%}
+
 %###############################################################################
 
 \newcommand\extrafootertext[1]{%
@@ -141,9 +153,10 @@
 %###############################################################################
 
 \title{
-  \normalsize{DD2356 VT25 Methods in}\\
-  \normalsize{High Performance Computing}\\
-  \large{Final Project: 1D FDTD Simulation}
+  \vspace{5cm}
+  \Large{DD2356 VT25 Methods in}\\
+  \Large{High Performance Computing}\\
+  \LARGE{Final Project: 1D FDTD Simulation}
 }
 \author{
   \small Rishi Vijayvargiya\textsuperscript{\textdagger}\\[-0.75ex]
@@ -174,6 +187,17 @@
 \renewcommand{\epsilon}{\varepsilon}
 
 %###############################################################################
+
+\newcommand{\usection}[1]{\section*{#1}
+\addcontentsline{toc}{section}{\protect\numberline{}#1}}
+
+\newcommand{\usubsection}[1]{\subsection*{#1}
+\addcontentsline{toc}{subsection}{\protect\numberline{}#1}}
+
+\newcommand{\usubsubsection}[1]{\subsubsection*{#1}
+\addcontentsline{toc}{subsubsection}{\protect\numberline{}#1}}
+
+%###############################################################################
 \makeatletter
 \renewcommand*{\@fnsymbol}[1]{\ensuremath{\ifcase#1\or \dagger\or \ddagger\or
    \mathsection\or \mathparagraph\or \|\or **\or \dagger\dagger
@@ -182,11 +206,16 @@
 %###############################################################################
 
 \begin{document}
+
+\begin{textblock*}{\paperwidth}(0cm,2.25cm)
+    \centering 
+    \includegraphics[width=3.75cm]{assets/kthlogo.png}
+\end{textblock*}
+
 \maketitle
 \extrafootertext{\textsuperscript{\textdagger}Authors made equal contribution to the project}
-\thispagestyle{firstpagestyle}
+%\thispagestyle{firstpagestyle}
 
-\listoftodos
 \vspace{1em}
 
 % content begin
@@ -198,7 +227,8 @@ The code for our project can be found at this location: \url{https://github.com/
 \tableofcontents
 \newpage
 
-\todo[inline]{Check headers}
+\listoftodos
+\newpage
 
 \section{Serial Implementation and Correctness}
 The serial implementation provides our optimization baseline. 
@@ -223,12 +253,116 @@ For both verification methods our results comply with the given code, yielding i
 Due to the scaling these e-fields look like a single Dirac-impulse instead of two pulses. 
 The numerical results in Table \ref{tab:5_numerical_verification} show that there are indeed two independent and symmetrical peaks, which are identical with the estimated peaks of the serial implementation.
 
-Additionally we checked for different \verb|NX| sizes. Figure \ref{fig:5_serial_verification} shows that for large enough grid sizes (\verb|NX|) (>>400) the simulation result of the given reference simulation is stable and yielding two symmetrical peaks, while for small grid sizes ($NX <=400$) this tends to shift to pointsymmetrical peaks, which we assume is due to the absorbing boundary conditions interfering.
+Additionally we checked for different \verb|NX| sizes. Figure \ref{fig:5_serial_verification} shows that for large enough grid sizes ($NX >> 400$)\todo{Is greater greater the right formulation here?} the simulation result of the given reference simulation is stable and yielding two symmetrical peaks, while for small grid sizes ($NX <= 400$) this tends to shift to pointsymmetrical peaks, which we assume is due to the absorbing boundary conditions interfering.
 To adjust for this, we chose sufficiently large grid sizes ($NX >> 400$) to ensure correctness and large enough array sizes to generate computational load for our implementations.
 
 \section{Parallelism through OpenMP}
+The code for this section is present in the \verb|2_openmp| directory.
+The \verb|dardel_runtimes| subdirectory contains the runtimes plotted in the graphs below, which were averages across 3 runs.
+Additionally, the \verb|outputs/| directory contains the snapshots of \verb|E| and \verb|H| at different time-steps for the serial and parallel implementation(s), which were used to verify correctness using the \verb|verify_outputs.sh| script.
+
+\subsection{Implementation description}
+We started the optimisation process using shared memory parallelisation.
+The main loop of the computation exists of two update methods, each of them performs a simple \verb|for-loop|.
+We noticed that all iterations of the loop are embarassingly parallel.
+The easiest parallisation strategie is to split up the iterations on multiple workers.
+Since we assume a shared memory architecture, communication is needed, in the sense that workers have to exchange information.
+
+OpenMP provides a very simple but effective directive for exactly this situation: \verb|#pragma omp parallel for|.\\
+When checking on dardel, which scheduling is used as a default, we found that the default is\\
+\verb|#pragma omp parallel for shedule(static, 0)|, meaning that the scheduling used is a static scheduler with unspecified chunk size.
+We tried different scheduling approaches, different chunk sizes or initialising only a single parallel region once; however, we were not able to outperform this first, most simplest approach.
+In the OMP documentation\footnote{\url{https://www.openmp.org/spec-html/5.0/openmpsu41.html\#x64-1290002.9.2}} we find:
+
+\begin{quote}
+When kind is static, iterations are divided into chunks of size chunk\_size, and the chunks are assigned to the threads in the team in a round-robin fashion in the order of the thread number. Each chunk contains chunk\_size iterations, except for the chunk that contains the sequentially last iteration, which may have fewer iterations.
+When no chunk\_size is specified, the iteration space is divided into chunks that are approximately equal in size, and at most one chunk is distributed to each thread. The size of the chunks is unspecified in this case.
+\end{quote}
+This means, that the chunk size is approximatly $NX / NThreads$.
+
+\subsection{Strong and Weak Scaling}
+\begin{figure}
+     \centering
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{../images/2_openmp/strong_scaling.png}
+         \caption{Strong Scaling (6.4 mil, 1k iters)}
+         \label{fig:2_omp_strong_scaling}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{../images/2_openmp/weak_scaling.png}
+         \caption{Weak Scaling (100k/thread, 1k iters)}
+         \label{fig:2_omp_weak_scaling}
+     \end{subfigure}
+     \caption{Strong and Weak Scaling (OpenMP) }
+     \label{fig:2_omp_strong_weak}
+\end{figure}
+
+We performed two types of runtime tests: strong and weak scaling.
+Figure \ref{fig:2_omp_strong_weak} displays the runtimes we measured using the static scheduling.
+
+The strong scaling was performed by allocating one full node on dardel, meaning
+\begin{itemize}
+\item one node
+\item one process per node
+\item 256 cpus per process
+\end{itemize}
+The only parameter changed was the \verb|OMP_NUM_THREADS| environment variable.
+Each configuration was run three times, we display the average runtime in the plot.
+The grid size for all measurements was performed with $NX = 6.4 * 10^6$, $NSTEPS = 1000$ and the \verb|OMP_NUM_THREADS| $\in [2^0, 2^1, ..., 2^8]$.
+For more information on standard deviation, min and max runtimes, please see the appendix on page \pageref{sec:app:statistics}.
+The runtimes are depicted in Figure \ref{fig:2_omp_strong_scaling}.
+We achive logarithmic speedup in the string scaling case, which peaks for $128$ threads.
+For $256$ threads the runtime remains the same (a tiny bit worse in performance than $128$ threads).
+
+In each weak scaling computation, we fixed the grid size for each working thread to $10^5$.
+The node allocation as well as all other parameters were the same as for the strong scaling experiments.
+The runtimes are depicted in Figure \ref{fig:2_omp_weak_scaling}.
+For thread counts $2^0, ..., 2^6$ see a near constant runtimes, which is close to optimal performence; however, when increasing to $128$ and then $256$ we see a sharp drop in performance.
+
+\subsection{Discussion}
+The first important question we have to ask, is: 'why does the default scheduler outperform the other schedulers?'
+\todo{answer this question}
+Each loop iteration has an approximatly similar load.
+This leads us to belive that reducing any scheduling overhead by using a static scheduler is the main reason for the good performace.
+Different chunk sizes mostly do more harm than good.
+There is not much reason why smaller chunk sizes would outperform bigger ones, when computaional intensity does not vary for different loop iterations.
+In the worst case, for very small chunk sizes, it mostly interferes with cache access patterns.
+
+To correctly interpret those runtimes, it is important to understand the topology of a compute node on dardel.
+\begin{figure}
+     \centering
+     \includegraphics[width=\textwidth]{../images/2_openmp/node_topology.png}
+     \caption{Dardel node topology. Image taken from 'Dardel sustainability at a glance'\cite{Barth2023}}
+     \label{fig:dardel_topo}
+\end{figure}
+Each node consists of two sockets with two cpus respectivly.
+Each of those nodes has 4 NUMA nodes, each NUMA node has 16 physical cores (32 virtual cores) available.
+That makes a total of 128 physical cores and 256 virtual cores.
+Figure \ref{fig:dardel_topo} depicts the overall architecture of the node.
+We can also see the NUMA node distances.
+
+Due to the fact that we ran all simulations on a fully allocated node, we expect that the OMP-Scheduler makes use of the available resources as good as possible.
+This means that if we run the code with the \verb|OMP_NUM_THREADS| environment variable set to 16, we expect OMP to schedule them on 16 distinct physical cores.
+Under this assumption, the weak scaling (see \ref{fig:2_omp_weak_scaling}) behaves as expected.
+For the first 64 threads, the runtime is mostly constant.
+We assume that all threads run on the same socket, meaning very small NUMA node distances when performing memory operations.
+However, when running the simulation with 128 threads, we can see a significant decrease in performance.
+We attribute this to the fact that OMP now has to schedule on the second socket as well (to make use of more physical cores), which increases the runtime due to memory synchronisation issues.
+When scaling to 256 threads, the performance nearly halves.
+This is also expected, because the physical core limit has been reached, and now threads are scheduled to virutal cores.
+Under the assumption that each of the previous 128 threads has a high cpu load, making use of virtual cores has a small effect on the performane.
 
 \section{OpenMP GPU Hand-off}
+The code for this section is present in the \verb|2_openmp| directory.
+The \verb|dardel_runtimes| subdirectory contains the runtimes plotted in the graphs below, which were averages across 3 runs.
+Additionally, the \verb|outputs/| directory contains the snapshots of \verb|E| and \verb|H| at different time-steps for the serial and parallel implementation(s), which were used to verify correctness using the \verb|verify_outputs.sh| script.
+
+\subsection{Implementation Description}
+\subsection{Runtimes}
+\subsection{Discussion}
 
 \section{Parallelism through MPI}
 \label{sec:3_mpi}
@@ -399,8 +533,11 @@ Finally, the MPI-only implementations seem to perform very poorly for small-mode
 
 Thus, from this experiment, we believe that the best approach would be to use the \underline{serial} implementation for \underline{small input sizes}, then transition to the \underline{OpenMP only} approach for \underline{moderate input sizes}, and finally to switch the to the \underline{Async MPI + OpenMP} approach for \underline{large input sizes}. 
 
-\section{Appendix}
-\subsection{Std Dev, Min, Max Runtimes}
+\newpage
+\usection{Appendix}
+\label{sec:app}
+\usubsection{Std Dev, Min, Max Runtimes}
+\label{sec:app:statistics}
 For brevity, we did not include the std dev, min, max of the runtimes obtained in the main report itself. The most important ones, however, be found in text-format in the repository, under the \verb|misc/stats_for_nerds| directory \href{https://github.com/paulmyr/DD2356-MethodsHPC/tree/master/5_project/misc/stats_for_nerds}{here}. Below we include some of the relevant files with these stats that might be of interest.
 \begin{itemize}
 \item \verb|serial_grid_vary.txt|: Serial runtimes for different grid sizes. Plotted in Figure \ref{fig:1_serial_runtime}.
@@ -416,7 +553,8 @@ For brevity, we did not include the std dev, min, max of the runtimes obtained i
 \item \verb|async_omp_grid_vary.txt|: Runtimes for different grid sizes for Async MPI + OpenMP (Opt) implementation. Plotted in Figure \ref{fig:conclusion}
 \end{itemize}
 
-\subsection{Verification results}
+\usubsection{Verification results}
+\label{sec:app:verification_results}
 
 The final e-field of all implementations is displayed in the following plot.
 \begin{figure}[H]
@@ -471,7 +609,7 @@ NX is set to 6.4e6.
 Final e-field results of serial reference for different grid sizes (NX).
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.9\textwidth]{../images/5_test/display_field_subplots.png}
+  \includegraphics[height=0.95\textheight]{../images/5_test/display_field_subplots.png}
   \caption{Serial simulation for different grid sizes (NX)}
   \label{fig:5_serial_verification}
 \end{figure}
@@ -479,6 +617,6 @@ Final e-field results of serial reference for different grid sizes (NX).
 % content end
 %###############################################################################
 
-% \printbibliography
+\printbibliography
 
 \end{document}
